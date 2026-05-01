@@ -1,0 +1,40 @@
+\chapter{Trabalhos relacionados}
+
+Este capítulo tem como objetivo revisar estudos relacionados que abordam a automatização de jogos interativos de adivinhar palavras, com foco na utilização de word embeddings.
+
+\section{AI Semantle}
+
+Um trabalho bem próximo ao desejado é o de \citeonline{greenstein2022aisemantle}, apresenta um relatório de uma automatização do jogo de palavras Semantle baseado na utilização de modelos de word embeddings para calcular a similaridade entre palavras. Para que a IA pudesse resolver Semantle com qualquer palavra em um grande conjunto de dados dentro de um tempo razoável, os autores propuseram a utilização de \textit{Q-Learning}, um algoritmo de aprendizado por reforço, como ferramenta para conduzir a busca pelas palavras mais promissoras.
+
+Para utilizar o Q-Learning, \citeonline{greenstein2022aisemantle} optaram por uma abordagem baseada em clusterização hierárquica, agrupando palavras semanticamente semelhantes e, reduzindo assim, o número de possibilidades a serem consideradas pela IA. A estratégia consiste em primeiro buscar um grande grupo de palavras e em seguida um subgrupo mais específico onde a palavra alvo poderia estar. Dentro de cada subgrupo, foram utilizadas duas abordagens heurísticas para encontrar a palavra secreta: uma abordagem gananciosa baseada nos vetores das palavras já tentadas, e uma baseada em Redes Neurais Recorrentes (RNNs) que prediz a similaridade da próxima palavra \cite{greenstein2022aisemantle}.
+
+A solução demonstrou desempenho expressivo ao resolver 79,2\% das partidas em até 50 tentativas utilizando a heurística gananciosa. Em comparação, a abordagem baseada em redes neurais recorrentes obteve um desempenho inferior, com 50,1\% de acerto com o mesmo número de tentativas. A IA também se destacou pela eficiência de tempo, realizando uma jogada em média em 0,002 segundos e concluindo uma partida completa em aproximadamente 0,068 segundos \cite{greenstein2022aisemantle}.
+
+Embora o trabalho seja uma referência fundamental pela similaridade da tarefa, sua metodologia apresenta uma limitação quanto à complexidade arquitetural, pois depende do treinamento supervisionado de agentes de aprendizado por reforço e da criação de \textit{clusters} específicos para o jogo. 
+
+Em contraste, a presente pesquisa busca investigar a aplicabilidade direta de modelos de linguagem pré-treinados na tarefa de resolução automática, verificando se suas relações semânticas internas são suficientes para guiar o processo de busca pela palavra secreta. Dessa forma, este trabalho evita o custo computacional de treinar um agente do zero e propõe uma abordagem mais simples, generalizável e acessível, especialmente adequada ao idioma português.
+
+\begin{comment}
+\begin{figure}[h!]
+    \centering
+    \label{fig:resultado-ia-semantle}
+    \caption{Precisão sobre o tempo das diferentes técnicas de seleção de palavras}
+    \includegraphics[width=0.5\textwidth]{figs/resultado-ia-semantle.png}
+    
+    Fonte: \cite{greenstein2022aisemantle}
+\end{figure}
+\end{comment}
+
+\section{Outros trabalhos com jogo de adivinhar palavras}
+
+Semantle não foi o único jogo de adivinhar palavras com base em semelhanças semânticas a ser alvo de automatização. O artigo \textit{"Playing Codenames with Language Graphs and Word Embeddings"} apresenta uma abordagem para a aplicação de Inteligência Artificial ao jogo Codenames. Diferente do Contexto, no Codenames equipes competem tentando adivinhar corretamente um grupo de palavras associadas com base em uma única dica fornecida por um parceiro.
+
+Nesse cenário, \citeonline{DBLP:journals/jair/KoyyalaguntaSDR21} apresentam um algoritmo capaz de gerar dicas utilizando a \textit{BabelNet} para a criação de redes semânticas, integrando diferentes modelos de word embeddings. O trabalho introduz o \textit{BabelNet-WSF}, um framework que permite o uso de grafos linguísticos ao armazenar subgrafos em cache e aplicar restrições sobre os possíveis caminhos a serem percorridos, garantindo trajetórias semanticamente mais coerentes e computacionalmente eficientes.
+
+Outra abordagem relevante para a automatização do Codenames é a de \citeonline{DBLP:journals/corr/abs-2403-00823}, que propõe o \textit{Adaptive Codenames Ensemble} (ACE), uma visão inovadora para o desenvolvimento de agentes adaptativos. Os autores identificaram que a utilização de um único modelo de Processamento de Linguagem Natural limita a capacidade do agente de se ajustar às diferentes interpretações semânticas e formas de comunicação dos parceiros humanos durante uma partida. Para mitigar isso, o ACE aplica múltiplos modelos de linguagem baseados em word embeddings, selecionados dinamicamente a cada jogada com base no desempenho anterior do companheiro atual.
+
+A seleção dos modelos é feita por meio do algoritmo \textit{Upper Confidence Bound} (UCB), frequentemente empregado em aprendizado de máquina para maximizar o retorno em ambientes incertos. Para calcular a recompensa, \citeonline{DBLP:journals/corr/abs-2403-00823} desenvolveram a métrica \textit{CoLT} (\textit{Codenames Linear Team Rating}), que avalia o desempenho da equipe com base em jogadas individuais, permitindo que o agente escolha o modelo de linguagem mais compatível com seu parceiro.
+
+Apesar da relevância técnica dessas abordagens para o campo de jogos semânticos, elas diferem fundamentalmente do problema abordado nesta pesquisa. Os estudos de \citeonline{DBLP:journals/jair/KoyyalaguntaSDR21} e \citeonline{DBLP:journals/corr/abs-2403-00823} se concentram na geração de dicas para conectar múltiplas palavras em um ambiente cooperativo e social (adaptação ao parceiro). 
+
+Em contraste, o jogo Contexto apresenta um desafio de otimização e busca convergente para um único alvo oculto, sem a necessidade de modelagem de parceiros humanos ou uso de grafos de conhecimento externos complexos como a BabelNet. Portanto, a lacuna que esses trabalhos exploram é a eficácia de modelos de embeddings puros aplicados a um problema de busca determinística em língua portuguesa, reduzindo a complexidade arquitetural em comparação aos sistemas híbridos e de ensemble propostos para o Codenames.
