@@ -1,93 +1,227 @@
-﻿\chapter{Gestão dos Conhecimentos}
+\chapter{Metodologia de Pesquisa}
 
-Neste capítulo, serão apresentadas as tecnologias que serão utilizadas para o desenvolvimento do projeto, e o motivo da utilização, além de uma contextualização de cada uma delas.
+Para alcançar os objetivos propostos neste trabalho, foi adotada uma abordagem metodológica exploratória e qualitativa. A escolha por esse tipo de pesquisa se justifica pela necessidade de compreender, de forma mais aprofundada, os hábitos, dificuldades e expectativas dos usuários em relação ao controle financeiro pessoal.
 
-% \section{Machine Learning}
+O projeto proposto consiste no desenvolvimento de um chatbot financeiro integrado ao WhatsApp, capaz de registrar entradas e saídas financeiras por meio de linguagem natural, classificar automaticamente despesas e disponibilizar relatórios visuais em uma interface web. Dessa forma, a pesquisa buscou entender como os usuários atualmente lidam com o registro de gastos, quais dificuldades enfrentam para manter uma rotina de organização financeira e de que maneira esperam ser orientados por uma solução baseada em inteligência artificial.
 
-% \textit{Machine Learning} é uma área da Ciência da Computação que estuda o desenvolvimento de algoritmos capazes de aprender a executar uma tarefa com sua própria experiência, sem
-% a necessidade de programar explicitamente todas as regras para cada tarefa específica \cite{cerri2019aprendizado}. A complexidade do aprendizado de máquina reside no fato de que o sucesso dos algoritmos depende da qualidade e da quantidade dos dados, além da escolha adequada dos modelos e técnicas \cite{DBLP:journals/cacm/Domingos12}.
+A coleta de dados foi realizada por meio de um formulário com perguntas abertas, permitindo que os participantes relatassem suas experiências de forma livre. Esse método foi escolhido por possibilitar a identificação de padrões de comportamento, dores recorrentes e oportunidades de melhoria para a solução proposta.
 
-% Existem três principais paradigmas em aprendizado de máquina: Aprendizado Supervisionado, Não Supervisionado e por Reforço.
+A pesquisa contou com 24 respostas. As perguntas abordaram situações relacionadas à anotação rápida de informações, perda de controle financeiro ao longo do mês, preferências quanto à abordagem de um assistente financeiro, tomada de decisão antes de compras, criação de hábitos, reação a gastos automáticos e planejamento para objetivos de consumo.
 
-% No Aprendizado Supervisionado, o modelo é treinado com dados rotulados, onde, para cada exemplo apresentado ao algoritmo, há uma resposta correta associada. Nesse caso, o algoritmo aprende a relacionar entradas às saídas desejadas, buscando generalizar esse conhecimento para realizar previsões precisas sobre novos dados.
+Após a coleta, as respostas foram analisadas de forma qualitativa, buscando identificar padrões e \textit{insights} que pudessem orientar a criação do mapa de empatia, das personas e das histórias de usuário. Com base nessa análise, foi possível observar que muitos usuários utilizam meios rápidos e familiares, como WhatsApp, áudio, bloco de notas ou até a própria memória, para registrar informações importantes. Também foi identificado que parte dos entrevistados possui dificuldade em manter constância no controle financeiro, demonstrando a necessidade de uma solução simples, acessível e com lembretes inteligentes.
 
-% Por outro lado, no Aprendizado Não Supervisionado, os dados fornecidos ao algoritmo não possuem rótulos. O objetivo é identificar padrões ou estruturas ocultas nos exemplos sem orientação explícita. Algoritmos comuns buscam agrupar dados semelhantes, formando agrupamentos ou \textit{clusters}.
+\section{Fluxograma de Atividades}
 
-% Já no Aprendizado por Reforço, o algoritmo interage diretamente com um ambiente, recebendo recompensas ou punições conforme suas ações. As recompensas reforçam comportamentos desejáveis, enquanto as punições servem para impedir as ações fracassadas. O objetivo é maximizar a recompensa acumulada ao longo do tempo, desenvolvendo uma política ótima de comportamento. O algoritmo \textit{Q-Learning} é um dos mais conhecidos e utilizados desse paradigma \cite{watkins1989learning}.
+O fluxograma a seguir apresenta as principais etapas realizadas no desenvolvimento da pesquisa e no levantamento de requisitos do sistema proposto.
 
-% É importante levantar que os modelos de Processamento de Linguagem Natural abordados neste trabalho, como o GloVe e o FastText, utilizam o aprendizado não supervisionado para seu treinamento.
-
-\section{Word Embeddings}
-
-No processamento de linguagem natural, word embeddings são representações vetoriais que mapeiam palavras para um conjunto de vetores de valores reais em um espaço N-dimensional predefinido, de modo que palavras que possuem significado semântico, contextual e sintático próximas no vocabulário sejam representadas por vetores próximos nesse espaço \cite{mikolov2013efficient}. Essas representações são aprendidas por meio de algoritmos de \textit{machine learning} que são gerados a partir de seu contexto.
-
-\begin{figure}[h!]
+\begin{figure}[H]
     \centering
-    
-    \label{fig:relacao-lineares-palavras}
-    \caption{Relações lineares entre palavras.}
-    \includegraphics[width=1\textwidth]{figs/relacao-palavras.jpg} 
-    
-    Fonte: \cite{duzzi2023}
+    \includegraphics[width=\textwidth]{figs/fluxograma_atividades.png}
+    \caption{Fluxograma de atividades da pesquisa}
+    \label{fig:fluxograma_atividades}
+    Fonte: Elaborado pelos autores.
 \end{figure}
 
-Inicialmente, técnicas como \textit{Bag of Words} (BoW) e TF-IDF eram amplamente utilizadas, baseando-se em vetores de alta dimensionalidade, nos quais cada palavra era representada como um índice isolado, sem considerar semelhanças semânticas entre diferentes termos. Apesar de sua simplicidade, esses métodos apresentavam limitações expressivas, especialmente na incapacidade de capturar relações semânticas ou contextuais entre as palavras \cite{mikolov2013efficient}.
+A sequência representada no fluxograma inicia-se com a definição da ideia do projeto, seguida pela análise do problema e da oportunidade identificada. Na etapa seguinte, é realizada a elaboração do protocolo de entrevista, que orienta a aplicação da entrevista com usuários. Depois da coleta, procede-se à análise qualitativa das respostas, permitindo a identificação de dores, necessidades e padrões de comportamento.
 
-Existem diversas abordagens para a obtenção de representações vetoriais de palavras, mas a maneira mais popular é treinando redes neurais, como é o caso do famoso \textit{Word2vec}, modelo de aprendizado de máquina desenvolvido por \citeonline{mikolov2013efficient} em 2013. Esse algoritmo utiliza redes neurais rasas para gerar embeddings.
+Com base nesses resultados, são desenvolvidos o mapa de empatia, as personas e as histórias de usuário. Em seguida, essas definições subsidiam o refinamento dos requisitos do sistema e, por fim, a modelagem e a proposta da solução. Dessa forma, o fluxograma evidencia que a solução técnica não foi concebida de forma isolada, mas construída a partir de etapas sucessivas de investigação, interpretação e consolidação dos achados obtidos com os usuários.
 
-\section{Word2Vec}
+\section{Protocolo de Entrevista}
 
-O modelo Word2Vec pode ser treinado a partir de duas arquiteturas possíveis: \textit{Continuous Bag-of-Words} (CBOW) e \textit{Skip-Gram}. O CBOW prevê uma palavra com base em seu contexto, enquanto o Skip-Gram prevê o contexto a partir de uma palavra. Por exemplo, a expressão vetorial “vetor(‘rei’) - vetor(‘homem’) + vetor(‘mulher’)” resulta em um vetor próximo ao vetor de “rainha”, evidenciando a captura das relações semânticas \cite{MikolovYZ13}.
+O protocolo de entrevista é um conjunto estruturado de orientações e perguntas utilizadas para conduzir a coleta de dados com os usuários. Seu objetivo é garantir que as entrevistas sejam realizadas de forma organizada e que as respostas obtidas estejam alinhadas com os objetivos do projeto.
 
-A arquitetura do Word2Vec é baseada em uma rede neural rasa composta por três camadas: entrada, oculta e saída. Na camada de entrada, cada palavra é representada por um vetor one-hot, que é então transformado em um vetor denso na camada oculta por meio de uma matriz de pesos. Essa matriz de pesos é, na verdade, o que constitui os embeddings de palavras aprendidos pelo modelo \cite{Rong14}.
-
-\begin{figure}[h!]
+\begin{table}[H]
     \centering
-    
-    \label{fig:representacao-modelos-w2v}
-    \caption{Representação dos modelos Word2Vec.}
-    \includegraphics[width=1\textwidth]{figs/representacao-modelos-w2v.png} 
-    
-    Fonte: \cite{mikolov2013efficient}
+    \caption{Protocolo de entrevista}
+    \label{tab:protocolo-entrevista}
+    \begin{tabularx}{\textwidth}{|p{3.8cm}|X|}
+        \hline
+        \textbf{Etapa} & \textbf{Descrição} \\
+        \hline
+        Saudação & Olá, somos estudantes de Sistemas de Informação da Universidade Vila Velha e estamos realizando uma pesquisa para nosso Trabalho de Conclusão de Curso. Nosso projeto propõe um chatbot financeiro integrado ao WhatsApp, com o objetivo de ajudar pessoas a registrarem e acompanharem seus gastos de forma mais simples. As respostas serão utilizadas apenas para fins acadêmicos. \\
+        \hline
+        Objetivo da entrevista & Entender como os usuários organizam sua vida financeira, quais dificuldades enfrentam para registrar gastos e quais funcionalidades consideram úteis em uma solução de controle financeiro por WhatsApp. \\
+        \hline
+        Perguntas de contexto & Pense na última vez que você precisou anotar algo muito importante, como uma ideia, recado ou gasto, mas estava na rua, com pressa ou com as mãos ocupadas. O que você fez nessa situação e por que escolheu esse método? \\
+        \hline
+        Perguntas sobre controle financeiro & Lembre-se da última vez que seu dinheiro acabou antes do fim do mês e você pensou: ``Para onde foi meu dinheiro?''. Qual estratégia você tomou e por quê? \\
+        \hline
+        Perguntas sobre abordagem da IA & Imagine que você contratou um assistente humano para cuidar do seu dinheiro e ele percebe que você está gastando demais no iFood. Como você gostaria que ele te desse essa má notícia e por que essa abordagem funcionaria com você? \\
+        \hline
+        Perguntas sobre decisão financeira & Se você fosse tomar uma decisão financeira amanhã, como comprar uma TV nova ou fazer uma viagem curta, como avaliaria sua situação e por que usaria esse método? \\
+        \hline
+        Perguntas sobre hábitos & Pense em algum hábito difícil que você tentou começar, como ir à academia, beber água ou anotar gastos. Como foi esse processo? \\
+        \hline
+        Perguntas sobre gastos recorrentes & Pense naqueles débitos automáticos que vão consumindo o saldo, como assinaturas de streaming, taxas e serviços não utilizados. Como você reage a esses ``vazamentos'' de dinheiro no fim do mês e por quê? \\
+        \hline
+        Perguntas sobre objetivos financeiros & Pense em um sonho de consumo que você tem, como uma viagem, curso ou celular novo. Como você tenta se planejar financeiramente para alcançar isso hoje e por quê? \\
+        \hline
+        Encerramento & Agradecemos pela participação. Suas respostas serão importantes para compreender as necessidades dos usuários e auxiliar no desenvolvimento de uma solução mais simples, útil e adequada ao controle financeiro pessoal. \\
+        \hline
+    \end{tabularx}
+\end{table}
+
+\section{Entrevista com Usuário}
+
+A entrevista com usuário foi utilizada como técnica de levantamento de requisitos e teve como objetivo compreender o comportamento dos participantes em relação ao controle financeiro pessoal. A pesquisa foi aplicada por meio de perguntas abertas, permitindo que os usuários relatassem suas experiências de maneira livre.
+
+Foram obtidas 24 respostas. A análise das respostas permitiu identificar padrões relevantes para o desenvolvimento da solução proposta. Um dos pontos observados foi que os usuários tendem a escolher métodos rápidos e acessíveis para registrar informações importantes. Entre as respostas, apareceram com frequência o uso do WhatsApp, notas de áudio, bloco de notas do celular e até a tentativa de memorizar a informação para anotar depois.
+
+Esse comportamento reforça a proposta do projeto, pois demonstra que o WhatsApp já é utilizado por parte dos usuários como ferramenta informal de registro rápido. Dessa forma, a integração do sistema a uma plataforma familiar pode reduzir o esforço necessário para registrar gastos e aumentar a chance de adesão ao uso diário.
+
+Outro padrão identificado foi a dificuldade de manter constância no controle financeiro. Muitos participantes relataram que, quando percebem que o dinheiro acabou antes do fim do mês, tentam rever gastos, consultar extratos, criar planilhas, cortar despesas ou reorganizar o orçamento. Entretanto, essas ações geralmente acontecem depois que o problema já ocorreu, o que indica uma oportunidade para o sistema atuar de forma preventiva.
+
+Em relação à forma como a inteligência artificial deve se comunicar, os participantes demonstraram preferência por uma abordagem direta, clara e sincera. Algumas respostas indicaram que o usuário gostaria de receber alertas objetivos, mostrando consequências dos gastos e sugerindo formas de melhorar a organização financeira. Também houve menções a relatórios, gráficos e avisos mais humanizados, semelhantes a notificações motivacionais.
+
+Sobre hábitos financeiros, os entrevistados relataram que iniciar e manter uma rotina é difícil, principalmente no começo. Foram citadas dificuldades com academia, hidratação, anotação de gastos e disciplina financeira. Esse dado indica que o sistema deve oferecer recursos de lembrete, acompanhamento e incentivo, ajudando o usuário a criar uma rotina de registro financeiro sem tornar o processo cansativo.
+
+Também foi identificado incômodo em relação a débitos automáticos e assinaturas recorrentes. Alguns usuários relataram surpresa, arrependimento ou frustração ao perceberem gastos automáticos no fim do mês. Outros afirmaram que tentam manter apenas serviços realmente necessários. Esse ponto sugere que o sistema pode incluir alertas sobre gastos recorrentes, análise de assinaturas e identificação de possíveis desperdícios.
+
+Por fim, em relação a sonhos de consumo, como viagens, cursos ou compras de maior valor, os participantes citaram planejamento mensal, economia, investimentos, poupança e separação de parte da renda. Esse comportamento indica que a solução pode ir além do simples registro de gastos, oferecendo metas financeiras e acompanhamento do progresso do usuário.
+
+\section{Mapa de Empatia}
+
+O mapa de empatia foi elaborado com base nos principais padrões identificados nas respostas dos usuários. Essa ferramenta permite compreender melhor o público-alvo, considerando o que ele pensa, sente, vê, ouve, fala, faz, quais são suas dores e quais ganhos espera obter com a solução.
+
+\begin{table}[H]
+    \centering
+    \caption{Síntese do mapa de empatia}
+    \label{tab:mapa-empatia}
+    \begin{tabularx}{\textwidth}{|p{3.5cm}|X|}
+        \hline
+        \textbf{Quadrante} & \textbf{Conteúdo} \\
+        \hline
+        O que vê? & Vê o dinheiro acabando antes do fim do mês; vê gastos pequenos se acumulando; vê assinaturas e débitos automáticos reduzindo o saldo; vê aplicativos financeiros como ferramentas muitas vezes complexas ou trabalhosas; vê o WhatsApp como um ambiente familiar e rápido para comunicação. \\
+        \hline
+        O que ouve? & Ouve recomendações sobre economizar, cortar gastos e se organizar melhor; ouve comentários de amigos e familiares sobre aumento de preços e dificuldade financeira; ouve que deveria planejar melhor suas compras; ouve que planilhas e aplicativos podem ajudar, mas nem sempre consegue manter o hábito. \\
+        \hline
+        O que pensa e sente? & Pensa que deveria ter mais controle sobre o próprio dinheiro; sente frustração quando não sabe para onde o dinheiro foi; sente dificuldade em manter disciplina; sente incômodo ao perceber gastos automáticos desnecessários; sente necessidade de avisos claros e objetivos antes que o problema aconteça. \\
+        \hline
+        O que diz e faz? & Diz que tenta cortar gastos quando percebe excesso; diz que usa bloco de notas, WhatsApp, áudio ou memória para registrar informações; faz planilhas ou consulta extratos quando perde o controle; tenta guardar parte do dinheiro para metas; cancela ou reduz assinaturas quando percebe desperdício. \\
+        \hline
+        Dores & Falta de constância no registro financeiro; esquecimento de anotar gastos; dificuldade em visualizar o impacto de pequenos gastos; falta de clareza sobre categorias de despesa; uso de métodos manuais que exigem esforço; sensação de descontrole financeiro no fim do mês. \\
+        \hline
+        Ganhos esperados & Registrar gastos de forma rápida; receber alertas inteligentes; entender onde mais gasta; visualizar gráficos e relatórios; receber orientação personalizada; criar metas financeiras; economizar sem depender de processos complicados; usar uma ferramenta simples integrada ao WhatsApp. \\
+        \hline
+    \end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox[c][8cm][c]{0.85\textwidth}{\centering Espaço reservado para a imagem final do mapa de empatia.}}
+    \caption{Placeholder para o mapa de empatia}
+    \label{fig:placeholder-mapa-empatia}
+    Fonte: Elaborado pelos autores.
 \end{figure}
 
-Já a camada de saída utiliza outra matriz de pesos para prever as palavras de contexto, no modelo Skip-Gram, ou a palavra central, no modelo CBOW, aplicando uma função \textit{softmax} para gerar uma distribuição de probabilidade sobre o vocabulário. O treinamento da rede ajusta os pesos de ambas as matrizes para minimizar a diferença entre as previsões e as palavras reais observadas no corpus.
+\section{Persona}
 
-\section{GloVe}
+Com base na análise qualitativa das respostas, foram definidas personas representativas do público-alvo da solução.
 
-O \textit{GloVe}, sigla para \textit{Global Vectors } (Vetores Globais), desenvolvido per \citeonline{pennington2014glove}, é um algoritmo de aprendizado não supervisionado usado para criar word embeddings. Sua principal inovação foi combinar o melhor de duas abordagens anteriores: a eficiência estatística global dos métodos baseados em contagem, como a análise de coocorrência em todo o texto, e o desempenho superior em tarefas de analogia dos métodos preditivos baseados em contexto local, como o Word2Vec.
+\subsection{Persona 1: Lucas Almeida}
 
-O GloVe opera construindo uma matriz global de coocorrência de palavras e, em seguida, treina um modelo de regressão ponderada para aprender vetores cujo produto escalar se aproxima do logaritmo da probabilidade de coocorrência dessas palavras. O resultado são embeddings que capturam de forma eficaz as relações semânticas e sintáticas complexas.
+\textbf{Idade}: 22 anos.
 
-\section{FastText}
+\textbf{Perfil}: estudante universitário e usuário frequente de WhatsApp.
 
-Técnicas de incorporação de palavras, como Word2Vec e GloVe, fornecem representações vetoriais únicas para cada palavra do vocabulário, negligenciando a estrutura morfológica interna desses termos. Essa abordagem é uma limitação significativa para línguas morfologicamente ricas, pois ignora as relações sintáticas e semânticas evidentes na formação das palavras (prefixos, sufixos e radicais).
+\textbf{Comportamento financeiro}: costuma usar cartão de crédito e percebe que pequenos gastos, principalmente com alimentação e serviços digitais, acabam impactando o orçamento no fim do mês.
 
-Para superar essa limitação, o \textit{FastText}, uma extensão do modelo Word2Vec, enriquece as representações vetoriais usando informações em nível de caractere. O FastText aprende embeddings para n-gramas de caracteres (subpartes da palavra) e representa uma palavra como a soma ou a média dos vetores de seus n-gramas constituintes. Assim como o antecessor, ele também utiliza as arquiteturas CBOW e Skip-Gram para o treinamento.
+\textbf{Tecnologias utilizadas}: WhatsApp, bloco de notas, aplicativos bancários e planilhas simples.
 
-A principal vantagem dessa abordagem é a capacidade de lidar com palavras fora do vocabulário (\textit{Out-of-Vocabulary} — OOV). Modelos como Word2Vec ou GloVe não conseguem gerar vetores para palavras que não estavam presentes nos dados de treinamento. O FastText, ao contrário, pode construir a representação de uma palavra OOV simplesmente somando os vetores de seus n-gramas de caracteres, permitindo-lhe inferir o significado de termos novos ou raros com base em sua composição. \cite{bojanowski-etal-2017-enriching}
+\textbf{Objetivo}: ter mais clareza sobre para onde o dinheiro está indo e conseguir controlar melhor os gastos do mês.
 
-\section{Tecnologias}
+\textbf{Dores}: esquece de anotar gastos; só percebe o descontrole quando o dinheiro já acabou; tem dificuldade de manter disciplina com planilhas; não gosta de aplicativos muito complexos.
 
-\subsection{Python}
+\textbf{Necessidades}: registrar gastos rapidamente pelo WhatsApp, receber alertas objetivos e visualizar relatórios simples sobre seus maiores gastos.
 
-\textit{Python} é uma linguagem de programação de alto nível, criada por Guido van Rossum em fevereiro de 1991. A linguagem foi desenvolvida com uma sintaxe clara e legível, que se assemelha à linguagem humana. Além disso, o Python é uma linguagem interpretada e de tipagem dinâmica, o que significa que as variáveis não precisam ter seu tipo explicitamente declarado, facilitando a curva de aprendizado e o desenvolvimento de aplicações.
+\textbf{Funcionalidades essenciais}: registro por mensagem natural, categorização automática, alerta de gastos excessivos, relatório mensal e gráficos por categoria.
 
-Em 2024, Python se tornou a linguagem de programação mais utilizada no \textit{GitHub}, ultrapassando \textit{JavaScript} pela primeira vez desde o início da plataforma\footnote{\url{https://github.blog/news-insights/octoverse/octoverse-2024/}, acessado em \today.}. Essa marca só foi possível de ser alcançada devido ao aumento de projetos relacionados à Inteligência Artificial, ciência de dados e aprendizado de máquina, áreas nas quais Python é amplamente adotado devido à extensa variedade de bibliotecas disponíveis. 
+\subsection{Persona 2: Camila Ferreira}
 
-% Por esse mesmo motivo, Python foi escolhido como a linguagem de programação para este projeto, garantindo uma implementação alinhada com as tendências atuais do desenvolvimento de aprendizado de máquina.
+\textbf{Idade}: 28 anos.
 
-\subsection{Gensim}
+\textbf{Perfil}: profissional com rotina corrida e busca por maior organização financeira.
 
-O \textit{Gensim} é uma biblioteca \textit{open-source} em Python projetada para representar documentos como vetores semânticos de maneira eficiente, facilitando o processamento e análise de textos não estruturados. Utilizando algoritmos de aprendizado não supervisionado, como Word2Vec e FastText, o Gensim é capaz de descobrir automaticamente a estrutura semântica dos documentos, analisando padrões de coocorrência estatística em grandes corpora de texto. Esses modelos transformam textos em representações vetoriais, permitindo consultas de similaridade semântica entre palavras, frases e documentos, o que promove uma análise mais profunda e automatizada do conteúdo textual. \cite{rehurek_lrec}
+\textbf{Comportamento financeiro}: tenta se planejar, mas tem dificuldade em manter constância. Costuma rever extratos e cortar gastos quando percebe que passou do orçamento.
 
-% O Gensim foi utilizado no projeto para carregar o modelo de embending e fazer as comparações.
+\textbf{Tecnologias utilizadas}: WhatsApp, aplicativo do banco, planilhas e notas do celular.
 
-\subsection{Playwright}
-O \textit{Playwright} é um framework de código aberto mantido pela \textit{Microsoft}, desenvolvido para a automação de navegadores e a execução de testes de ponta-a-ponta (\textit{end-to-end}). Seu principal diferencial é a capacidade de controlar os três principais motores de renderização, \textit{Chromium}, \textit{Firefox} e \textit{WebKit}, por meio de uma API única e unificada. Essa abordagem permite que desenvolvedores e analistas de qualidade escrevam um único \textit{script} de teste e o executem de forma consistente em todos os principais navegadores. O framework oferece suporte a diversas linguagens, como Python, JavaScript, Java e C\#.\footnote{\url{https://playwright.dev/docs/intro}, acessado em \today.}
+\textbf{Objetivo}: criar uma rotina de controle financeiro simples e receber lembretes para não esquecer de registrar gastos.
 
-% \subsection{Numpy}
-% NumPy é o pacote fundamental para computação científica em Python. É uma biblioteca Python que fornece um objeto de array multidimensional, vários objetos derivados (como arrays e matrizes mascaradas) e uma variedade de rotinas para operações rápidas em arrays, incluindo operações matemáticas, lógicas, manipulação de formas, ordenação, seleção, entrada/saída, transformadas discretas de Fourier, álgebra linear básica, operações estatísticas básicas, simulação aleatória e muito mais.\footnote{\url{https://numpy.org/doc/stable}, acessado em \today.
+\textbf{Dores}: falta de tempo; dificuldade de manter hábitos; frustração com gastos automáticos; sensação de que o salário ``some'' sem perceber.
 
-\subsection{Hugging Face Hub}
-O Hugging Face Hub é uma plataforma com mais de 2 milhões de modelos, 500 mil conjuntos de dados e 1 milhão de demonstrações, na qual as pessoas podem colaborar facilmente em seus fluxos de trabalho de aprendizado de máquina. O Hub funciona como um local central onde qualquer pessoa pode compartilhar, explorar, descobrir e experimentar com aprendizado de máquina de código aberto.\footnote{\url{https://huggingface.co/docs/hub/index}, acessado em \today.}
+\textbf{Necessidades}: ter uma ferramenta prática que ajude no dia a dia, sem exigir muitas etapas manuais.
+
+\textbf{Funcionalidades essenciais}: lembretes de registro, alerta de assinaturas, resumo semanal, sugestões de economia e acompanhamento de metas.
+
+\subsection{Persona 3: Mariana Souza}
+
+\textbf{Idade}: 34 anos.
+
+\textbf{Perfil}: usuária que deseja realizar sonhos de consumo, como viagens, cursos ou compra de equipamentos.
+
+\textbf{Comportamento financeiro}: procura guardar parte da renda, mas sente dificuldade em acompanhar o progresso das metas. Tem preocupação com gastos recorrentes e compras por impulso.
+
+\textbf{Tecnologias utilizadas}: aplicativos bancários, WhatsApp e planilhas.
+
+\textbf{Objetivo}: planejar metas financeiras e acompanhar sua evolução ao longo do tempo.
+
+\textbf{Dores}: falta de clareza sobre quanto precisa guardar por mês; dificuldade em visualizar o impacto dos gastos atuais nos objetivos futuros; incômodo com despesas recorrentes desnecessárias.
+
+\textbf{Necessidades}: receber orientação personalizada, acompanhar metas e entender como seus hábitos de consumo afetam seus planos.
+
+\textbf{Funcionalidades essenciais}: cadastro de metas financeiras, previsão de tempo para atingir objetivos, análise de gastos recorrentes, relatórios personalizados e recomendações da IA.
+
+\subsection{Histórias de Usuário}
+
+As histórias de usuário traduzem as necessidades observadas na pesquisa em cenários práticos de uso, contribuindo para o detalhamento funcional da solução.
+
+\subsubsection{História 1: Registro rápido de gasto}
+
+Como Lucas Almeida, um estudante que usa o WhatsApp diariamente, eu quero registrar meus gastos por mensagem de texto ou áudio, para não precisar abrir uma planilha ou aplicativo específico sempre que fizer uma compra.
+
+\textbf{Cenário}: Lucas sai da faculdade e compra um lanche. Em vez de esperar chegar em casa para anotar, ele envia uma mensagem no WhatsApp dizendo: ``Gastei 18 reais com lanche agora''. O sistema interpreta a mensagem, identifica o valor, classifica a categoria como alimentação e registra automaticamente a despesa.
+
+\textbf{Critérios de aceitação}: o sistema deve aceitar mensagens em linguagem natural; identificar valor, tipo de transação e categoria; confirmar o registro ao usuário; e permitir correção caso a classificação esteja incorreta.
+
+\subsubsection{História 2: Alerta de gasto excessivo}
+
+Como Lucas Almeida, eu quero receber alertas quando meus gastos em uma categoria estiverem altos, para conseguir mudar meu comportamento antes do fim do mês.
+
+\textbf{Cenário}: durante o mês, Lucas registra vários gastos com delivery. Ao perceber que os gastos com alimentação passaram do limite definido, o sistema envia uma mensagem informando que essa categoria teve aumento e sugere uma redução nos próximos dias.
+
+\textbf{Critérios de aceitação}: o sistema deve monitorar os gastos por categoria; comparar os valores com limites definidos ou médias anteriores; enviar alertas objetivos; e apresentar sugestões simples de economia.
+
+\subsubsection{História 3: Relatório financeiro mensal}
+
+Como Camila Ferreira, uma usuária que deseja entender melhor seu orçamento, eu quero receber um relatório mensal com meus principais gastos, para saber onde posso economizar.
+
+\textbf{Cenário}: no fim do mês, Camila recebe um resumo informando quanto gastou em alimentação, transporte, lazer, assinaturas e outras categorias. O relatório também mostra quais categorias tiveram maior impacto e apresenta sugestões personalizadas.
+
+\textbf{Critérios de aceitação}: o sistema deve gerar relatório mensal automaticamente; mostrar valores por categoria; destacar os maiores gastos; e apresentar recomendações personalizadas com base no comportamento do usuário.
+
+\subsubsection{História 4: Controle de assinaturas e débitos recorrentes}
+
+Como Camila Ferreira, eu quero ser avisada sobre assinaturas e débitos automáticos que impactam meu saldo, para cancelar ou revisar serviços que não uso mais.
+
+\textbf{Cenário}: Camila possui assinaturas de streaming e serviços digitais. O sistema identifica lançamentos recorrentes e envia um aviso perguntando se ela deseja manter todos os serviços cadastrados ou revisar possíveis gastos desnecessários.
+
+\textbf{Critérios de aceitação}: o sistema deve identificar gastos recorrentes; listar os débitos automáticos detectados; permitir marcar uma assinatura como necessária ou dispensável; e alertar o usuário antes ou depois da cobrança.
+
+\subsubsection{História 5: Cadastro de meta financeira}
+
+Como Mariana Souza, uma usuária que deseja realizar uma viagem, eu quero cadastrar uma meta financeira, para acompanhar quanto ainda preciso economizar até alcançar meu objetivo.
+
+\textbf{Cenário}: Mariana deseja fazer uma viagem e informa ao sistema que precisa juntar R\$ 3.000,00 em seis meses. O sistema calcula quanto ela precisa guardar por mês e acompanha seu progresso com base nas entradas, saídas e economias registradas.
+
+\textbf{Critérios de aceitação}: o sistema deve permitir cadastrar nome, valor e prazo da meta; calcular o valor mensal necessário para atingir o objetivo; mostrar o progresso; e alertar quando os gastos atuais ameaçarem o cumprimento da meta.
+
+\subsubsection{História 6: Consulta por dashboard web}
+
+Como Mariana Souza, eu quero acessar uma interface web com gráficos dos meus gastos, para visualizar minha situação financeira de forma mais clara.
+
+\textbf{Cenário}: Mariana acessa a plataforma web e visualiza gráficos de gastos por categoria, evolução mensal, entradas, saídas e progresso das metas financeiras. Isso permite uma análise mais ampla do seu comportamento financeiro.
+
+\textbf{Critérios de aceitação}: o sistema deve permitir login na plataforma web; exibir gráficos personalizados com base nos dados do usuário; apresentar entradas, saídas e saldo; e mostrar categorias de maior impacto financeiro.
+
+

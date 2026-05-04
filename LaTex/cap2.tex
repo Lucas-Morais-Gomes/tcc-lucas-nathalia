@@ -1,40 +1,55 @@
-﻿\chapter{Trabalhos relacionados}
+\chapter{Referencial Teórico}
 
-Este capítulo tem como objetivo revisar estudos relacionados que abordam a automatização de jogos interativos de adivinhar palavras, com foco na utilização de word embeddings.
+Este capítulo reúne os fundamentos conceituais que sustentam a proposta do chatbot financeiro, contemplando soluções correlatas e as principais tecnologias empregadas na construção do sistema.
 
-\section{AI Semantle}
+\section{Trabalhos Relacionados}
 
-Um trabalho bem próximo ao desejado é o de \citeonline{greenstein2022aisemantle}, apresenta um relatório de uma automatização do jogo de palavras Semantle baseado na utilização de modelos de word embeddings para calcular a similaridade entre palavras. Para que a IA pudesse resolver Semantle com qualquer palavra em um grande conjunto de dados dentro de um tempo razoável, os autores propuseram a utilização de \textit{Q-Learning}, um algoritmo de aprendizado por reforço, como ferramenta para conduzir a busca pelas palavras mais promissoras.
+O levantamento de trabalhos relacionados tem como objetivo identificar abordagens já utilizadas em soluções de automação conversacional, controle financeiro digital e integração entre assistentes virtuais e plataformas de mensageria. Essa análise permite compreender práticas adotadas no mercado e na literatura, bem como delimitar o diferencial da proposta desenvolvida neste trabalho.
 
-Para utilizar o Q-Learning, \citeonline{greenstein2022aisemantle} optaram por uma abordagem baseada em clusterização hierárquica, agrupando palavras semanticamente semelhantes e, reduzindo assim, o número de possibilidades a serem consideradas pela IA. A estratégia consiste em primeiro buscar um grande grupo de palavras e em seguida um subgrupo mais específico onde a palavra alvo poderia estar. Dentro de cada subgrupo, foram utilizadas duas abordagens heurísticas para encontrar a palavra secreta: uma abordagem gananciosa baseada nos vetores das palavras já tentadas, e uma baseada em Redes Neurais Recorrentes (RNNs) que prediz a similaridade da próxima palavra \cite{greenstein2022aisemantle}.
+\subsection{Concorrentes}
 
-A solução demonstrou desempenho expressivo ao resolver 79,2\% das partidas em até 50 tentativas utilizando a heurística gananciosa. Em comparação, a abordagem baseada em redes neurais recorrentes obteve um desempenho inferior, com 50,1\% de acerto com o mesmo número de tentativas. A IA também se destacou pela eficiência de tempo, realizando uma jogada em média em 0,002 segundos e concluindo uma partida completa em aproximadamente 0,068 segundos \cite{greenstein2022aisemantle}.
+Entre as soluções concorrentes, destacam-se aplicativos de gestão financeira que oferecem categorização de despesas, relatórios e metas, além de assistentes conversacionais voltados a atendimento automatizado. De modo geral, essas ferramentas evidenciam a importância da usabilidade, da integração com canais familiares e da apresentação clara de indicadores financeiros. Como texto-base provisório, esta subseção deverá ser refinada com a descrição comparativa de produtos específicos e suas funcionalidades.
 
-Embora o trabalho seja uma referência fundamental pela similaridade da tarefa, sua metodologia apresenta uma limitação quanto à complexidade arquitetural, pois depende do treinamento supervisionado de agentes de aprendizado por reforço e da criação de \textit{clusters} específicos para o jogo. 
+\subsection{Artigos Científicos Relacionados}
 
-Em contraste, a presente pesquisa busca investigar a aplicabilidade direta de modelos de linguagem pré-treinados na tarefa de resolução automática, verificando se suas relações semânticas internas são suficientes para guiar o processo de busca pela palavra secreta. Dessa forma, este trabalho evita o custo computacional de treinar um agente do zero e propõe uma abordagem mais simples, generalizável e acessível, especialmente adequada ao idioma português.
+Na literatura científica, estudos sobre chatbots, interfaces conversacionais e apoio à tomada de decisão mostram que sistemas baseados em linguagem natural podem reduzir barreiras de uso e aumentar a frequência de interação dos usuários com serviços digitais. Para a versão final do trabalho, esta subseção deverá incorporar referências bibliográficas que abordem chatbots financeiros, interação humano-computador, adoção de mensageria e recomendação personalizada em contexto financeiro.
 
-\begin{comment}
-\begin{figure}[h!]
-    \centering
-    \label{fig:resultado-ia-semantle}
-    \caption{Precisão sobre o tempo das diferentes técnicas de seleção de palavras}
-    \includegraphics[width=0.5\textwidth]{figs/resultado-ia-semantle.png}
-    
-    Fonte: \cite{greenstein2022aisemantle}
-\end{figure}
-\end{comment}
+\section{Tecnologias}
 
-\section{Outros trabalhos com jogo de adivinhar palavras}
+As tecnologias selecionadas para a solução foram escolhidas com base em integração, facilidade de automação, escalabilidade e aderência ao fluxo proposto para o produto.
 
-Semantle não foi o único jogo de adivinhar palavras com base em semelhanças semânticas a ser alvo de automatização. O artigo \textit{"Playing Codenames with Language Graphs and Word Embeddings"} apresenta uma abordagem para a aplicação de Inteligência Artificial ao jogo Codenames. Diferente do Contexto, no Codenames equipes competem tentando adivinhar corretamente um grupo de palavras associadas com base em uma única dica fornecida por um parceiro.
+\subsection{WhatsApp}
 
-Nesse cenário, \citeonline{DBLP:journals/jair/KoyyalaguntaSDR21} apresentam um algoritmo capaz de gerar dicas utilizando a \textit{BabelNet} para a criação de redes semânticas, integrando diferentes modelos de word embeddings. O trabalho introduz o \textit{BabelNet-WSF}, um framework que permite o uso de grafos linguísticos ao armazenar subgrafos em cache e aplicar restrições sobre os possíveis caminhos a serem percorridos, garantindo trajetórias semanticamente mais coerentes e computacionalmente eficientes.
+O WhatsApp será utilizado como principal canal de interação com o usuário. A escolha dessa plataforma se justifica por sua ampla adoção, familiaridade de uso e capacidade de reduzir a fricção no registro de informações do dia a dia. No contexto da solução, o aplicativo funciona como porta de entrada para mensagens, comandos, alertas e confirmações de lançamentos financeiros.
 
-Outra abordagem relevante para a automatização do Codenames é a de \citeonline{DBLP:journals/corr/abs-2403-00823}, que propõe o \textit{Adaptive Codenames Ensemble} (ACE), uma visão inovadora para o desenvolvimento de agentes adaptativos. Os autores identificaram que a utilização de um único modelo de Processamento de Linguagem Natural limita a capacidade do agente de se ajustar às diferentes interpretações semânticas e formas de comunicação dos parceiros humanos durante uma partida. Para mitigar isso, o ACE aplica múltiplos modelos de linguagem baseados em word embeddings, selecionados dinamicamente a cada jogada com base no desempenho anterior do companheiro atual.
+\subsection{Evolution API}
 
-A seleção dos modelos é feita por meio do algoritmo \textit{Upper Confidence Bound} (UCB), frequentemente empregado em aprendizado de máquina para maximizar o retorno em ambientes incertos. Para calcular a recompensa, \citeonline{DBLP:journals/corr/abs-2403-00823} desenvolveram a métrica \textit{CoLT} (\textit{Codenames Linear Team Rating}), que avalia o desempenho da equipe com base em jogadas individuais, permitindo que o agente escolha o modelo de linguagem mais compatível com seu parceiro.
+A Evolution API atua como camada de integração entre o sistema proposto e o WhatsApp, permitindo o envio e recebimento de mensagens, além da orquestração de eventos conversacionais. Nesta etapa do trabalho, a subseção registra seu papel arquitetural e deverá ser expandida posteriormente com detalhes de autenticação, webhooks e fluxo de mensagens.
 
-Apesar da relevância técnica dessas abordagens para o campo de jogos semânticos, elas diferem fundamentalmente do problema abordado nesta pesquisa. Os estudos de \citeonline{DBLP:journals/jair/KoyyalaguntaSDR21} e \citeonline{DBLP:journals/corr/abs-2403-00823} se concentram na geração de dicas para conectar múltiplas palavras em um ambiente cooperativo e social (adaptação ao parceiro). 
+\subsection{Chatbot}
 
-Em contraste, o jogo Contexto apresenta um desafio de otimização e busca convergente para um único alvo oculto, sem a necessidade de modelagem de parceiros humanos ou uso de grafos de conhecimento externos complexos como a BabelNet. Portanto, a lacuna que esses trabalhos exploram é a eficácia de modelos de embeddings puros aplicados a um problema de busca determinística em língua portuguesa, reduzindo a complexidade arquitetural em comparação aos sistemas híbridos e de ensemble propostos para o Codenames.
+O chatbot representa o núcleo conversacional da solução, sendo responsável por interpretar mensagens em linguagem natural, direcionar o fluxo de atendimento e acionar os serviços internos necessários ao registro e à consulta de dados financeiros. Sua modelagem considera clareza de resposta, simplicidade operacional e contextualização adequada para o usuário final.
+
+\subsection{n8n}
+
+O n8n será empregado como ferramenta de automação para integrar etapas do fluxo conversacional, regras de negócio e serviços externos. Seu uso favorece a criação de rotinas visuais de processamento, reduzindo o acoplamento direto entre todas as integrações e permitindo maior flexibilidade na manutenção dos fluxos.
+
+\subsection{Groq API}
+
+A Groq API é considerada na proposta como serviço de apoio ao processamento de linguagem natural, com potencial para interpretar intenções, estruturar informações extraídas das mensagens e apoiar respostas contextualizadas. Esta subseção permanece como base conceitual e deverá ser aprofundada na versão final com a estratégia de uso da API na arquitetura.
+
+\subsection{Docker}
+
+O Docker será utilizado para padronizar a execução dos serviços da aplicação em ambientes isolados, favorecendo reprodutibilidade e portabilidade. Seu uso contribui para simplificar a configuração do ambiente de desenvolvimento e implantação da solução.
+
+\subsection{Docker Compose}
+
+O Docker Compose será empregado para orquestrar os contêineres necessários ao funcionamento do sistema, como backend, automação, banco de dados e interface web. A adoção dessa ferramenta permite definir e subir a infraestrutura local de forma integrada.
+
+\subsection{React}
+
+O React será utilizado na construção da interface web destinada à visualização de relatórios, gráficos e dados financeiros consolidados. A escolha se deve à flexibilidade para composição de componentes e à facilidade de criação de interfaces dinâmicas voltadas à experiência do usuário.
+
+\subsection{PostgreSQL}
+
+O PostgreSQL será o sistema de gerenciamento de banco de dados da aplicação, responsável por persistir usuários, lançamentos financeiros, categorias, metas e demais entidades necessárias ao funcionamento da solução. Sua adoção se justifica pela robustez, confiabilidade e aderência a aplicações transacionais.
