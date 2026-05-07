@@ -1,18 +1,57 @@
 \chapter{Introdução}
 
-O controle financeiro pessoal permanece como uma dificuldade recorrente para grande parte da população, especialmente quando o registro de gastos depende de disciplina manual, uso frequente de planilhas ou acesso a aplicações pouco integradas ao cotidiano do usuário. Em muitos casos, despesas de pequeno valor são ignoradas ao longo do mês, comprometendo a visão consolidada do orçamento e dificultando a tomada de decisão. Ao mesmo tempo, aplicativos de mensageria como o WhatsApp já fazem parte da rotina diária dos usuários e se apresentam como um canal natural para interações rápidas, simples e frequentes.
+O endividamento das famílias brasileiras tornou-se um fenômeno cada vez mais presente na realidade econômica e social do país. Nas últimas décadas, a ampliação da oferta de crédito e o fácil acesso a serviços financeiros permitiram que parcelas da população anteriormente excluídas do sistema financeiro passassem a utilizar cartões de crédito, empréstimos e financiamentos com maior frequência. Segundo estudo indexado na SciELO Brasil \cite{scielo_credito_2026}, o crescimento do crédito está relacionado às transformações estruturais do capitalismo contemporâneo e ao aumento das práticas de consumo na sociedade brasileira.
 
-Nesse contexto, surge a oportunidade de empregar técnicas de automação e inteligência artificial para transformar a comunicação em linguagem natural em registros financeiros estruturados. Um chatbot financeiro integrado ao WhatsApp pode reduzir a fricção de uso, interpretar mensagens de texto ou áudio, classificar lançamentos e fornecer resumos úteis ao usuário. Além do registro de despesas, a solução pode atuar de forma preventiva, identificando padrões de consumo, gastos recorrentes e oportunidades de organização financeira.
+Paralelamente, observa-se que o endividamento passou a atingir públicos cada vez mais jovens. A entrada precoce no mercado de trabalho, associada à facilidade de obtenção de crédito, tem levado muitos jovens adultos a enfrentarem situações de inadimplência antes mesmo de conquistarem estabilidade financeira. De acordo com \citeonline{cbn_jovens_2025}, quatro em cada dez jovens entre 18 e 24 anos já tiveram o nome negativado em órgãos de proteção ao crédito, cenário frequentemente associado à ausência de planejamento financeiro, ao consumo impulsivo e ao uso inadequado do crédito.
 
-O presente trabalho concentra-se na concepção de uma solução que combine chatbot, automação de fluxo, integração com API de mensageria, persistência de dados e interface web para visualização de relatórios. A proposta parte da compreensão do comportamento dos usuários para definir requisitos e direcionar a modelagem técnica do sistema.
+\begin{figure}[H]
+    \centering
+    \caption{Abertura de uma conta em um banco digital}
+    \label{fig:nubank}
+    \includegraphics[width=0.75\textwidth]{figs/nubank.png}
+    
+    Fonte: \citeonline{forbes_nubank_2026}.
+\end{figure}
+
+Além disso, o avanço das tecnologias digitais e das redes sociais intensificou práticas de consumo associadas à busca por status, pertencimento social e satisfação imediata. Conforme apontado por \citeonline{bonomo2017}, o ambiente digital e as dinâmicas de compra não planejada influenciam diretamente o comportamento financeiro dos indivíduos, estimulando hábitos de consumo impulsivos e contribuindo para dificuldades no planejamento financeiro pessoal. Nesse contexto, o consumo deixa de estar relacionado apenas às necessidades básicas e passa também a representar fatores emocionais e sociais.
+
+\begin{figure}[H]
+    \centering
+    \caption{Influência das redes sociais nos hábitos de consumo}
+    \label{fig:carrinho_teclado}
+    \includegraphics[width=0.75\textwidth]{figs/carrinho-no-teclado.png}
+    
+    Fonte: \citeonline{unsplash_carrinho_2023}.
+\end{figure}
+
+A ausência de educação financeira também se apresenta como um fator relevante para o crescimento do descontrole financeiro entre jovens e adultos. Segundo \citeonline{vieira2014}, muitos consumidores possuem dificuldades em organizar gastos, planejar despesas e compreender os impactos do uso excessivo do crédito, o que compromete diretamente a saúde financeira das famílias brasileiras.
+
+Apesar da existência de aplicativos e plataformas voltados ao controle financeiro, muitos usuários ainda encontram dificuldades em manter constância no registro diário de gastos, seja pela complexidade das ferramentas disponíveis, pela necessidade de preenchimentos manuais frequentes ou pela baixa integração dessas soluções ao cotidiano das pessoas. Em muitos casos, pequenas despesas deixam de ser registradas ao longo do mês, dificultando a visualização consolidada do orçamento e comprometendo a tomada de decisão financeira.
+
+\begin{figure}[H]
+    \centering
+    \caption{Exemplo de aplicativo financeiro tradicional}
+    \label{fig:mobills}
+    \includegraphics[width=0.75\textwidth]{figs/cadastro-e-login-no-mobills.png}
+    
+    Fonte: \citeonline{mobills_2023}.
+\end{figure}
+
+Nesse cenário, o avanço das interfaces conversacionais e das aplicações de mensagens instantâneas cria novas possibilidades para o desenvolvimento de soluções mais acessíveis e intuitivas. O WhatsApp destaca-se como uma das plataformas de comunicação mais utilizadas no Brasil, tornando-se um ambiente favorável para soluções que utilizem linguagem natural e interação simplificada. Dessa forma, este trabalho propõe o desenvolvimento de um chatbot financeiro integrado ao WhatsApp, capaz de auxiliar usuários no registro e acompanhamento de entradas, saídas e metas financeiras por meio de mensagens enviadas de forma natural. A proposta combina automação, inteligência artificial e visualização de dados, buscando reduzir o esforço necessário para o controle financeiro pessoal e tornar o processo mais acessível, prático e aderente ao cotidiano dos usuários.
 
 \section{Problemática}
 
-Apesar da ampla disponibilidade de aplicativos financeiros, muitos usuários ainda encontram dificuldade para manter constância no registro diário de gastos, compreender o impacto de pequenas despesas e acompanhar metas financeiras de forma prática. A problemática central deste trabalho consiste em como desenvolver uma solução computacional acessível, integrada a ferramentas já utilizadas no cotidiano, que facilite o controle financeiro pessoal por meio de interações simples em linguagem natural.
+Apesar da vasta oferta de crédito e da existência de aplicativos de gestão financeira, o aumento do endividamento entre jovens brasileiros persiste, evidenciando uma dificuldade crônica no controle pessoal de gastos. A inconstância e a baixa adesão às ferramentas disponíveis, que exigem preenchimentos manuais complexos ou não se integram à rotina do usuário, constituem um obstáculo relevante para a organização financeira cotidiana.
+
+Nesse contexto, observa-se a necessidade de compreender como ferramentas mais acessíveis, intuitivas e integradas aos meios de comunicação já utilizados diariamente pela população podem auxiliar no controle financeiro pessoal. Dessa forma, a problemática desta pesquisa consiste em analisar de que maneira um chatbot financeiro integrado ao WhatsApp, utilizando linguagem natural e inteligência artificial, pode contribuir para o registro de despesas, o acompanhamento financeiro e a conscientização sobre hábitos de consumo.
 
 \section{Justificativa}
 
-A relevância deste estudo está associada à necessidade de soluções mais aderentes ao comportamento real dos usuários. Em vez de exigir a adoção de rotinas complexas ou plataformas pouco familiares, o uso do WhatsApp como canal principal de interação pode ampliar a adesão e tornar o processo de registro financeiro mais natural. Do ponto de vista acadêmico, o trabalho também contribui ao integrar conceitos de chatbot, automação, análise de requisitos e modelagem de sistemas em um contexto aplicado de alto impacto cotidiano.
+O cenário de crescente endividamento e a ausência de educação financeira adequada evidenciam a urgência por ferramentas que promovam o controle de gastos de forma eficiente. No entanto, uma das principais barreiras à organização financeira reside na baixa adesão dos usuários aos aplicativos tradicionais, que frequentemente exigem preenchimentos manuais e apresentam fluxos complexos, resultando na descontinuidade do registro de despesas ao longo do mês.
+
+Além disso, o avanço das tecnologias digitais e das redes sociais intensificou práticas de consumo impulsivo associadas à busca por status e satisfação imediata. Estudos apontam que o ambiente digital influencia diretamente o comportamento financeiro dos indivíduos, contribuindo para dificuldades no planejamento financeiro pessoal e no controle de gastos. Outro fator relevante está relacionado à ausência de educação financeira, já que muitos consumidores ainda apresentam dificuldades em organizar despesas, planejar gastos e compreender os impactos do uso excessivo do crédito.
+
+Diante dessa lacuna, o presente trabalho se justifica pela proposição de uma solução estratégica baseada na ubiquidade do WhatsApp, plataforma amplamente utilizada no Brasil. Ao integrar um chatbot com inteligência artificial e linguagem natural, o projeto visa superar barreiras de usabilidade dos sistemas convencionais, permitindo que o registro de entradas e saídas seja realizado de maneira orgânica e intuitiva, diretamente no cotidiano do usuário.
 
 \section{Objetivo}
 
@@ -20,31 +59,38 @@ Esta seção apresenta os objetivos que orientam o desenvolvimento da pesquisa e
 
 \subsection{Objetivo Geral}
 
-Desenvolver a proposta de um chatbot financeiro integrado ao WhatsApp, capaz de registrar movimentações financeiras em linguagem natural, apoiar o acompanhamento de gastos e oferecer visualizações e alertas para auxiliar no controle financeiro pessoal.
+Desenvolver um chatbot financeiro integrado ao WhatsApp, utilizando inteligência artificial e linguagem natural, com o objetivo de auxiliar usuários no registro e acompanhamento de gastos pessoais de forma prática, acessível e intuitiva.
 
 \subsection{Objetivos Específicos}
 
 \begin{itemize}
-    \item Investigar hábitos, dificuldades e expectativas de usuários em relação ao controle financeiro pessoal.
-    \item Levantar requisitos funcionais e não funcionais para a solução proposta.
-    \item Estruturar um referencial teórico sobre tecnologias, trabalhos relacionados e conceitos necessários ao sistema.
-    \item Modelar a solução por meio de artefatos de análise e projeto.
-    \item Definir um protótipo conceitual da aplicação conversacional e da interface web de apoio.
+    \item Analisar fatores relacionados ao endividamento e à dificuldade de controle financeiro entre jovens e adultos.
+    \item Investigar limitações presentes em aplicativos tradicionais de gestão financeira.
+    \item Estudar o uso de interfaces conversacionais aplicadas ao controle financeiro pessoal.
+    \item Desenvolver um protótipo funcional de chatbot financeiro integrado ao WhatsApp.
+    \item Implementar funcionalidades para registro de entradas e saídas financeiras por meio de linguagem natural.
+    \item Desenvolver visualizações e relatórios financeiros com base nos dados registrados pelos usuários.
+    \item Avaliar a proposta do sistema como ferramenta de apoio à organização financeira pessoal.
 \end{itemize}
 
 \section{Metodologia}
 
-O trabalho adota abordagem qualitativa e exploratória, combinando revisão bibliográfica com levantamento de dados junto a usuários. A investigação empírica é utilizada para compreender como os participantes registram gastos, quais barreiras enfrentam para manter constância no controle financeiro e quais funcionalidades consideram úteis em uma solução conversacional. Os dados coletados subsidiam a elaboração do mapa de empatia, das personas, das histórias de usuário e dos requisitos da proposta.
+Para o desenvolvimento deste trabalho, foi adotada uma pesquisa de caráter aplicado, exploratório, qualitativo e quantitativo, com o objetivo de compreender fatores relacionados ao endividamento, às dificuldades no controle financeiro pessoal e às possibilidades de utilização de interfaces conversacionais como ferramenta de apoio à organização financeira.
+
+A pesquisa caracteriza-se como exploratória por buscar maior familiaridade com o problema estudado, permitindo compreender comportamentos, hábitos financeiros e dificuldades enfrentadas pela população no gerenciamento de gastos pessoais. Além disso, possui caráter aplicado, uma vez que propõe o desenvolvimento de uma solução tecnológica voltada para uma necessidade prática identificada no cotidiano dos usuários.
+
+Inicialmente, foi realizado um levantamento bibliográfico por meio da análise de artigos científicos, notícias, relatórios e publicações relacionados à educação financeira, endividamento, comportamento de consumo, inteligência artificial, chatbots e interfaces conversacionais. Além da pesquisa bibliográfica, foi realizada uma pesquisa de campo por meio da aplicação de formulários digitais. O objetivo da coleta de dados foi compreender como diferentes usuários organizam suas finanças pessoais, identificar dificuldades relacionadas ao controle de gastos e analisar hábitos financeiros presentes no cotidiano da população.
 
 \section{Organização}
-O presente trabalho está organizado da seguinte forma:
 
-O \textbf{Capítulo 1} apresenta a introdução do estudo, contextualizando o problema de pesquisa, sua relevância no cenário atual, os objetivos gerais e específicos, bem como a metodologia empregada.
+O presente trabalho está organizado da seguinte forma.
 
-O \textbf{Capítulo 2} trata dos trabalhos relacionados, reunindo estudos e projetos previamente desenvolvidos que possuem afinidade com o tema abordado, a fim de embasar teoricamente a proposta.
+O \textbf{Capítulo 1} apresenta a introdução do estudo, contextualizando o problema de pesquisa, sua relevância, os objetivos gerais e específicos e a metodologia empregada.
 
-O \textbf{Capítulo 3} aborda os principais conceitos, fundamentos e ferramentas envolvidos na execução do projeto, detalhando os elementos que sustentam a construção da proposta.
+O \textbf{Capítulo 2} reúne o referencial teórico, contemplando trabalhos relacionados e as principais tecnologias utilizadas na proposta.
 
-O \textbf{Capítulo 4} descreve o desenvolvimento da solução proposta, detalhando as etapas e processos adotados na implementação e na construção da resolução de jogos de adivinhar palavras.
+O \textbf{Capítulo 3} descreve a metodologia de pesquisa, incluindo o protocolo de entrevista, a análise qualitativa das respostas, o mapa de empatia, as personas e as histórias de usuário.
 
-O \textbf{Capítulo 5} apresenta as considerações finais, destacando os resultados obtidos, as contribuições do trabalho e sugestões para futuras melhorias e desdobramentos do projeto.
+O \textbf{Capítulo 4} detalha a proposta de solução, com foco na documentação técnica, nos requisitos, na modelagem e no protótipo do sistema.
+
+Por fim, o \textbf{Capítulo 5} apresenta a conclusão do trabalho, destacando as contribuições da pesquisa e possíveis desdobramentos futuros.
