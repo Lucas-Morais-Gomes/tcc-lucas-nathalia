@@ -1,55 +1,67 @@
-\chapter{Referencial Teórico}
+\chapter{Referencial Te\'orico}
 
-Este capítulo reúne os fundamentos conceituais que sustentam a proposta do chatbot financeiro, contemplando soluções correlatas e as principais tecnologias empregadas na construção do sistema.
+Este cap\'itulo apresenta os conceitos que fundamentam o desenvolvimento do sistema proposto, bem como solu\c{c}\~oes semelhantes dispon\'iveis no mercado e estudos cient\'ificos relacionados ao uso de intelig\^encia artificial em finan\c{c}as pessoais. Busca-se, com isso, contextualizar a proposta do chatbot financeiro integrado ao WhatsApp, evidenciando quais problemas j\'a v\^em sendo abordados por ferramentas existentes e quais lacunas ainda podem ser exploradas.
 
 \section{Trabalhos Relacionados}
 
-O levantamento de trabalhos relacionados tem como objetivo identificar abordagens já utilizadas em soluções de automação conversacional, controle financeiro digital e integração entre assistentes virtuais e plataformas de mensageria. Essa análise permite compreender práticas adotadas no mercado e na literatura, bem como delimitar o diferencial da proposta desenvolvida neste trabalho.
+A an\'alise de trabalhos relacionados \`e importante para compreender como outras solu\c{c}\~oes tratam problemas semelhantes aos deste projeto. Nesse contexto, foram observadas ferramentas de controle financeiro pessoal, assistentes financeiros integrados ao WhatsApp e estudos cient\'ificos sobre a aplica\c{c}\~ao de intelig\^encia artificial generativa em tarefas financeiras.
+
+Esse levantamento contribui para identificar funcionalidades recorrentes, caracter\'isticas presentes no mercado, limita\c{c}\~oes das solu\c{c}\~oes j\'a existentes e possibilidades de diferencia\c{c}\~ao para o sistema aqui proposto.
 
 \subsection{Concorrentes}
 
-Entre as soluções concorrentes, destacam-se aplicativos de gestão financeira que oferecem categorização de despesas, relatórios e metas, além de assistentes conversacionais voltados a atendimento automatizado. De modo geral, essas ferramentas evidenciam a importância da usabilidade, da integração com canais familiares e da apresentação clara de indicadores financeiros. Como texto-base provisório, esta subseção deverá ser refinada com a descrição comparativa de produtos específicos e suas funcionalidades.
+Foram identificadas solu\c{c}\~oes concorrentes voltadas ao controle financeiro pessoal, especialmente aquelas que utilizam WhatsApp, intelig\^encia artificial, dashboards e relat\'orios financeiros. Entre elas, destacam-se Porquim \cite{porquim_2026}, Ganhos e Gastos \cite{ganhos_gastos_2026}, Lucrefy \cite{lucrefy_2026}, Bot Financeiro \cite{bot_financeiro_2026} e ZapGastos \cite{zapgastos_2026}.
 
-\subsection{Artigos Científicos Relacionados}
+O Porquim \citeonline{porquim_2026} \`e uma solu\c{c}\~ao voltada ao controle financeiro por meio do WhatsApp, com foco em usu\'arios que enfrentam dificuldades para registrar e organizar seus gastos de maneira cont\'inua, sem depender de planilhas ou aplicativos mais complexos. A ferramenta utiliza intelig\^encia artificial para interpretar mensagens, \`audios e imagens, o que permite registrar despesas de forma mais natural. Entre suas principais funcionalidades est\~ao a categoriza\c{c}\~ao autom\'atica de gastos, a identifica\c{c}\~ao de meios de pagamento, o envio de alertas de limite e a gera\c{c}\~ao de relat\'orios di\'arios, semanais e mensais. Em rela\c{c}\~ao a essa abordagem, a proposta deste trabalho se diferencia ao combinar o registro conversacional via WhatsApp com uma interface web destinada \`a visualiza\c{c}\~ao de dashboards, ao acompanhamento de metas e \`a gera\c{c}\~ao de relat\'orios explicativos mais detalhados.
 
-Na literatura científica, estudos sobre chatbots, interfaces conversacionais e apoio à tomada de decisão mostram que sistemas baseados em linguagem natural podem reduzir barreiras de uso e aumentar a frequência de interação dos usuários com serviços digitais. Para a versão final do trabalho, esta subseção deverá incorporar referências bibliográficas que abordem chatbots financeiros, interação humano-computador, adoção de mensageria e recomendação personalizada em contexto financeiro.
+O Ganhos e Gastos \citeonline{ganhos_gastos_2026} tamb\'em apresenta uma proposta de controle financeiro pessoal com apoio de intelig\^encia artificial e integra\c{c}\~ao ao WhatsApp. Seu objetivo \`e facilitar o lan\c{c}amento de receitas e despesas, reduzindo o esfor\c{c}o manual exigido na organiza\c{c}\~ao financeira. A solu\c{c}\~ao permite registrar movimenta\c{c}\~oes, categoriz\'a-las e visualizar informa\c{c}\~oes por meio de gr\'aficos e indicadores. Assim como em outras ferramentas do segmento, o WhatsApp funciona como canal de entrada de dados, tornando o uso mais pr\'oximo da rotina do usu\'ario. A proposta deste trabalho, por sua vez, busca oferecer uma experi\^encia h\'ibrida entre chatbot e plataforma web, com relat\'orios personalizados e explica\c{c}\~oes em linguagem simples sobre os h\'abitos financeiros do usu\'ario.
+
+O Lucrefy \citeonline{lucrefy_2026} \`e uma ferramenta de controle financeiro pelo WhatsApp direcionada tanto a pessoas f\'isicas quanto a aut\^onomos e pequenos neg\'ocios. Sua proposta est\'a relacionada ao acompanhamento pr\'atico de entradas, sa\'idas e resultados financeiros. Entre suas caracter\'isticas est\~ao o registro das informa\c{c}\~oes por conversa, a categoriza\c{c}\~ao de gastos, a visualiza\c{c}\~ao de relat\'orios e o apoio \`a separa\c{c}\~ao entre finan\c{c}as pessoais e profissionais. Por se tratar de uma solu\c{c}\~ao mais ampla, que tamb\'em contempla o contexto empresarial, a proposta desenvolvida neste trabalho concentra-se no usu\'ario pessoa f\'isica, com \^enfase em educa\c{c}\~ao financeira, metas individuais, comunica\c{c}\~ao personalizada e acompanhamento dos h\'abitos de consumo.
+
+O Bot Financeiro \citeonline{bot_financeiro_2026} utiliza o WhatsApp como interface principal para auxiliar usu\'arios no registro de despesas e receitas. O problema central que procura resolver est\'a associado \`a desorganiza\c{c}\~ao financeira provocada pela dificuldade de registrar gastos no momento em que ocorrem. A ferramenta permite o envio de informa\c{c}\~oes por texto, \`audio ou foto, utilizando intelig\^encia artificial para interpretar os dados e organizar as transa\c{c}\~oes. Al\'em disso, oferece categoriza\c{c}\~ao autom\'atica e resumos financeiros por per\'iodo ou categoria. A partir dessa refer\^encia, a proposta deste trabalho busca complementar esse modelo com relat\'orios mais interpretativos, dashboards mais completos e acompanhamento contextual do comportamento financeiro do usu\'ario ao longo do tempo.
+
+O ZapGastos \citeonline{zapgastos_2026} atua como assistente financeiro integrado ao WhatsApp, com foco no controle de contas, cart\~oes, receitas e despesas. A solu\c{c}\~ao procura reduzir a depend\^encia de planilhas e registros manuais ao oferecer recursos como lan\c{c}amento por texto, \`audio ou foto, edi\c{c}\~ao de transa\c{c}\~oes, lembretes, relat\'orios, gr\'aficos personalizados e \textit{insights} financeiros. Um de seus diferenciais est\'a na integra\c{c}\~ao com bancos e cart\~oes por meio de \textit{Open Finance}, o que amplia a automa\c{c}\~ao na coleta de dados. Por outro lado, esse tipo de integra\c{c}\~ao pode exigir maior confian\c{c}a do usu\'ario e autoriza\c{c}\~ao para acesso a informa\c{c}\~oes financeiras sens\'iveis. Nesse sentido, a proposta deste trabalho procura oferecer uma alternativa com menor barreira inicial de ado\c{c}\~ao, baseada em registro manual inteligente, maior controle sobre os dados informados e possibilidade de evolu\c{c}\~ao gradual para recursos automatizados.
+
+\subsection{Artigos Cient\'ificos Relacionados}
+
+Na literatura cient\'ifica, estudos sobre chatbots, interfaces conversacionais e apoio \`a tomada de decis\~ao mostram que sistemas baseados em linguagem natural podem reduzir barreiras de uso e aumentar a frequ\^encia de intera\c{c}\~ao dos usu\'arios com servi\c{c}os digitais. Para a vers\~ao final do trabalho, esta subse\c{c}\~ao dever\'a incorporar refer\^encias bibliogr\'aficas que abordem chatbots financeiros, intera\c{c}\~ao humano-computador, ado\c{c}\~ao de mensageria e recomenda\c{c}\~ao personalizada em contexto financeiro.
 
 \section{Tecnologias}
 
-As tecnologias selecionadas para a solução foram escolhidas com base em integração, facilidade de automação, escalabilidade e aderência ao fluxo proposto para o produto.
+As tecnologias selecionadas para a solu\c{c}\~ao foram escolhidas com base em integra\c{c}\~ao, facilidade de automa\c{c}\~ao, escalabilidade e ader\^encia ao fluxo proposto para o produto.
 
 \subsection{WhatsApp}
 
-O WhatsApp será utilizado como principal canal de interação com o usuário. A escolha dessa plataforma se justifica por sua ampla adoção, familiaridade de uso e capacidade de reduzir a fricção no registro de informações do dia a dia. No contexto da solução, o aplicativo funciona como porta de entrada para mensagens, comandos, alertas e confirmações de lançamentos financeiros.
+O WhatsApp ser\'a utilizado como principal canal de intera\c{c}\~ao com o usu\'ario. A escolha dessa plataforma se justifica por sua ampla ado\c{c}\~ao, familiaridade de uso e capacidade de reduzir a fric\c{c}\~ao no registro de informa\c{c}\~oes do dia a dia. No contexto da solu\c{c}\~ao, o aplicativo funciona como porta de entrada para mensagens, comandos, alertas e confirma\c{c}\~oes de lan\c{c}amentos financeiros.
 
 \subsection{Evolution API}
 
-A Evolution API atua como camada de integração entre o sistema proposto e o WhatsApp, permitindo o envio e recebimento de mensagens, além da orquestração de eventos conversacionais. Nesta etapa do trabalho, a subseção registra seu papel arquitetural e deverá ser expandida posteriormente com detalhes de autenticação, webhooks e fluxo de mensagens.
+A Evolution API atua como camada de integra\c{c}\~ao entre o sistema proposto e o WhatsApp, permitindo o envio e recebimento de mensagens, al\'em da orquestra\c{c}\~ao de eventos conversacionais. Nesta etapa do trabalho, a subse\c{c}\~ao registra seu papel arquitetural e dever\'a ser expandida posteriormente com detalhes de autentica\c{c}\~ao, webhooks e fluxo de mensagens.
 
 \subsection{Chatbot}
 
-O chatbot representa o núcleo conversacional da solução, sendo responsável por interpretar mensagens em linguagem natural, direcionar o fluxo de atendimento e acionar os serviços internos necessários ao registro e à consulta de dados financeiros. Sua modelagem considera clareza de resposta, simplicidade operacional e contextualização adequada para o usuário final.
+O chatbot representa o n\'ucleo conversacional da solu\c{c}\~ao, sendo respons\'avel por interpretar mensagens em linguagem natural, direcionar o fluxo de atendimento e acionar os servi\c{c}os internos necess\'arios ao registro e \`a consulta de dados financeiros. Sua modelagem considera clareza de resposta, simplicidade operacional e contextualiza\c{c}\~ao adequada para o usu\'ario final.
 
 \subsection{n8n}
 
-O n8n será empregado como ferramenta de automação para integrar etapas do fluxo conversacional, regras de negócio e serviços externos. Seu uso favorece a criação de rotinas visuais de processamento, reduzindo o acoplamento direto entre todas as integrações e permitindo maior flexibilidade na manutenção dos fluxos.
+O n8n ser\'a empregado como ferramenta de automa\c{c}\~ao para integrar etapas do fluxo conversacional, regras de neg\'ocio e servi\c{c}os externos. Seu uso favorece a cria\c{c}\~ao de rotinas visuais de processamento, reduzindo o acoplamento direto entre todas as integra\c{c}\~oes e permitindo maior flexibilidade na manuten\c{c}\~ao dos fluxos.
 
 \subsection{Groq API}
 
-A Groq API é considerada na proposta como serviço de apoio ao processamento de linguagem natural, com potencial para interpretar intenções, estruturar informações extraídas das mensagens e apoiar respostas contextualizadas. Esta subseção permanece como base conceitual e deverá ser aprofundada na versão final com a estratégia de uso da API na arquitetura.
+A Groq API \`e considerada na proposta como servi\c{c}o de apoio ao processamento de linguagem natural, com potencial para interpretar inten\c{c}\~oes, estruturar informa\c{c}\~oes extra\'idas das mensagens e apoiar respostas contextualizadas. Esta subse\c{c}\~ao permanece como base conceitual e dever\'a ser aprofundada posteriormente com a estrat\'egia de uso da API na arquitetura.
 
 \subsection{Docker}
 
-O Docker será utilizado para padronizar a execução dos serviços da aplicação em ambientes isolados, favorecendo reprodutibilidade e portabilidade. Seu uso contribui para simplificar a configuração do ambiente de desenvolvimento e implantação da solução.
+O Docker ser\'a utilizado para padronizar a execu\c{c}\~ao dos servi\c{c}os da aplica\c{c}\~ao em ambientes isolados, favorecendo reprodutibilidade e portabilidade. Seu uso contribui para simplificar a configura\c{c}\~ao do ambiente de desenvolvimento e implanta\c{c}\~ao da solu\c{c}\~ao.
 
 \subsection{Docker Compose}
 
-O Docker Compose será empregado para orquestrar os contêineres necessários ao funcionamento do sistema, como backend, automação, banco de dados e interface web. A adoção dessa ferramenta permite definir e subir a infraestrutura local de forma integrada.
+O Docker Compose ser\'a empregado para orquestrar os cont\^eineres necess\'arios ao funcionamento do sistema, como backend, automa\c{c}\~ao, banco de dados e interface web. A ado\c{c}\~ao dessa ferramenta permite definir e subir a infraestrutura local de forma integrada.
 
 \subsection{React}
 
-O React será utilizado na construção da interface web destinada à visualização de relatórios, gráficos e dados financeiros consolidados. A escolha se deve à flexibilidade para composição de componentes e à facilidade de criação de interfaces dinâmicas voltadas à experiência do usuário.
+O React ser\'a utilizado na constru\c{c}\~ao da interface web destinada \`a visualiza\c{c}\~ao de relat\'orios, gr\'aficos e dados financeiros consolidados. A escolha se deve \`a flexibilidade para composi\c{c}\~ao de componentes e \`a facilidade de cria\c{c}\~ao de interfaces din\^amicas voltadas \`a experi\^encia do usu\'ario.
 
 \subsection{PostgreSQL}
 
-O PostgreSQL será o sistema de gerenciamento de banco de dados da aplicação, responsável por persistir usuários, lançamentos financeiros, categorias, metas e demais entidades necessárias ao funcionamento da solução. Sua adoção se justifica pela robustez, confiabilidade e aderência a aplicações transacionais.
+O PostgreSQL ser\'a o sistema de gerenciamento de banco de dados da aplica\c{c}\~ao, respons\'avel por persistir usu\'arios, lan\c{c}amentos financeiros, categorias, metas e demais entidades necess\'arias ao funcionamento da solu\c{c}\~ao. Sua ado\c{c}\~ao se justifica pela robustez, confiabilidade e ader\^encia a aplica\c{c}\~oes transacionais.
