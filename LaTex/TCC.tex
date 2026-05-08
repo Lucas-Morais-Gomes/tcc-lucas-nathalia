@@ -30,8 +30,8 @@
 \documentclass[
 	% -- opções da classe memoir --
 	12pt,				% tamanho da fonte
-	openright,			% capítulos começam em pág ímpar (insere página vazia caso preciso)
-	twoside,			% para impressão em verso e anverso. Oposto a oneside
+	openany,			% permite iniciar capítulos sem inserir página em branco
+	oneside,			% mantém margens uniformes em todas as páginas
 	a4paper,			% tamanho do papel. 
 	% -- opções da classe abntex2 --
 	%chapter=TITLE,		% títulos de capítulos convertidos em letras maiúsculas
@@ -65,6 +65,7 @@
 \usepackage{listings}
 \usepackage{hyperref}
 \usepackage{caption}
+\usepackage{needspace}
 % ---
 		
 % ---
@@ -152,6 +153,11 @@
 % --- 
 % CONFIGURAÇÕES DE PACOTES
 % --- 
+\setlength{\beforechapskip}{0pt}
+\setlength{\afterchapskip}{24pt}
+\pretocmd{\section}{\Needspace{10\baselineskip}}{}{}
+\pretocmd{\subsection}{\Needspace{8\baselineskip}}{}{}
+
 \renewcommand{\imprimircapa}{
 \include{modelocapa}}
 
