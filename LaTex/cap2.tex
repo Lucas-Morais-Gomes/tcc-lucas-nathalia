@@ -87,36 +87,60 @@ As tecnologias selecionadas para a solução foram escolhidas com base em integr
 
 \subsection{WhatsApp}
 
-O WhatsApp será utilizado como principal canal de interação com o usuário. A escolha dessa plataforma se justifica por sua ampla adoção, familiaridade de uso e capacidade de reduzir a fricção no registro de informações do dia a dia. No contexto da solução, o aplicativo funciona como porta de entrada para mensagens, comandos, alertas e confirmações de lançamentos financeiros.
+O WhatsApp é uma plataforma de mensagens instantâneas utilizada para comunicação por texto, áudio, imagem, vídeo, documentos e chamadas. Além do uso pessoal, a plataforma também disponibiliza recursos voltados à comunicação empresarial, permitindo que organizações utilizem canais oficiais para interação com clientes e usuários. No contexto técnico, a WhatsApp Business Platform oferece funcionalidades de envio e recebimento de mensagens por meio da Cloud API \cite{whatsapp_cloud_api_2026}.
+
+A documentação da WhatsApp Business Platform também apresenta o uso de webhooks para o recebimento de mensagens e eventos. Esse mecanismo permite que sistemas externos sejam notificados sempre que uma nova mensagem é recebida ou quando ocorre alguma atualização relacionada à comunicação. Dessa forma, o WhatsApp pode ser integrado a aplicações externas por meio de APIs e eventos automatizados \cite{whatsapp_cloud_api_2026}.
 
 \subsection{Evolution API}
 
-A Evolution API atua como camada de integração entre o sistema proposto e o WhatsApp, permitindo o envio e recebimento de mensagens, além da orquestração de eventos conversacionais. Nesta etapa do trabalho, a subseção registra seu papel arquitetural e deverá ser expandida posteriormente com detalhes de autenticação, webhooks e fluxo de mensagens.
+A Evolution API é uma API REST voltada à integração com o WhatsApp. Conforme descrito em sua documentação oficial, ela integra o ecossistema Evolution e oferece uma solução de comunicação com suporte a diferentes provedores, como Baileys, WhatsApp Web, Meta Business API e Evolution Provider. A ferramenta foi desenvolvida com Node.js e TypeScript \cite{evolution_api_docs_2026}.
+
+Entre seus principais recursos, a Evolution API disponibiliza endpoints REST para gerenciamento de instâncias, mensagens, grupos e contatos. A documentação também descreve suporte a integrações nativas com ferramentas como Typebot, Chatwoot, OpenAI, Dify, n8n, Flowise e EvoAI, além de funcionalidades como multi-instância, autenticação independente e sistema de eventos \cite{evolution_api_docs_2026}.
 
 \subsection{Chatbot}
 
-O chatbot representa o núcleo conversacional da solução, sendo responsável por interpretar mensagens em linguagem natural, direcionar o fluxo de atendimento e acionar os serviços internos necessários ao registro e à consulta de dados financeiros. Sua modelagem considera clareza de resposta, simplicidade operacional e contextualização adequada para o usuário final.
+Um chatbot é um programa de computador desenvolvido para simular conversas com usuários. Segundo a IBM, nem todo chatbot utiliza inteligência artificial, uma vez que alguns operam com fluxos de perguntas e respostas previamente definidos. Em contrapartida, os chatbots mais modernos costumam empregar técnicas de inteligência artificial conversacional para interpretar perguntas e automatizar respostas \cite{ibm_chatbot_2026}.
+
+Esses sistemas podem ser aplicados em diferentes canais de comunicação, como sites, aplicativos, redes sociais e plataformas de mensagens. A IBM destaca ainda que chatbots com inteligência artificial podem utilizar processamento de linguagem natural para compreender melhor as mensagens dos usuários e responder de maneira mais flexível do que soluções baseadas apenas em regras fixas \cite{ibm_chatbot_2026}.
 
 \subsection{n8n}
 
-O n8n será empregado como ferramenta de automação para integrar etapas do fluxo conversacional, regras de negócio e serviços externos. Seu uso favorece a criação de rotinas visuais de processamento, reduzindo o acoplamento direto entre todas as integrações e permitindo maior flexibilidade na manutenção dos fluxos.
+O n8n é uma ferramenta de automação de fluxos de trabalho que permite conectar aplicações, APIs e serviços externos. De acordo com sua documentação oficial, trata-se de uma plataforma de automação com licença \textit{fair-code}, que combina automação de processos com funcionalidades de inteligência artificial. A ferramenta pode ser utilizada tanto em nuvem quanto em ambiente auto-hospedado \cite{n8n_docs_2026}.
+
+No n8n, os fluxos de automação são denominados \textit{workflows}. Cada workflow é composto por nós conectados entre si, sendo que cada nó executa uma ação específica, como buscar dados, processar informações, chamar uma API ou iniciar uma automação a partir de um evento. Essa estrutura visual favorece a criação de integrações entre diferentes sistemas \cite{n8n_workflows_2026}.
 
 \subsection{Groq API}
 
-A Groq API é considerada na proposta como serviço de apoio ao processamento de linguagem natural, com potencial para interpretar intenções, estruturar informações extraídas das mensagens e apoiar respostas contextualizadas. Esta subseção permanece como base conceitual e deverá ser aprofundada posteriormente com a estratégia de uso da API na arquitetura.
+A Groq API é uma interface de programação que permite utilizar modelos de linguagem em aplicações externas. Sua documentação oficial apresenta o endpoint de \textit{chat completions}, responsável por receber uma lista de mensagens e retornar uma resposta gerada por um modelo. Esse tipo de API é empregado em aplicações voltadas a conversação, geração de texto, automação e processamento de linguagem natural \cite{groq_api_reference_2026}.
+
+A documentação da Groq também informa que a API de \textit{chat completions} possibilita interações conversacionais com modelos de linguagem, recebendo mensagens de usuário e instruções de sistema. Além de respostas textuais, esse recurso pode ser aplicado em tarefas como geração de conteúdo, agentes conversacionais, automação de tarefas e produção de saídas estruturadas em formatos como JSON \cite{groq_text_generation_2026}.
 
 \subsection{Docker}
 
-O Docker será utilizado para padronizar a execução dos serviços da aplicação em ambientes isolados, favorecendo reprodutibilidade e portabilidade. Seu uso contribui para simplificar a configuração do ambiente de desenvolvimento e implantação da solução.
+O Docker é uma plataforma aberta utilizada para desenvolver, distribuir e executar aplicações. Segundo a documentação oficial, sua proposta é separar a aplicação da infraestrutura subjacente, facilitando a entrega de software em diferentes ambientes. Essa separação contribui para maior consistência na execução de aplicações em máquinas distintas \cite{docker_overview_2026}.
 
-\subsection{Docker Compose}
+A principal unidade de execução do Docker é o \textit{container}. Um container corresponde a um ambiente isolado que reúne a aplicação e os elementos necessários ao seu funcionamento. Conforme descrito na documentação oficial, containers são leves, podem ser executados simultaneamente em um mesmo host e ajudam a padronizar o ambiente de execução da aplicação \cite{docker_overview_2026}.
 
-O Docker Compose será empregado para orquestrar os contêineres necessários ao funcionamento do sistema, como backend, automação, banco de dados e interface web. A adoção dessa ferramenta permite definir e subir a infraestrutura local de forma integrada.
+\subsection{JavaScript}
+
+O JavaScript é uma linguagem de programação leve, interpretada ou compilada em tempo de execução, amplamente utilizada no desenvolvimento de aplicações web. De acordo com a MDN Web Docs, a linguagem oferece suporte a funções de primeira classe, tipagem dinâmica e diferentes paradigmas de programação, entre eles os paradigmas imperativo, funcional e orientado a objetos \cite{mdn_javascript_2026}.
+
+Seu uso, no entanto, não se restringe aos navegadores. O JavaScript também pode ser empregado em ambientes externos à web, como Node.js, Apache CouchDB e Adobe Acrobat. Essa flexibilidade permite sua aplicação na criação de comportamentos dinâmicos, na manipulação de dados e no tratamento de objetos, funções, eventos e demais estruturas próprias da linguagem, o que justifica sua relevância no desenvolvimento de aplicações modernas \cite{mdn_javascript_2026}.
 
 \subsection{React}
 
-O React será utilizado na construção da interface web destinada à visualização de relatórios, gráficos e dados financeiros consolidados. A escolha se deve à flexibilidade para composição de componentes e à facilidade de criação de interfaces dinâmicas voltadas à experiência do usuário.
+O React é uma biblioteca JavaScript utilizada para a construção de interfaces de usuário web e nativas. A documentação oficial o define como uma biblioteca voltada à criação de interfaces baseadas em componentes, permitindo dividir a tela em partes menores e reutilizáveis. Esses componentes podem ser combinados para formar páginas, telas e aplicações completas \cite{react_docs_2026}.
+
+Uma das ideias centrais do React é a organização da interface em componentes independentes. Esses componentes podem representar elementos visuais como botões, menus, formulários, cartões, listas e outras partes da tela. Essa abordagem favorece a reutilização de código e contribui para a organização de interfaces mais complexas \cite{react_docs_2026}.
+
+\subsection{Node.js}
+
+O Node.js é um ambiente de execução JavaScript de código aberto e multiplataforma. Conforme descrito em sua documentação oficial, ele executa o motor V8, o mesmo utilizado pelo Google Chrome, fora do navegador, permitindo que JavaScript também seja empregado em ambientes de servidor e em ferramentas de linha de comando \cite{nodejs_intro_2026}.
+
+Uma característica importante do Node.js é seu modelo de entrada e saída assíncrono e não bloqueante. Esse funcionamento permite lidar com operações como leitura de arquivos, acesso a banco de dados e comunicação em rede sem bloquear a execução principal do programa, favorecendo aplicações que precisam tratar múltiplas conexões simultâneas \cite{nodejs_intro_2026}.
 
 \subsection{PostgreSQL}
 
-O PostgreSQL será o sistema de gerenciamento de banco de dados da aplicação, responsável por persistir usuários, lançamentos financeiros, categorias, metas e demais entidades necessárias ao funcionamento da solução. Sua adoção se justifica pela robustez, confiabilidade e aderência a aplicações transacionais.
+O PostgreSQL é um sistema gerenciador de banco de dados objeto-relacional de código aberto. De acordo com sua documentação oficial, ele tem origem no projeto POSTGRES, desenvolvido na Universidade da Califórnia em Berkeley, e oferece suporte a grande parte do padrão SQL. Entre seus recursos estão consultas complexas, chaves estrangeiras, gatilhos, visões atualizáveis, integridade transacional e controle de concorrência multiversão \cite{postgresql_intro_2026}.
+
+Além das funcionalidades tradicionais de bancos relacionais, o PostgreSQL permite extensões em diferentes níveis. A documentação oficial informa que os usuários podem ampliar o banco por meio de novos tipos de dados, funções, operadores, agregações, métodos de índice e linguagens procedurais. Por possuir licença livre, o sistema pode ser utilizado, modificado e distribuído para diferentes finalidades \cite{postgresql_intro_2026}.
