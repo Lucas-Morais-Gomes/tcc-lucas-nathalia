@@ -257,8 +257,6 @@
 \pdfbookmark[0]{\listfigurename}{lof}
 \listoffigures*
 \cleardoublepage
-%% ---
-\begin{comment}
 % ---
 % inserir lista de tabelas
 % ---
@@ -270,16 +268,14 @@
 % ---
 % inserir lista de listings
 % ---
-\pdfbookmark[0]{\lstlistlistingname}{lol}
-\begin{KeepFromToc}
-{   % Straightforward hack to remove footnote marks from lstlistoflistings
-\let\footnotemark\relax
-\lstlistoflistings
-}
-\end{KeepFromToc}
-\cleardoublepage
-% ---
-\end{comment}
+%\pdfbookmark[0]{\lstlistlistingname}{lol}
+%\begin{KeepFromToc}
+%{   % Straightforward hack to remove footnote marks from lstlistoflistings
+%\let\footnotemark\relax
+%\lstlistoflistings
+%}
+%\end{KeepFromToc}
+%\cleardoublepage
 
 % ---
 \include{siglas}
