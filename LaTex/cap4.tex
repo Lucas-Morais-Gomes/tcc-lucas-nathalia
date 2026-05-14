@@ -13,23 +13,35 @@ O levantamento de requisitos foi orientado pelos achados da pesquisa qualitativa
 \subsubsection{Requisitos Funcionais}
 
 \begin{itemize}
-    \item O sistema deve permitir o registro de entradas e saídas financeiras por meio de mensagens em linguagem natural no WhatsApp.
-    \item O sistema deve classificar automaticamente os lançamentos em categorias financeiras.
-    \item O sistema deve confirmar ao usuário os registros realizados e permitir correção em caso de interpretação inadequada.
-    \item O sistema deve gerar relatórios periódicos com síntese de gastos, entradas e saldo.
-    \item O sistema deve identificar gastos recorrentes e emitir alertas sobre assinaturas ou débitos automáticos.
-    \item O sistema deve permitir o cadastro e acompanhamento de metas financeiras.
-    \item O sistema deve disponibilizar uma interface web para consulta de gráficos e informações consolidadas.
+    \item O sistema deve interpretar e processar mensagens enviadas pelo usuário via WhatsApp utilizando Inteligência Artificial.
+    \item O sistema deve identificar automaticamente os valores, tipos de movimentação (receita/despesa) e categorias presentes nas mensagens de linguagem natural do usuário.
+    \item O sistema deve gerar gráficos financeiros com base nos dados registrados pelo usuário.
+    \item O sistema deve permitir que o usuário possa se cadastrar.
+    \item O sistema deve permitir que o usuário faça o login, baseado nos dados cadastrados.
+    \item O sistema deve ter uma visualização web, que permita ao usuário ver os dashboards criados.
+    \item O sistema deve permitir separar gastos por categorias.
+    \item O sistema deve permitir a configuração do estilo de comunicação do assistente virtual conforme a preferência do usuário.
+    \item O sistema deve permitir que o usuário reserve valores para metas financeiras específicas, desconsiderando-os do saldo disponível.
+    \item O sistema deve permitir que o usuário edite as movimentações financeiras registradas.
+    \item O sistema deve permitir que o usuário remova as movimentações financeiras registradas.
+    \item O sistema deve permitir a geração de relatórios financeiros com base nos dados registrados pelo usuário.
+    \item O sistema deve permitir que o usuário exporte o relatório para fora do site.
+    \item O assistente de IA deve manter o contexto da conversa com o usuário, permitindo interações contínuas e mais fluidas.
 \end{itemize}
 
 \subsubsection{Requisitos Não Funcionais}
 
 \begin{itemize}
-    \item A solução deve apresentar fluxo de uso simples e compatível com usuários sem conhecimento técnico.
-    \item O tempo de resposta das interações conversacionais deve ser adequado ao contexto de mensagens instantâneas.
-    \item O sistema deve garantir persistência e integridade dos dados financeiros registrados.
-    \item A arquitetura deve permitir evolução modular das integrações e serviços.
-    \item A aplicação deve ser passível de execução em ambiente conteinerizado para facilitar implantação e manutenção.
+    \item O sistema deve apresentar fluxo de uso simples, intuitivo e compatível com usuários sem conhecimento técnico.
+    \item O processo de registro financeiro deve exigir o menor número de etapas, reduzindo o esforço necessário para utilização contínua da plataforma.
+    \item A interface conversacional deve utilizar linguagem clara, objetiva e de fácil compreensão para o usuário.
+    \item O sistema deve permitir utilização em dispositivos móveis, considerando que o WhatsApp será o principal canal de interação.
+    \item O sistema deve garantir persistência, integridade e segurança dos dados financeiros registrados pelos usuários.
+    \item A solução deve possuir arquitetura modular, permitindo evolução futura das integrações e funcionalidades.
+    \item A aplicação deve ser coerente com execução em ambiente conteinerizado utilizando Docker.
+    \item O dashboard web deve apresentar informações financeiras de forma visual, organizada e acessível.
+    \item O sistema deve priorizar facilidade de uso e baixo esforço mental, buscando incentivar constância no acompanhamento financeiro.
+    \item O sistema deve oferecer experiência coerente com a rotina do dia a dia do usuário, permitindo registros rápidos por linguagem natural.
 \end{itemize}
 
 \subsection{Modelagem}
