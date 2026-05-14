@@ -94,14 +94,57 @@ No contexto da presente proposta, o diagrama entidade-relacionamento representa 
 
 \subsection{Protótipo da Interface de Usuário}
 
-O protótipo da solução deverá contemplar dois eixos principais: a experiência conversacional no WhatsApp e a interface web para visualização de relatórios. Na interação conversacional, espera-se um fluxo enxuto para registrar transações, revisar classificações e receber alertas. Na interface web, a proposta inclui visualização de categorias, evolução de gastos, saldo e metas financeiras.
+O protótipo da solução contempla dois eixos principais: a experiência conversacional no WhatsApp e a interface web para visualização de dashboards e relatórios. A proposta busca oferecer uma jornada de usuário fluida, começando pelo registro simplificado de gastos via linguagem natural e culminando em uma análise visual completa da saúde financeira.
 
-Nesta versão do documento, o protótipo permanece descrito em nível conceitual, servindo como guia para a etapa de refinamento visual e técnico. A inclusão das telas finais e dos fluxos completos deverá ser realizada em etapa posterior do trabalho.
+\subsubsection{Interface Conversacional (WhatsApp)}
+
+A interação no WhatsApp foi projetada para ser rápida e intuitiva. O usuário pode enviar mensagens de texto ou áudio descrevendo um gasto, e o assistente GranaAI processa a informação em tempo real. A Figura \ref{fig:prototipo-whatsapp} ilustra uma simulação de uso onde o usuário registra uma compra impulsiva no iFood. Além de confirmar o registro, a IA fornece um \textit{insight} imediato sobre o limite da categoria, cumprindo o papel de assistente preventivo.
 
 \begin{figure}[H]
     \centering
-    \caption{Placeholder para o protótipo do sistema}
-    \label{fig:placeholder-prototipo}
-    \fbox{\parbox[c][6cm][c]{0.8\textwidth}{\centering Espaço reservado para imagens do protótipo da solução.}}
+    \caption{Simulação de registro de gasto via WhatsApp}
+    \label{fig:prototipo-whatsapp}
+    \includegraphics[width=0.5\textwidth]{figs/simulado-whatsapp.png}
     \fonte{Elaborado pelos autores.}
 \end{figure}
+
+\subsubsection{Dashboard Web}
+
+A interface web serve como o centro de análise financeira do usuário. Nela, os dados registrados via WhatsApp são consolidados em visualizações gráficas que facilitam a compreensão do orçamento. A Figura \ref{fig:prototipo-dashboard} apresenta a visão geral do dashboard, com cartões de resumo financeiro, gráficos de evolução mensal e a lista de transações recentes.
+
+\begin{figure}[H]
+    \centering
+    \caption{Interface principal do Dashboard Web}
+    \label{fig:prototipo-dashboard}
+    \includegraphics[width=\textwidth]{figs/dashboards.png}
+    \fonte{Elaborado pelos autores.}
+\end{figure}
+
+As demais funcionalidades, como o gerenciamento de categorias (Figura \ref{fig:prototipo-categorias}) e o acompanhamento de metas financeiras (Figura \ref{fig:prototipo-metas}), complementam a experiência, permitindo que o usuário tenha controle total sobre seus objetivos de médio e longo prazo.
+
+\begin{figure}[H]
+    \centering
+    \caption{Gerenciamento de limites por categoria}
+    \label{fig:prototipo-categorias}
+    \includegraphics[width=0.8\textwidth]{figs/categorias.png}
+    \fonte{Elaborado pelos autores.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \caption{Acompanhamento de metas financeiras}
+    \label{fig:prototipo-metas}
+    \includegraphics[width=0.8\textwidth]{figs/metas.png}
+    \fonte{Elaborado pelos autores.}
+\end{figure}
+
+Por fim, a tela de relatórios e \textit{insights} (Figura \ref{fig:prototipo-relatorios}) oferece uma visão analítica e projeções futuras geradas pela IA, auxiliando na tomada de decisão estratégica do usuário.
+
+\begin{figure}[H]
+    \centering
+    \caption{Relatórios detalhados e insights da IA}
+    \label{fig:prototipo-relatorios}
+    \includegraphics[width=\textwidth]{figs/relatorios.png}
+    \fonte{Elaborado pelos autores.}
+\end{figure}
+
