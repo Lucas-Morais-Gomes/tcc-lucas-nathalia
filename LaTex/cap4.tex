@@ -96,6 +96,26 @@ No contexto da presente proposta, o diagrama entidade-relacionamento representa 
 
 O protótipo da solução contempla dois eixos principais: a experiência conversacional no WhatsApp e a interface web para visualização de dashboards e relatórios. A proposta busca oferecer uma jornada de usuário fluida, começando pelo registro simplificado de gastos via linguagem natural e culminando em uma análise visual completa da saúde financeira.
 
+\subsubsection{Fluxo de cadastro e uso do sistema}
+
+O uso da solução proposta pode começar por dois caminhos. No primeiro, o usuário acessa diretamente a versão web do GranaAI, abre a tela de cadastro e preenche as informações solicitadas pelo sistema. Após a conclusão do formulário, a plataforma confirma o cadastro e permite que o usuário siga para o uso da aplicação.
+
+No segundo caminho, o primeiro contato acontece pelo WhatsApp. Caso o usuário envie uma mensagem ao chatbot antes de possuir cadastro, o sistema identifica que aquele número ainda não está vinculado a nenhuma conta. Em seguida, o assistente informa a necessidade de cadastro e envia o link da tela correspondente.
+
+Depois que o cadastro é finalizado, o usuário recebe uma confirmação na versão web e pode retornar à conversa com o chatbot. A partir desse momento, quando ele enviar uma mensagem relacionada a uma movimentação financeira, como uma despesa ou receita, o sistema associa automaticamente o número de telefone à conta cadastrada.
+
+Com essa vinculação, as informações enviadas pelo WhatsApp passam a ser registradas na base de dados do usuário. Assim, uma mensagem como ``gastei R\$ 35,00 com lanche'' pode ser interpretada pelo chatbot, classificada como despesa e armazenada na categoria correspondente.
+
+Para consultar essas informações na versão web, o usuário acessa a tela de login e informa os dados definidos no cadastro. Após a autenticação, ele visualiza suas movimentações, gráficos, metas financeiras e relatórios gerados a partir dos registros feitos pelo WhatsApp.
+
+\begin{figure}[H]
+    \centering
+    \caption{Diagrama de sequência de cadastro e registro financeiro}
+    \label{fig:diagrama-sequencia-cadastro-registro}
+    \includegraphics[width=\textwidth]{figs/diagrama-sequencia.png}
+    \fonte{Elaborado pelos autores.}
+\end{figure}
+
 \subsubsection{Interface Conversacional (WhatsApp)}
 
 A interação no WhatsApp foi projetada para ser rápida e intuitiva. O usuário pode enviar mensagens de texto ou áudio descrevendo um gasto, e o assistente GranaAI processa a informação em tempo real. A Figura \ref{fig:prototipo-whatsapp} ilustra uma simulação de uso onde o usuário registra uma compra impulsiva no iFood. Além de confirmar o registro, a IA fornece um \textit{insight} imediato sobre o limite da categoria, cumprindo o papel de assistente preventivo.
@@ -147,4 +167,3 @@ Por fim, a tela de relatórios e \textit{insights} (Figura \ref{fig:prototipo-re
     \includegraphics[width=\textwidth]{figs/relatorios.png}
     \fonte{Elaborado pelos autores.}
 \end{figure}
-
