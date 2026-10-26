@@ -1,0 +1,146 @@
+\chapter{Referencial Teórico}
+
+Este capítulo apresenta os conceitos que fundamentam o desenvolvimento do sistema proposto, bem como soluções semelhantes disponíveis no mercado e estudos científicos relacionados ao uso de inteligência artificial em finanças pessoais. Busca-se, com isso, contextualizar a proposta do chatbot financeiro integrado ao WhatsApp, evidenciando quais problemas já vêm sendo abordados por ferramentas existentes e quais lacunas ainda podem ser exploradas.
+
+\section{Trabalhos Relacionados}
+
+A análise de trabalhos relacionados é importante para compreender como outras soluções tratam problemas semelhantes aos deste projeto. Nesse contexto, foram observadas ferramentas de controle financeiro pessoal, assistentes financeiros integrados ao WhatsApp e estudos científicos sobre a aplicação de inteligência artificial generativa em tarefas financeiras.
+
+Esse levantamento contribui para identificar funcionalidades recorrentes, características presentes no mercado, limitações das soluções já existentes e possibilidades de diferenciação para o sistema aqui proposto.
+
+\subsection{Concorrentes}
+
+Foram identificadas soluções concorrentes voltadas ao controle financeiro pessoal, especialmente aquelas que utilizam WhatsApp, inteligência artificial, dashboards e relatórios financeiros. Entre elas, destacam-se Porquim \cite{porquim_2026}, Ganhos e Gastos \cite{ganhos_gastos_2026}, Lucrefy \cite{lucrefy_2026}, Bot Financeiro \cite{bot_financeiro_2026} e ZapGastos \cite{zapgastos_2026}.
+
+O Porquim \cite{porquim_2026} é uma ferramenta voltada ao controle financeiro por meio do WhatsApp, com foco em usuários que enfrentam dificuldades para registrar e organizar seus gastos de maneira contínua, sem depender de planilhas ou aplicativos mais complexos. A ferramenta utiliza inteligência artificial para interpretar mensagens, áudios e imagens, o que permite registrar despesas de forma mais natural. Entre suas principais funcionalidades estão a categorização automática de gastos, a identificação de meios de pagamento, o envio de alertas de limite e a geração de relatórios diários, semanais e mensais. Em relação a essa abordagem, a proposta deste trabalho se diferencia ao combinar o registro conversacional via WhatsApp com uma interface web destinada à visualização de dashboards, ao acompanhamento de metas e à geração de relatórios explicativos mais detalhados.
+
+\begin{figure}[H]
+    \centering
+    \caption{Interface da plataforma Porquim}
+    \label{fig:concorrente-porquim}
+    \includegraphics[width=0.8\textwidth,height=0.65\textheight,keepaspectratio]{figs/porquim.png}
+    
+    \fonte{\citeonline{porquim_2026}.}
+\end{figure}
+
+O Ganhos e Gastos \cite{ganhos_gastos_2026} também apresenta uma proposta de controle financeiro pessoal com apoio de inteligência artificial e integração ao WhatsApp. Seu objetivo é facilitar o lançamento de receitas e despesas, reduzindo o esforço manual exigido na organização financeira. A solução permite registrar movimentações, categorizá-las e visualizar informações por meio de gráficos e indicadores. Assim como em outras ferramentas do segmento, o WhatsApp funciona como canal de entrada de dados, tornando o uso mais próximo da rotina do usuário. A proposta deste trabalho, por sua vez, busca oferecer uma experiência híbrida entre chatbot e plataforma web, com relatórios personalizados e explicações em linguagem simples sobre os hábitos financeiros do usuário.
+
+\begin{figure}[H]
+    \centering
+    \caption{Interface da plataforma Ganhos e Gastos}
+    \label{fig:concorrente-ganhos-gastos}
+    \includegraphics[width=0.8\textwidth,height=0.65\textheight,keepaspectratio]{figs/ganhos-e-gastos.png}
+    
+    \fonte{\citeonline{ganhos_gastos_2026}.}
+\end{figure}
+
+O Lucrefy \cite{lucrefy_2026} é uma ferramenta de controle financeiro pelo WhatsApp direcionada tanto a pessoas físicas quanto a autônomos e pequenos negócios. Sua proposta está relacionada ao acompanhamento prático de entradas, saídas e resultados financeiros. Entre suas características estão o registro das informações por conversa, a categorização de gastos, a visualização de relatórios e o apoio à separação entre finanças pessoais e profissionais. Por se tratar de uma solução mais ampla, que também contempla o contexto empresarial, a proposta desenvolvida neste trabalho concentra-se no usuário pessoa física, com ênfase em educação financeira, metas individuais, comunicação personalizada e acompanhamento dos hábitos de consumo.
+
+\begin{figure}[H]
+    \centering
+    \caption{Interface da plataforma Lucrefy}
+    \label{fig:concorrente-lucrefy}
+    \includegraphics[width=0.8\textwidth,height=0.65\textheight,keepaspectratio]{figs/lucrefy.png}
+    
+    \fonte{\citeonline{lucrefy_2026}.}
+\end{figure}
+
+O Bot Financeiro \cite{bot_financeiro_2026} utiliza o WhatsApp como interface principal para auxiliar usuários no registro de despesas e receitas. O problema central que procura resolver está associado à desorganização financeira provocada pela dificuldade de registrar gastos no momento em que ocorrem. A ferramenta permite o envio de informações por texto, áudio ou foto, utilizando inteligência artificial para interpretar os dados e organizar as transações. Além disso, oferece categorização automática e resumos financeiros por período ou categoria. A partir dessa referência, a proposta deste trabalho busca complementar esse modelo com relatórios mais interpretativos, dashboards mais completos e acompanhamento contextual do comportamento financeiro do usuário ao longo do tempo.
+
+\begin{figure}[H]
+    \centering
+    \caption{Interface da plataforma Bot Financeiro}
+    \label{fig:concorrente-bot-financeiro}
+    \includegraphics[width=0.8\textwidth,height=0.65\textheight,keepaspectratio]{figs/botfinanceiro.png}
+    
+    \fonte{\citeonline{bot_financeiro_2026}.}
+\end{figure}
+
+O ZapGastos \cite{zapgastos_2026} atua como assistente financeiro integrado ao WhatsApp, com foco no controle de contas, cartões, receitas e despesas. A solução procura reduzir a dependência de planilhas e registros manuais ao oferecer recursos como lançamento por texto, áudio ou foto, edição de transações, lembretes, relatórios, gráficos personalizados e \textit{insights} financeiros. Um de seus diferenciais está na integração com bancos e cartões por meio de \textit{Open Finance}, o que amplia a automação na coleta de dados. Por outro lado, esse tipo de integração pode exigir maior confiança do usuário e autorização para acesso a informações financeiras sensíveis. Nesse sentido, a proposta deste trabalho procura oferecer uma alternativa com menor barreira inicial de adoção, baseada em registro manual inteligente, maior controle sobre os dados informados e possibilidade de evolução gradual para recursos automatizados.
+
+\begin{figure}[H]
+    \centering
+    \caption{Interface da plataforma ZapGastos}
+    \label{fig:concorrente-zapgastos}
+    \includegraphics[width=0.8\textwidth,height=0.65\textheight,keepaspectratio]{figs/zapgastos.png}
+    
+    \fonte{\citeonline{zapgastos_2026}.}
+\end{figure}
+
+\subsection{Artigos Científicos Relacionados}
+
+\subsubsection{Uso de modelos de linguagem em aconselhamento financeiro}
+
+O estudo \textit{Using Large Language Models for Financial Advice}, de Fieberg, Hornuf, Streich e Meiler \cite{fieberg2024financialadvice}, analisa a capacidade de grandes modelos de linguagem de gerar recomendações financeiras adequadas. Para isso, os autores avaliaram sugestões de portfólio produzidas por 32 modelos de linguagem para diferentes perfis de investidores, considerando fatores como preferência de risco, país, sustentabilidade, gênero e experiência de investimento. Os resultados indicam que esses modelos podem produzir orientações compatíveis com características relevantes dos usuários, embora também revelem limitações importantes, como a presença de vieses, entre eles a tendência de favorecer ativos do país de origem do investidor.
+
+Embora o artigo esteja voltado ao aconselhamento de investimentos, sua contribuição para este trabalho é relevante, pois evidencia o potencial dos modelos de linguagem na interpretação de perfis financeiros e na geração de orientações personalizadas. No contexto do chatbot financeiro proposto, essa capacidade pode ser aplicada à análise de hábitos de consumo, à elaboração de relatórios individualizados e à oferta de recomendações de economia. Ainda assim, o uso de inteligência artificial em finanças exige cautela, uma vez que as respostas produzidas devem ser compreendidas como apoio informativo, e não como aconselhamento financeiro profissional.
+
+\subsubsection{Uso de IA generativa na gestão financeira pessoal}
+
+O artigo \textit{How individuals use generative AI for personal financial management}, publicado no \textit{Journal of Behavioral and Experimental Finance} por Pak \cite{pak2026personalfinance}, investiga de que maneira indivíduos utilizam modelos de linguagem, como o ChatGPT, em tarefas relacionadas à gestão financeira pessoal. O estudo analisou dados de 2.170 adultos coreanos e identificou aplicações em áreas como orçamento, planejamento de poupança, investimentos, impostos, dívidas, seguros, moradia, detecção de fraudes, educação financeira e apoio psicológico. De acordo com o autor, os usuários podem recorrer aos LLMs como tutores sob demanda, mecanismos de busca, quase consultores e fontes de apoio em decisões financeiras.
+
+Esse estudo apresenta relação direta com a proposta deste trabalho, pois demonstra a existência de interesse no uso de IA generativa para atividades cotidianas de organização financeira. Com base nessa constatação, o projeto aqui proposto busca aplicar esse potencial em um ambiente já familiar ao usuário, o WhatsApp, com o objetivo de reduzir barreiras de uso e tornar o controle financeiro mais acessível.
+
+\section{Tecnologias}
+
+As tecnologias selecionadas para a solução foram escolhidas com base em integração, facilidade de automação, escalabilidade e aderência ao fluxo proposto para o produto.
+
+\subsection{WhatsApp}
+
+O WhatsApp é uma plataforma de mensagens instantâneas utilizada para comunicação por texto, áudio, imagem, vídeo, documentos e chamadas. Além do uso pessoal, a plataforma também disponibiliza recursos voltados à comunicação empresarial, permitindo que organizações utilizem canais oficiais para interação com clientes e usuários. No contexto técnico, a WhatsApp Business Platform oferece funcionalidades de envio e recebimento de mensagens por meio da Cloud API \cite{whatsapp_cloud_api_2026}.
+
+A documentação da WhatsApp Business Platform também apresenta o uso de webhooks para o recebimento de mensagens e eventos. Esse mecanismo permite que sistemas externos sejam notificados sempre que uma nova mensagem é recebida ou quando ocorre alguma atualização relacionada à comunicação. Dessa forma, o WhatsApp pode ser integrado a aplicações externas por meio de APIs e eventos automatizados \cite{whatsapp_cloud_api_2026}.
+
+\subsection{Evolution API}
+
+A Evolution API é uma API REST voltada à integração com o WhatsApp. Conforme descrito em sua documentação oficial, ela integra o ecossistema Evolution e oferece uma solução de comunicação com suporte a diferentes provedores, como Baileys, WhatsApp Web, Meta Business API e Evolution Provider. A ferramenta foi desenvolvida com Node.js e TypeScript \cite{evolution_api_docs_2026}.
+
+Entre seus principais recursos, a Evolution API disponibiliza endpoints REST para gerenciamento de instâncias, mensagens, grupos e contatos. A documentação também descreve suporte a integrações nativas com ferramentas como Typebot, Chatwoot, OpenAI, Dify, n8n, Flowise e EvoAI, além de funcionalidades como multi-instância, autenticação independente e sistema de eventos \cite{evolution_api_docs_2026}.
+
+\subsection{Chatbot}
+
+Um chatbot é um programa de computador desenvolvido para simular conversas com usuários. Segundo a IBM, nem todo chatbot utiliza inteligência artificial, uma vez que alguns operam com fluxos de perguntas e respostas previamente definidos. Em contrapartida, os chatbots mais modernos costumam empregar técnicas de inteligência artificial conversacional para interpretar perguntas e automatizar respostas \cite{ibm_chatbot_2026}.
+
+Esses sistemas podem ser aplicados em diferentes canais de comunicação, como sites, aplicativos, redes sociais e plataformas de mensagens. A IBM destaca ainda que chatbots com inteligência artificial podem utilizar processamento de linguagem natural para compreender melhor as mensagens dos usuários e responder de maneira mais flexível do que soluções baseadas apenas em regras fixas \cite{ibm_chatbot_2026}.
+
+\subsection{n8n}
+
+O n8n é uma ferramenta de automação de fluxos de trabalho que permite conectar aplicações, APIs e serviços externos. De acordo com sua documentação oficial, trata-se de uma plataforma de automação com licença \textit{fair-code}, que combina automação de processos com funcionalidades de inteligência artificial. A ferramenta pode ser utilizada tanto em nuvem quanto em ambiente auto-hospedado \cite{n8n_docs_2026}.
+
+No n8n, os fluxos de automação são denominados \textit{workflows}. Cada workflow é composto por nós conectados entre si, sendo que cada nó executa uma ação específica, como buscar dados, processar informações, chamar uma API ou iniciar uma automação a partir de um evento. Essa estrutura visual favorece a criação de integrações entre diferentes sistemas \cite{n8n_workflows_2026}.
+
+\subsection{Groq API}
+
+A Groq API é uma interface de programação que permite utilizar modelos de linguagem em aplicações externas. Sua documentação oficial apresenta o endpoint de \textit{chat completions}, responsável por receber uma lista de mensagens e retornar uma resposta gerada por um modelo. Esse tipo de API é empregado em aplicações voltadas a conversação, geração de texto, automação e processamento de linguagem natural \cite{groq_api_reference_2026}.
+
+A documentação da Groq também informa que a API de \textit{chat completions} possibilita interações conversacionais com modelos de linguagem, recebendo mensagens de usuário e instruções de sistema. Além de respostas textuais, esse recurso pode ser aplicado em tarefas como geração de conteúdo, agentes conversacionais, automação de tarefas e produção de saídas estruturadas em formatos como JSON \cite{groq_text_generation_2026}.
+
+\subsection{Docker}
+
+O Docker é uma plataforma aberta utilizada para desenvolver, distribuir e executar aplicações. Segundo a documentação oficial, sua proposta é separar a aplicação da infraestrutura subjacente, facilitando a entrega de software em diferentes ambientes. Essa separação contribui para maior consistência na execução de aplicações em máquinas distintas \cite{docker_overview_2026}.
+
+A principal unidade de execução do Docker é o \textit{container}. Um container corresponde a um ambiente isolado que reúne a aplicação e os elementos necessários ao seu funcionamento. Conforme descrito na documentação oficial, containers são leves, podem ser executados simultaneamente em um mesmo host e ajudam a padronizar o ambiente de execução da aplicação \cite{docker_overview_2026}.
+
+\subsection{JavaScript}
+
+O JavaScript é uma linguagem de programação leve, interpretada ou compilada em tempo de execução, amplamente utilizada no desenvolvimento de aplicações web. De acordo com a MDN Web Docs, a linguagem oferece suporte a funções de primeira classe, tipagem dinâmica e diferentes paradigmas de programação, entre eles os paradigmas imperativo, funcional e orientado a objetos \cite{mdn_javascript_2026}.
+
+Seu uso, no entanto, não se restringe aos navegadores. O JavaScript também pode ser empregado em ambientes externos à web, como Node.js, Apache CouchDB e Adobe Acrobat. Essa flexibilidade permite sua aplicação na criação de comportamentos dinâmicos, na manipulação de dados e no tratamento de objetos, funções, eventos e demais estruturas próprias da linguagem, o que justifica sua relevância no desenvolvimento de aplicações modernas \cite{mdn_javascript_2026}.
+
+\subsection{React}
+
+O React é uma biblioteca JavaScript utilizada para a construção de interfaces de usuário web e nativas. A documentação oficial o define como uma biblioteca voltada à criação de interfaces baseadas em componentes, permitindo dividir a tela em partes menores e reutilizáveis. Esses componentes podem ser combinados para formar páginas, telas e aplicações completas \cite{react_docs_2026}.
+
+Uma das ideias centrais do React é a organização da interface em componentes independentes. Esses componentes podem representar elementos visuais como botões, menus, formulários, cartões, listas e outras partes da tela. Essa abordagem favorece a reutilização de código e contribui para a organização de interfaces mais complexas \cite{react_docs_2026}.
+
+\subsection{Node.js}
+
+O Node.js é um ambiente de execução JavaScript de código aberto e multiplataforma. Conforme descrito em sua documentação oficial, ele executa o motor V8, o mesmo utilizado pelo Google Chrome, fora do navegador, permitindo que JavaScript também seja empregado em ambientes de servidor e em ferramentas de linha de comando \cite{nodejs_intro_2026}.
+
+Uma característica importante do Node.js é seu modelo de entrada e saída assíncrono e não bloqueante. Esse funcionamento permite lidar com operações como leitura de arquivos, acesso a banco de dados e comunicação em rede sem bloquear a execução principal do programa, favorecendo aplicações que precisam tratar múltiplas conexões simultâneas \cite{nodejs_intro_2026}.
+
+\subsection{PostgreSQL}
+
+O PostgreSQL é um sistema gerenciador de banco de dados objeto-relacional de código aberto. De acordo com sua documentação oficial, ele tem origem no projeto POSTGRES, desenvolvido na Universidade da Califórnia em Berkeley, e oferece suporte a grande parte do padrão SQL. Entre seus recursos estão consultas complexas, chaves estrangeiras, gatilhos, visões atualizáveis, integridade transacional e controle de concorrência multiversão \cite{postgresql_intro_2026}.
+
+Além das funcionalidades tradicionais de bancos relacionais, o PostgreSQL permite extensões em diferentes níveis. A documentação oficial informa que os usuários podem ampliar o banco por meio de novos tipos de dados, funções, operadores, agregações, métodos de índice e linguagens procedurais. Por possuir licença livre, o sistema pode ser utilizado, modificado e distribuído para diferentes finalidades \cite{postgresql_intro_2026}.
