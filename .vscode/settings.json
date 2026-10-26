@@ -5,21 +5,21 @@
   "latex-workshop.latex.autoBuild.run": "onSave",
   "latex-workshop.latex.tools": [
     {
-      "name": "latexmk",
-      "command": "latexmk",
+      "name": "texify",
+      "command": "texify",
       "args": [
-        "-synctex=1",
-        "-interaction=nonstopmode",
-        "-file-line-error",
-        "-pdf",
-        "%DOC%"
+        "--synctex=1",
+        "--tex-option=-interaction=nonstopmode",
+        "--tex-option=-file-line-error",
+        "--pdf",
+        "%DOC_EXT%"
       ]
     }
   ],
   "latex-workshop.latex.recipes": [
     {
-      "name": "latexmk",
-      "tools": ["latexmk"]
+      "name": "texify (MiKTeX, sem Perl)",
+      "tools": ["texify"]
     }
   ],
   "latex-workshop.latex.clean.fileTypes": [
