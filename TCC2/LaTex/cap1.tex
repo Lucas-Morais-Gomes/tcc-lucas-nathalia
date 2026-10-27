@@ -1,15 +1,128 @@
 \chapter{Introdução}
 
+O endividamento das famílias brasileiras tornou-se um fenômeno cada vez mais presente na realidade econômica e social do país. Nas últimas décadas, a ampliação da oferta de crédito e o fácil acesso a serviços financeiros permitiram que parcelas da população anteriormente excluídas do sistema financeiro passassem a utilizar cartões de crédito, empréstimos e financiamentos com maior frequência. Segundo estudo indexado na SciELO Brasil \cite{scielo_credito_2026}, o crescimento do crédito está relacionado às transformações estruturais do capitalismo contemporâneo e ao aumento das práticas de consumo na sociedade brasileira.
+
+Paralelamente, observa-se que o endividamento passou a atingir públicos cada vez mais jovens. A entrada precoce no mercado de trabalho, associada à facilidade de obtenção de crédito, tem levado muitos jovens adultos a enfrentarem situações de inadimplência antes mesmo de conquistarem estabilidade financeira. De acordo com \citeonline{cbn_jovens_2025}, quatro em cada dez jovens entre 18 e 24 anos já tiveram o nome negativado em órgãos de proteção ao crédito, cenário frequentemente associado à ausência de planejamento financeiro, ao consumo impulsivo e ao uso inadequado do crédito.
+
+\begin{figure}[htbp]
+    \centering
+    \caption{Abertura de uma conta em um banco digital}
+    \label{fig:abertura-conta}
+    \includegraphics[width=0.8\textwidth,height=0.6\textheight,keepaspectratio]{figs/nubank.png}
+    \fonte{\citeonline{forbes_nubank_2026}.}
+\end{figure}
+
+Além disso, o avanço das tecnologias digitais e das redes sociais intensificou práticas de consumo associadas à busca por status, pertencimento social e satisfação imediata. Conforme apontado por \citeonline{bonomo2017}, o ambiente digital e as dinâmicas de compra não planejada influenciam diretamente o comportamento financeiro dos indivíduos, estimulando hábitos de consumo impulsivos e contribuindo para dificuldades no planejamento financeiro pessoal. Nesse contexto, o consumo deixa de estar relacionado apenas às necessidades básicas e passa também a representar fatores emocionais e sociais.
+
+\begin{figure}[htbp]
+    \centering
+    \caption{Influência das redes sociais nos hábitos de consumo}
+    \label{fig:consumo-redes}
+    \includegraphics[width=0.8\textwidth,height=0.6\textheight,keepaspectratio]{figs/carrinho-no-teclado.png}
+    \fonte{\citeonline{unsplash_carrinho_2023}.}
+\end{figure}
+
+A ausência de educação financeira também se apresenta como um fator relevante para o crescimento do descontrole financeiro entre jovens e adultos. Segundo \citeonline{vieira2014}, muitos consumidores possuem dificuldades em organizar gastos, planejar despesas e compreender os impactos do uso excessivo do crédito, o que compromete diretamente a saúde financeira das famílias brasileiras.
+
+Apesar da existência de aplicativos e plataformas voltados ao controle financeiro, muitos usuários ainda encontram dificuldades em manter constância no registro diário de gastos, seja pela complexidade das ferramentas disponíveis, pela necessidade de preenchimentos manuais frequentes ou pela baixa integração dessas soluções ao cotidiano das pessoas. Em muitos casos, pequenas despesas deixam de ser registradas ao longo do mês, dificultando a visualização consolidada do orçamento e comprometendo a tomada de decisão financeira.
+
+\begin{figure}[htbp]
+    \centering
+    \caption{Exemplo de aplicativo financeiro tradicional}
+    \label{fig:app-financeiro}
+    \includegraphics[width=0.8\textwidth,height=0.6\textheight,keepaspectratio]{figs/cadastro-e-login-no-mobills.png}
+    \fonte{\citeonline{mobills_2023}.}
+\end{figure}
+
+Nesse cenário, o avanço das interfaces conversacionais e das aplicações de mensagens instantâneas cria novas possibilidades para o desenvolvimento de soluções mais acessíveis e intuitivas. O WhatsApp destaca-se como uma das plataformas de comunicação mais utilizadas no Brasil, tornando-se um ambiente favorável para soluções que utilizem linguagem natural e interação simplificada. Dessa forma, este trabalho propõe o desenvolvimento de um chatbot financeiro integrado ao WhatsApp, capaz de auxiliar usuários no registro e acompanhamento de entradas, saídas e metas financeiras por meio de mensagens enviadas de forma natural. A proposta combina automação, inteligência artificial e visualização de dados, buscando reduzir o esforço necessário para o controle financeiro pessoal e tornar o processo mais acessível, prático e aderente ao cotidiano dos usuários.
+
 \section{Problemática}
+
+O controle financeiro pessoal constitui uma atividade fundamental para o planejamento econômico dos indivíduos, uma vez que permite acompanhar receitas, despesas e compromissos financeiros, além de contribuir para a tomada de decisões relacionadas ao consumo. Entretanto, a manutenção de hábitos contínuos de organização financeira ainda representa um desafio para parte da população, especialmente diante da facilidade de acesso ao crédito, da diversidade de meios de pagamento e da necessidade de registrar frequentemente as movimentações realizadas.
+
+Embora existam diferentes aplicativos e plataformas destinados à gestão das finanças pessoais, a utilização dessas ferramentas pode exigir o preenchimento manual de informações, a navegação por múltiplas funcionalidades e a dedicação de tempo para atualização dos registros. Essas características podem dificultar a continuidade do acompanhamento financeiro, principalmente entre usuários que procuram alternativas rápidas e integradas às atividades cotidianas.
+
+A pesquisa realizada durante o desenvolvimento deste trabalho, que contou com 35 respostas, identificou dificuldades relacionadas à manutenção de hábitos de controle financeiro e a utilização de recursos familiares, como aplicativos de mensagens, notas de áudio e blocos de notas, para o registro de informações. Esses resultados contribuíram para a identificação de oportunidades de desenvolvimento de uma solução que reduzisse o esforço necessário para registrar e consultar movimentações financeiras.
+
+Nesse contexto, as tecnologias de inteligência artificial e processamento de linguagem natural apresentam possibilidades de aplicação na interpretação de mensagens e na construção de interfaces conversacionais. A integração dessas tecnologias a plataformas de comunicação amplamente utilizadas, como o WhatsApp, possibilita explorar formas de interação que não dependam exclusivamente de formulários tradicionais de cadastro e registro financeiro.
+
+Diante desse cenário, estabelece-se a seguinte questão de pesquisa: \textbf{de que maneira uma solução tecnológica integrada ao WhatsApp, utilizando inteligência artificial e linguagem natural, pode apoiar o registro de movimentações financeiras e o acompanhamento das finanças pessoais de forma prática e acessível?}
+
+A partir dessa problemática, o presente trabalho contempla o desenvolvimento do GranaAI, uma solução de apoio ao controle financeiro pessoal que combina uma interface conversacional integrada ao WhatsApp com uma plataforma web destinada à visualização e ao acompanhamento das informações financeiras registradas pelos usuários.
 
 \section{Justificativa}
 
+A organização financeira pessoal representa um aspecto importante para a estabilidade econômica dos indivíduos, uma vez que possibilita o acompanhamento das receitas, despesas e compromissos financeiros, contribuindo para o planejamento de recursos e para a tomada de decisões relacionadas ao consumo. Entretanto, a dificuldade em manter hábitos contínuos de controle financeiro, associada à facilidade de acesso ao crédito e à influência de práticas de consumo impulsivo, pode comprometer o equilíbrio orçamentário e favorecer situações de endividamento.
+
+Embora o avanço das tecnologias digitais tenha ampliado a disponibilidade de ferramentas destinadas à gestão financeira pessoal, a existência dessas soluções não garante sua utilização contínua. Aplicativos tradicionais frequentemente apresentam funcionalidades que exigem o preenchimento manual de informações, a navegação entre diferentes telas e a dedicação de tempo para registrar e acompanhar movimentações financeiras. Essas características podem representar obstáculos para usuários que buscam alternativas mais simples e compatíveis com suas rotinas, especialmente quando o registro de pequenas despesas depende de ações repetitivas.
+
+Nesse contexto, a utilização de plataformas de comunicação já incorporadas ao cotidiano dos indivíduos apresenta uma oportunidade para o desenvolvimento de soluções tecnológicas mais acessíveis. O WhatsApp, por permitir a troca de mensagens de texto e outros formatos de comunicação, constitui um ambiente que pode ser explorado para simplificar a interação entre usuários e sistemas de informação. Sua integração com tecnologias de inteligência artificial e processamento de linguagem natural possibilita o desenvolvimento de interfaces conversacionais capazes de interpretar informações fornecidas pelos usuários, reduzindo a dependência de formulários convencionais para o registro de movimentações financeiras.
+
+A relevância social deste trabalho está relacionada à possibilidade de oferecer uma ferramenta de apoio à organização das finanças pessoais, especialmente para indivíduos que enfrentam dificuldades em manter registros frequentes de suas receitas e despesas. Ao propor uma interação baseada em linguagem natural, o sistema busca tornar o acompanhamento financeiro mais próximo das práticas cotidianas dos usuários, favorecendo o acesso às informações necessárias para compreender seus hábitos de consumo e acompanhar sua situação financeira.
+
+A proposta também encontra fundamentação nos resultados da pesquisa exploratória realizada durante as etapas iniciais do projeto, que contou com 35 respostas de participantes. A análise das informações coletadas identificou a utilização de métodos rápidos e familiares, como WhatsApp, mensagens de áudio e aplicativos de anotações, além de dificuldades relacionadas à continuidade do controle financeiro. Esses achados contribuíram para o levantamento dos requisitos do sistema e reforçaram a pertinência de investigar uma solução que associasse praticidade, automação e acompanhamento das movimentações financeiras.
+
+Sob a perspectiva tecnológica, o trabalho justifica-se pela aplicação integrada de diferentes recursos computacionais na construção de uma solução de controle financeiro pessoal. O GranaAI combina uma interface conversacional integrada ao WhatsApp com uma plataforma web destinada à visualização de informações financeiras, utilizando tecnologias de desenvolvimento de software, comunicação entre sistemas, persistência de dados e inteligência artificial. Essa integração permite explorar a utilização de modelos de linguagem na interpretação de mensagens e no apoio à organização das informações registradas pelos usuários.
+
+Além disso, a disponibilização de uma interface web complementar à interação conversacional busca ampliar as possibilidades de acompanhamento financeiro, permitindo que os dados registrados sejam apresentados de maneira estruturada, por meio de indicadores e representações visuais. Dessa forma, a proposta não se limita à simplificação do registro de transações, mas contempla também a organização e a apresentação das informações, elementos relevantes para o processo de análise e planejamento financeiro pessoal.
+
+No âmbito acadêmico, o desenvolvimento do GranaAI contribui para a aplicação prática de conhecimentos adquiridos ao longo do curso de Sistemas de Informação, especialmente nas áreas de engenharia de software, análise de requisitos, modelagem de sistemas, desenvolvimento de aplicações web, banco de dados, integração de APIs e inteligência artificial. O projeto possibilita relacionar os fundamentos teóricos estudados durante a graduação às etapas de investigação, planejamento, modelagem e implementação de uma solução tecnológica direcionada a uma necessidade identificada por meio de pesquisa com usuários.
+
+Por fim, a realização deste trabalho justifica-se pela oportunidade de investigar como a combinação entre interfaces conversacionais, inteligência artificial e visualização de dados pode apoiar o controle financeiro pessoal. A proposta do GranaAI busca contribuir para o desenvolvimento de alternativas que tornem o registro e o acompanhamento das movimentações financeiras mais práticos e acessíveis, respeitando as necessidades identificadas durante a pesquisa e possibilitando a avaliação das funcionalidades implementadas ao longo do desenvolvimento do sistema.
+
 \section{Objetivo}
+
+Esta seção apresenta o objetivo geral e os objetivos específicos que orientam o desenvolvimento do presente trabalho, contemplando a investigação das dificuldades relacionadas ao controle financeiro pessoal, a aplicação de tecnologias de inteligência artificial e a implementação de uma solução tecnológica voltada ao registro, à organização e ao acompanhamento de movimentações financeiras.
 
 \subsection{Objetivo Geral}
 
+Desenvolver e avaliar uma solução tecnológica de apoio ao controle financeiro pessoal, denominada GranaAI, composta por um chatbot integrado ao WhatsApp, que utiliza inteligência artificial e processamento de linguagem natural para interpretar e registrar movimentações financeiras, e por uma plataforma web destinada à organização, visualização e acompanhamento das informações registradas, buscando proporcionar uma experiência prática, acessível e intuitiva aos usuários.
+
 \subsection{Objetivos Específicos}
+
+\begin{itemize}
+    \item Analisar fatores relacionados ao endividamento, aos hábitos de consumo e às dificuldades enfrentadas por jovens e adultos na organização e no acompanhamento de suas finanças pessoais.
+    \item Investigar as características, funcionalidades e limitações de aplicações existentes destinadas ao controle financeiro pessoal, identificando oportunidades de melhoria relacionadas à usabilidade e à praticidade do registro de informações.
+    \item Estudar a aplicação de interfaces conversacionais, inteligência artificial e processamento de linguagem natural no desenvolvimento de soluções tecnológicas voltadas à gestão financeira pessoal.
+    \item Identificar as necessidades dos potenciais usuários por meio de pesquisa exploratória, utilizando os resultados obtidos para apoiar o levantamento de requisitos funcionais e não funcionais do sistema.
+    \item Projetar e implementar o GranaAI, integrando um chatbot financeiro ao WhatsApp para permitir o registro e a consulta de movimentações financeiras por meio de mensagens em linguagem natural.
+    \item Desenvolver uma plataforma web integrada ao sistema, destinada à organização e à visualização de informações financeiras, incluindo receitas, despesas, indicadores e relatórios relacionados às movimentações registradas.
+    \item Implementar recursos de acompanhamento financeiro previstos nos requisitos do projeto, considerando funcionalidades como metas financeiras, limites de gastos e apresentação de informações para auxiliar o usuário na análise de suas finanças pessoais.
+    \item Realizar testes funcionais para verificar o comportamento das funcionalidades implementadas, a integração entre os componentes do sistema e a consistência das informações apresentadas aos usuários.
+    \item Analisar os resultados obtidos durante o desenvolvimento e a validação funcional do GranaAI, identificando suas contribuições, limitações e possibilidades de aprimoramento como ferramenta de apoio ao controle financeiro pessoal.
+
+\end{itemize}
 
 \section{Metodologia}
 
+O presente trabalho caracteriza-se como uma pesquisa de natureza aplicada, com objetivos exploratórios e abordagem qualitativa e quantitativa, voltada à investigação das dificuldades relacionadas ao controle financeiro pessoal e ao desenvolvimento de uma solução tecnológica capaz de auxiliar os usuários no registro, na organização e no acompanhamento de suas movimentações financeiras. A pesquisa busca relacionar conhecimentos teóricos e práticos das áreas de Sistemas de Informação, inteligência artificial e desenvolvimento de software à identificação de necessidades presentes no cotidiano dos indivíduos.
+
+A natureza aplicada da pesquisa justifica-se pela utilização de conhecimentos científicos e tecnológicos para o desenvolvimento de uma solução direcionada a um problema prático. Seu caráter exploratório está relacionado à necessidade de compreender os hábitos de organização financeira, as dificuldades enfrentadas pelos usuários e as possibilidades de utilização de interfaces conversacionais como instrumentos de apoio ao gerenciamento das finanças pessoais. A abordagem qualitativa e quantitativa decorre da análise de percepções, comportamentos e necessidades dos participantes, bem como da organização e interpretação dos dados obtidos durante a investigação.
+
+Inicialmente, foi realizado um levantamento bibliográfico com base em artigos científicos, publicações acadêmicas, notícias e relatórios relacionados à educação financeira, ao endividamento, ao comportamento de consumo, à inteligência artificial e à utilização de chatbots e interfaces conversacionais. Essa etapa teve como finalidade estabelecer a fundamentação teórica do estudo, compreender o contexto do problema investigado e identificar possibilidades de aplicação de tecnologias digitais no desenvolvimento de ferramentas de controle financeiro pessoal.
+
+Paralelamente, foi conduzida uma análise de soluções tecnológicas existentes no mercado, considerando aplicativos e serviços destinados ao gerenciamento de receitas, despesas e outras informações financeiras. Essa investigação permitiu observar características e funcionalidades oferecidas por ferramentas semelhantes, além de identificar possíveis limitações e oportunidades de melhoria relacionadas à praticidade, à acessibilidade e à experiência de utilização.
+
+Como parte da investigação, foi realizada uma pesquisa de campo por meio de formulário digital, que obteve 35 respostas. A coleta de dados teve como objetivo compreender como os participantes organizavam suas finanças pessoais, quais métodos utilizavam para registrar movimentações financeiras e quais dificuldades enfrentavam na manutenção de hábitos de acompanhamento financeiro. As informações coletadas foram utilizadas como subsídio para a identificação de necessidades dos potenciais usuários e para a definição das características da solução proposta.
+
+Com base nos resultados da pesquisa e nos estudos realizados, foram desenvolvidos artefatos de análise e modelagem, incluindo mapa de empatia, personas e histórias de usuário. Esses instrumentos contribuíram para a compreensão dos diferentes perfis de utilização e para a definição dos requisitos funcionais e não funcionais do sistema. Posteriormente, foram elaborados diagramas e protótipos destinados à representação das funcionalidades, das interações entre os componentes e da estrutura de dados necessária ao funcionamento da aplicação.
+
+A etapa de desenvolvimento tecnológico compreendeu a implementação do GranaAI, uma solução de apoio ao controle financeiro pessoal composta por um chatbot integrado ao WhatsApp e por uma plataforma web de acompanhamento financeiro. A implementação envolveu a utilização de tecnologias de desenvolvimento de aplicações, integração entre sistemas, persistência de dados e inteligência artificial, com o propósito de permitir a interpretação de mensagens em linguagem natural, o registro de movimentações financeiras e a apresentação estruturada das informações armazenadas.
+
+A arquitetura da solução contempla a comunicação entre a interface conversacional, os serviços responsáveis pelo processamento das requisições e o banco de dados, além da disponibilização de uma interface web para consulta e visualização das informações financeiras. As tecnologias empregadas, os componentes implementados e suas respectivas responsabilidades serão apresentados detalhadamente nos capítulos destinados à documentação técnica e ao desenvolvimento do sistema.
+
+Por fim, a metodologia contempla uma etapa de validação funcional, destinada à verificação do comportamento das funcionalidades implementadas e da integração entre os componentes da aplicação. Nessa etapa, serão examinados aspectos relacionados ao registro de movimentações financeiras, ao processamento das informações, ao armazenamento dos dados e à sua apresentação na plataforma web, conforme as funcionalidades efetivamente disponibilizadas. Os procedimentos realizados e os resultados obtidos serão documentados e analisados, permitindo identificar o atendimento aos requisitos estabelecidos, eventuais limitações e possibilidades de aprimoramento do GranaAI.
+
 \section{Organização}
+
+O presente trabalho está estruturado em cinco capítulos, organizados de maneira a apresentar a contextualização do problema investigado, os fundamentos teóricos relacionados ao tema, os procedimentos metodológicos adotados, a proposta de solução tecnológica e as considerações finais.
+
+O \textbf{Capítulo 1 --- Introdução} apresenta a contextualização do controle financeiro pessoal e das dificuldades relacionadas à organização de receitas e despesas, estabelecendo a problemática que orienta a pesquisa. Também são apresentados a justificativa, os objetivos geral e específicos, a metodologia adotada e a estrutura de organização do trabalho.
+
+O \textbf{Capítulo 2 --- Referencial Teórico} reúne os fundamentos conceituais e tecnológicos que sustentam o desenvolvimento da solução proposta. São abordados trabalhos relacionados à gestão financeira pessoal, aplicações existentes no mercado e estudos científicos sobre a utilização de inteligência artificial e interfaces conversacionais. Além disso, são apresentadas as principais tecnologias relacionadas ao desenvolvimento do GranaAI, considerando seus conceitos, características e possibilidades de aplicação.
+
+O \textbf{Capítulo 3 --- Metodologia de Pesquisa} descreve os procedimentos utilizados para a investigação das necessidades dos potenciais usuários. São apresentados o planejamento das atividades, os instrumentos de coleta de dados, a análise das respostas obtidas na pesquisa de campo e os artefatos elaborados a partir dessas informações, incluindo mapa de empatia, personas e histórias de usuário. Esse capítulo demonstra como os resultados da investigação contribuíram para a identificação das necessidades e para a definição dos requisitos da solução tecnológica.
+
+O \textbf{Capítulo 4 --- Proposta de Solução} apresenta a documentação técnica do GranaAI, contemplando o levantamento de requisitos funcionais e não funcionais, os diagramas de modelagem e o protótipo da interface de usuário. São descritas as interações previstas entre a interface conversacional integrada ao WhatsApp e a plataforma web destinada à visualização e ao acompanhamento das informações financeiras.
+
+Por fim, o \textbf{Capítulo 5 --- Conclusão} retoma a problemática e os objetivos estabelecidos no início da pesquisa, apresentando as considerações finais sobre as atividades desenvolvidas. Também são discutidas as contribuições do GranaAI como ferramenta de apoio ao controle financeiro pessoal, suas limitações e as possibilidades de aprimoramento em trabalhos futuros.
