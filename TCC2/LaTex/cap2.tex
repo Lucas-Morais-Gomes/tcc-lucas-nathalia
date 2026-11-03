@@ -185,11 +185,10 @@ Entre os mecanismos utilizados nessas integrações, destacam-se as APIs e os we
 
 A utilização de aplicativos de mensagens como interface de sistemas de informação apresenta possibilidades de aplicação em atividades que exigem interação frequente com os usuários. Em soluções de controle financeiro pessoal, essa abordagem pode permitir que informações relacionadas a receitas e despesas sejam fornecidas diretamente em uma conversa, reduzindo a necessidade de acessar diferentes telas para realizar registros cotidianos.
 
-No desenvolvimento do GranaAI, o WhatsApp foi selecionado como canal de interação conversacional entre o usuário e o sistema. A proposta consiste em permitir que movimentações financeiras sejam informadas por meio de mensagens em linguagem natural, possibilitando seu encaminhamento aos componentes responsáveis pela interpretação, pelo processamento e pelo armazenamento dos dados.
+No GranaAI, o WhatsApp é o canal de interação com o chatbot financeiro. As mensagens são recebidas pela Evolution API e encaminhadas ao backend, que interpreta as solicitações e executa as operações correspondentes. Além de texto, o sistema também recebe áudios e imagens.
 
 A integração entre o WhatsApp e os serviços internos do GranaAI foi realizada com o auxílio da Evolution API, apresentada na subseção seguinte. Essa ferramenta atuou como intermediária na comunicação entre a plataforma de mensagens e a aplicação, permitindo que os eventos recebidos sejam encaminhados ao backend responsável pela execução das funcionalidades financeiras.
 
-Dessa forma, o WhatsApp constitui um dos principais componentes da interface de interação do GranaAI, enquanto os processos de interpretação das mensagens, validação das informações e persistência dos registros são executados pelos demais serviços que compõem a arquitetura da solução.
 
 \subsection{Evolution API}
 
@@ -277,13 +276,13 @@ A validação de dados constitui uma etapa importante no desenvolvimento de sist
 
 No desenvolvimento de APIs, o Pydantic pode ser utilizado em conjunto com o FastAPI para definir modelos de requisição e resposta. Dessa maneira, os dados encaminhados aos endpoints podem ser analisados de acordo com as estruturas estabelecidas, enquanto as respostas podem ser organizadas em formatos adequados à comunicação entre os sistemas.
 
-No GranaAI, o Pydantic v2 é utilizado para estruturar e validar informações processadas pelo backend, contribuindo para o tratamento dos dados recebidos e retornados pelos serviços da aplicação. Essa funcionalidade é relevante para o controle financeiro pessoal, uma vez que as operações envolvem informações como valores monetários, categorias, datas e descrições de movimentações.
+No GranaAI, o Pydantic define os modelos de entrada e saída dos endpoints. No cadastro de movimentações pela API, esses modelos especificam campos como tipo, valor, categoria e data. As informações extraídas das mensagens pelo chatbot são tratadas pelas rotinas de classificação e pelas regras de negócio do backend.
 
 A utilização conjunta de Python, FastAPI, SQLAlchemy e Pydantic permitiu organizar o backend do GranaAI em diferentes responsabilidades. Enquanto o Python fornece a linguagem utilizada na implementação das funcionalidades, o FastAPI disponibilizou os mecanismos de comunicação por meio de APIs, o SQLAlchemy realizou a interação com o banco de dados e o Pydantic auxilia na definição e na validação das estruturas de informação.
 
 Essa combinação tecnológica estabelece uma base para o desenvolvimento de uma aplicação modular, na qual as interfaces de comunicação, as regras de negócio e os mecanismos de persistência podem ser organizados de maneira separada. Tal abordagem favorece a compreensão da arquitetura e possibilita que alterações em determinados componentes sejam realizadas com menor interferência sobre os demais, dependendo das relações de dependência estabelecidas durante a implementação.
 
-Dessa forma, as tecnologias de backend desempenham um papel fundamental no funcionamento do GranaAI, pois são responsáveis por conectar as interfaces utilizadas pelos usuários aos serviços de processamento e armazenamento das informações financeiras. A descrição detalhada da organização dos módulos, dos endpoints implementados e dos fluxos de comunicação será apresentada no capítulo dedicado ao desenvolvimento e à implementação da solução.
+No backend do GranaAI, o FastAPI organiza as rotas da aplicação, o Pydantic valida os dados recebidos e o SQLAlchemy realiza o acesso ao banco de dados.
 
 % Imagem de tipo um diagrama de como  essas tecnologias trabalham juntas
 
@@ -307,15 +306,9 @@ Entretanto, a utilização de modelos de linguagem não garante, por si só, que
 
 Nesse contexto, é importante diferenciar as responsabilidades do modelo de linguagem e dos demais componentes do sistema. Enquanto o modelo pode auxiliar na interpretação de mensagens e na organização das informações extraídas, o backend deve manter o controle sobre as regras de negócio, a validação dos dados e a execução das operações relacionadas ao armazenamento e à consulta das movimentações financeiras.
 
-No desenvolvimento do GranaAI, a Groq API foi selecionada como serviço de apoio ao processamento de linguagem natural utilizado pelo chatbot financeiro. Sua integração esteve relacionada à necessidade de interpretar mensagens encaminhadas pelos usuários por meio do WhatsApp, permitindo que informações financeiras apresentadas em linguagem cotidiana sejam tratadas pelos serviços internos da aplicação.
-
-A comunicação com esse serviço ocorre por meio do backend desenvolvido em Python, que atua como intermediário entre os componentes de integração com o WhatsApp e os recursos de inteligência artificial. Dessa maneira, as mensagens recebidas podem ser encaminhadas para processamento, enquanto as respostas produzidas pelo modelo podem ser analisadas antes de serem utilizadas nas operações financeiras do sistema.
-
-A utilização dessa abordagem permite separar a interpretação das mensagens da execução das funcionalidades financeiras. Assim, a Groq API atua como um recurso de processamento de linguagem, enquanto o backend permanece responsável pela aplicação das regras de negócio e pela comunicação com o banco de dados PostgreSQL.
+A Groq API é utilizada para identificar a intenção e as informações presentes nas mensagens. O backend trata a resposta do modelo e encaminha a solicitação ao chatbot. Nos fluxos de registro, são solicitadas informações complementares e a confirmação do usuário antes de salvar a movimentação. A integração com a Groq também inclui a transcrição de áudios e a interpretação de imagens recebidas pelo WhatsApp.
 
 Outro aspecto relevante está relacionado ao tratamento das informações encaminhadas aos serviços externos. Considerando que aplicações financeiras podem processar dados pessoais e registros de movimentações, torna-se necessário avaliar quais informações são efetivamente necessárias para cada solicitação, bem como adotar medidas adequadas de proteção e controle de acesso. A utilização de serviços de inteligência artificial deve, portanto, considerar não apenas as possibilidades funcionais, mas também os requisitos de segurança e privacidade associados ao tratamento dos dados.
-
-Dessa forma, a Groq API constitui um componente tecnológico importante na proposta do GranaAI, pois possibilita incorporar recursos de inteligência artificial à interface conversacional utilizada pelos usuários. Sua aplicação busca contribuir para a interpretação de mensagens em linguagem natural, enquanto os demais componentes da arquitetura são responsáveis por transformar as informações processadas em operações estruturadas de controle financeiro pessoal.
 
 A descrição detalhada da integração entre o backend e a Groq API, incluindo o tratamento das requisições e das respostas, será apresentada no capítulo dedicado ao desenvolvimento e à implementação do sistema.
 
@@ -341,15 +334,11 @@ Para facilitar o gerenciamento de aplicações que utilizam mais de um contêine
 
 A utilização do Docker Compose contribui para organizar a inicialização e a configuração dos serviços, permitindo que diferentes componentes sejam definidos de maneira centralizada. Essa abordagem é especialmente útil em ambientes de desenvolvimento e teste, nos quais a reprodução das configurações pode facilitar a preparação do sistema e a identificação de problemas relacionados às dependências e à comunicação entre os serviços.
 
-No contexto do GranaAI, o Docker foi considerado como tecnologia de apoio à organização do ambiente de execução dos componentes que integram a solução. A arquitetura do sistema envolve diferentes serviços, incluindo o backend desenvolvido em Python, o banco de dados PostgreSQL e os mecanismos responsáveis pela integração com o WhatsApp, os quais apresentam necessidades específicas de configuração e comunicação.
-
-A utilização de contêineres pode contribuir para organizar esses componentes em ambientes separados, permitindo estabelecer configurações específicas para cada serviço. Dessa forma, as dependências necessárias à execução do backend podem ser administradas independentemente daquelas utilizadas por outros componentes da aplicação, reduzindo possíveis conflitos entre tecnologias.
-
-O Docker Compose, por sua vez, oferece recursos para definir as configurações dos serviços e suas relações de comunicação em um mesmo ambiente. Essa possibilidade é relevante para aplicações que dependem da execução coordenada de diferentes componentes, uma vez que permite documentar as configurações necessárias e simplificar determinados procedimentos de inicialização.
+O ambiente do GranaAI foi organizado com Docker Compose. A configuração define os serviços da API, da interface web, do banco PostgreSQL e da Evolution API. O backend utiliza uma imagem baseada em Python 3.12. A interface é construída em uma etapa com Node.js.
 
 Entretanto, a utilização de contêineres não elimina a necessidade de configuração adequada dos serviços, gerenciamento de credenciais, definição de políticas de acesso e proteção das informações armazenadas. Em aplicações financeiras, esses aspectos são particularmente importantes devido à natureza dos dados processados, que podem incluir informações pessoais e registros de movimentações financeiras.
 
-Assim, o Docker representa uma tecnologia relevante para a organização e a padronização de ambientes de execução, oferecendo mecanismos de isolamento, distribuição e gerenciamento de aplicações. No desenvolvimento do GranaAI, sua utilização deve ser compreendida como parte da infraestrutura tecnológica de apoio ao funcionamento dos serviços, enquanto os detalhes relacionados aos contêineres configurados, às dependências e aos procedimentos de execução são apresentados no capítulo dedicado à implementação do sistema.
+No GranaAI, o Docker foi utilizado para organizar os serviços e suas dependências em contêineres.
 
 % imagem conceitual da infraestrutura
 
@@ -437,7 +426,6 @@ A comunicação entre a interface desenvolvida com React e os serviços do backe
 
 Dessa maneira, o conjunto formado por React, TypeScript, Vite, Zustand, Tailwind CSS, React Router e Recharts constitui a base tecnológica utilizada na construção da plataforma web do GranaAI. Cada uma dessas ferramentas desempenha uma função específica, contribuindo para a organização dos componentes, o gerenciamento das informações, a navegação entre páginas e a apresentação visual dos dados financeiros.
 
-Portanto, a utilização do React e de suas tecnologias complementares está relacionada à necessidade de desenvolver uma interface web organizada, dinâmica e integrada aos serviços responsáveis pelo processamento das informações financeiras. A descrição detalhada dos componentes implementados, das telas desenvolvidas e dos mecanismos de comunicação será apresentada no capítulo dedicado ao desenvolvimento e à implementação da solução.
 
 % Imagem de organização conceitual do frontend
 
@@ -471,7 +459,7 @@ A execução da aplicação backend utiliza o Uvicorn, um servidor ASGI (\textit
 
 Essa distinção é relevante para a compreensão da arquitetura do sistema, pois evita atribuir ao Node.js responsabilidades que pertencem aos componentes desenvolvidos com outras tecnologias. No GranaAI, o processamento das operações financeiras e a integração com o banco de dados PostgreSQL estão relacionados ao backend Python, enquanto o ecossistema Node.js oferece suporte à preparação e à manutenção da interface web.
 
-A utilização conjunta dessas tecnologias demonstra a possibilidade de empregar diferentes ambientes de execução em uma mesma aplicação, de acordo com as necessidades de cada componente. Enquanto o Python é utilizado na implementação dos serviços internos, o Node.js oferece suporte às ferramentas empregadas no desenvolvimento da plataforma web, permitindo organizar as responsabilidades entre as diferentes camadas do sistema.
+O Node.js foi utilizado nas ferramentas de desenvolvimento e construção do frontend. O backend financeiro foi desenvolvido em Python com FastAPI.
 
 Dessa forma, o Node.js constitui uma tecnologia de apoio ao desenvolvimento do GranaAI, contribuindo para o gerenciamento das dependências e para a execução dos processos necessários à construção da interface React. Sua utilização integra o conjunto de ferramentas selecionadas para a implementação da plataforma web, cujos detalhes de configuração e funcionamento são apresentados no capítulo dedicado ao desenvolvimento e à implementação da solução.
 
@@ -521,7 +509,7 @@ A utilização conjunta do PostgreSQL e do SQLAlchemy contribui para a separaç�
 
 É importante destacar que a utilização de um banco de dados com mecanismos de integridade e controle transacional não elimina a necessidade de implementar medidas adicionais de segurança. Aplicações que armazenam informações financeiras devem considerar aspectos relacionados à autenticação, à autorização, à proteção de credenciais e ao controle de acesso aos registros, de acordo com os requisitos definidos para o sistema.
 
-Dessa forma, o PostgreSQL constitui um componente fundamental da arquitetura do GranaAI, oferecendo recursos para o armazenamento estruturado, a consulta e o gerenciamento das informações financeiras. Sua utilização está relacionada à necessidade de manter os registros produzidos pela aplicação e disponibilizá-los aos serviços responsáveis pelo acompanhamento das movimentações.
+No GranaAI, o PostgreSQL armazena os dados utilizados nas operações financeiras e nas consultas da aplicação.
 
 A descrição detalhada do modelo de dados, das entidades, dos relacionamentos e dos mecanismos de persistência implementados no GranaAI será apresentada no capítulo dedicado ao desenvolvimento e à implementação da solução.
 
