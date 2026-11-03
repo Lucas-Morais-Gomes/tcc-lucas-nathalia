@@ -119,9 +119,21 @@ No contexto da presente proposta, o diagrama entidade-relacionamento representa 
     \fonte{Elaborado pelos autores.}
 \end{figure}
 
-\subsection{Protótipo da Interface de Usuário}
+\newlength{\alturaPrint}
+\newlength{\larguraPrint}
+\newlength{\margemInferiorPrint}
+\newlength{\margemSuperiorPrint}
+\newcommand{\trechoPrint}[3]{%
+    \settoheight{\alturaPrint}{\includegraphics{#1}}%
+    \setlength{\margemInferiorPrint}{#2\alturaPrint}%
+    \setlength{\margemSuperiorPrint}{#3\alturaPrint}%
+    \edef\comandoPrint{\noexpand\includegraphics[width=\larguraPrint,height=0.70\noexpand\textheight,keepaspectratio,trim={0pt \the\margemInferiorPrint\space 0pt \the\margemSuperiorPrint},clip]{#1}}%
+    \comandoPrint%
+}
 
-O protótipo da solução contempla dois eixos principais: a experiência conversacional no WhatsApp e a interface web para visualização de dashboards e relatórios. A proposta busca oferecer uma jornada de usuário fluida, começando pelo registro simplificado de gastos via linguagem natural e culminando em uma análise visual completa da saúde financeira.
+\subsection{Interface de Usuário}
+
+A interface da solução reúne a interação conversacional no WhatsApp e a plataforma web de acompanhamento financeiro. As figuras apresentadas nesta subseção mostram as telas do sistema desenvolvido em formato móvel. Algumas incluem o conteúdo completo de uma página com rolagem.
 
 \subsubsection{Fluxo de cadastro e uso do sistema}
 
@@ -131,11 +143,11 @@ No segundo caminho, o primeiro contato acontece pelo WhatsApp. Caso o usuário e
 
 Depois que o cadastro é finalizado, o usuário recebe uma confirmação na versão web e pode retornar à conversa com o chatbot. A partir desse momento, quando ele enviar uma mensagem relacionada a uma movimentação financeira, como uma despesa ou receita, o sistema associa automaticamente o número de telefone à conta cadastrada.
 
-Com essa vinculação, as informações enviadas pelo WhatsApp passam a ser registradas na base de dados do usuário. Assim, uma mensagem como “gastei R\textbackslash{}\$ 35,00 com lanche” pode ser interpretada pelo chatbot, classificada como despesa e armazenada na categoria correspondente.
+Com essa vinculação, as informações enviadas pelo WhatsApp passam a ser registradas na base de dados do usuário. Assim, uma mensagem como “gastei R\$ 35,00 com lanche” pode ser interpretada pelo chatbot, classificada como despesa e armazenada na categoria correspondente.
 
 Para consultar essas informações na versão web, o usuário acessa a tela de login e informa os dados definidos no cadastro. Após a autenticação, ele visualiza suas movimentações, gráficos, metas financeiras e relatórios gerados a partir dos registros feitos pelo WhatsApp.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \caption{Diagrama de sequência de cadastro e registro financeiro}
     \label{fig:md-14}
@@ -143,84 +155,271 @@ Para consultar essas informações na versão web, o usuário acessa a tela de l
     \fonte{Elaborado pelos autores.}
 \end{figure}
 
+As telas de cadastro e acesso são apresentadas na Figura~\ref{fig:prints-acesso}. À esquerda, o formulário de criação de conta reúne nome, telefone, e-mail opcional, senha, confirmação de senha e renda mensal. À direita, o formulário de entrada solicita telefone e senha e oferece acesso ao cadastro para quem ainda não possui conta. A comparação mostra a separação entre o preenchimento inicial dos dados e a identificação necessária para acessar a plataforma.
+
+\begin{figure}[H]
+    \centering
+    \setlength{\larguraPrint}{0.44\textwidth}
+    \caption{Telas de cadastro e acesso à plataforma, respectivamente}
+    \label{fig:prints-acesso}
+    \begin{minipage}[t]{0.48\textwidth}
+        \vspace{0pt}\centering
+        \includegraphics[width=\larguraPrint,height=0.70\textheight,keepaspectratio]{figs/screenshots/cadastro-mobile.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \vspace{0pt}\centering
+        \includegraphics[width=\larguraPrint,height=0.70\textheight,keepaspectratio]{figs/screenshots/login-mobile.png}
+    \end{minipage}
+    \fonte{Elaboração dos autores a partir da interface do GranaAI.}
+\end{figure}
+
 \subsubsection{Interface Conversacional (WhatsApp)}
 
-A interação no WhatsApp foi projetada para ser rápida e intuitiva. O usuário pode enviar mensagens de texto ou áudio descrevendo um gasto, e o assistente GranaAI processa a informação em tempo real. O espaço da Figura~\ref{fig:md-15} está reservado para um print do registro de gasto pelo WhatsApp. Além de confirmar o registro, a IA fornece um \textit{insight} imediato sobre o limite da categoria, cumprindo o papel de assistente preventivo.
+A interação conversacional foi desenvolvida para receber informações financeiras pelo WhatsApp e encaminhá-las aos serviços da aplicação. As figuras desta subseção apresentam o encaminhamento para cadastro, o registro de uma despesa e as consultas de categorias, metas e assinaturas. Esses fluxos permitem acompanhar a comunicação entre as mensagens enviadas pelo usuário e as respostas do assistente.
 
-\begin{figure}[htbp]
+A Figura~\ref{fig:wa-cadastro} mostra o primeiro contato de um usuário sem conta vinculada ao número utilizado na conversa. Após a saudação, o assistente informa a necessidade de cadastro e apresenta o endereço da página de criação de conta. O link relaciona o telefone da conversa ao formulário, permitindo que o usuário prossiga na interface web antes de utilizar as operações financeiras. A mensagem final orienta o retorno ao WhatsApp depois dessa etapa.
+
+\begin{figure}[H]
     \centering
-    \caption{Registro de gasto via WhatsApp --- espaço reservado para print}
+    \setlength{\larguraPrint}{0.55\textwidth}
+    \caption{Encaminhamento para cadastro a partir do WhatsApp}
+    \label{fig:wa-cadastro}
+    \trechoPrint{figs/screenshots/whatsapp-cadastro.png}{0.531250}{0.000000}
+    \fonte{Elaboração dos autores a partir da interface do GranaAI no WhatsApp.}
+\end{figure}
+
+A sequência apresentada na Figura~\ref{fig:md-15} mostra o registro de uma despesa. O usuário envia a mensagem \textit{Pizza 45 reais}, e o assistente organiza o valor, a categoria Alimentação e a descrição Pizza em um resumo. Antes da gravação, a resposta solicita que o usuário digite sim para confirmar ou não para cancelar. Após a resposta afirmativa, o assistente informa a conclusão do registro e repete os dados da movimentação, permitindo conferir o resultado da operação na própria conversa.
+
+\begin{figure}[H]
+    \centering
+    \setlength{\larguraPrint}{0.55\textwidth}
+    \caption{Registro e confirmação de despesa pelo WhatsApp}
     \label{fig:md-15}
-    \fbox{%
-        \begin{minipage}[c][0.24\textheight][c]{0.90\linewidth}
-            \centering
-            \textbf{Espaço reservado para print do sistema}\\[0.8em]
-            Registro de gasto via WhatsApp
-        \end{minipage}%
-    }
-    \fonte{Elaborado pelos autores.}
+    \trechoPrint{figs/screenshots/whatsapp-despesa.jpeg}{0.122500}{0.000000}
+    \fonte{Elaboração dos autores a partir da interface do GranaAI no WhatsApp.}
+\end{figure}
+
+As consultas de categorias e metas são apresentadas na Figura~\ref{fig:wa-categorias-metas}. À esquerda, a mensagem \textit{Minhas categorias} retorna a relação de categorias com o valor utilizado, o limite e o percentual correspondente. Essa apresentação reúne o acompanhamento do orçamento na conversa, sem exigir a abertura da página de categorias. À direita, a solicitação \textit{Minhas metas} apresenta os objetivos cadastrados, os valores acumulados, os valores-alvo e os percentuais de progresso. Os dois fluxos permitem consultar informações organizadas pelo sistema por meio de mensagens curtas.
+
+\begin{figure}[H]
+    \centering
+    \setlength{\larguraPrint}{0.44\textwidth}
+    \caption{Consulta de categorias e metas pelo WhatsApp}
+    \label{fig:wa-categorias-metas}
+    \begin{minipage}[t]{0.48\textwidth}
+        \vspace{0pt}\centering
+        \trechoPrint{figs/screenshots/whatsapp-categorias.jpeg}{0.125000}{0.000000}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \vspace{0pt}\centering
+        \trechoPrint{figs/screenshots/whatsapp-metas.jpeg}{0.500000}{0.000000}
+    \end{minipage}
+    \fonte{Elaboração dos autores a partir da interface do GranaAI no WhatsApp.}
+\end{figure}
+
+A Figura~\ref{fig:wa-assinaturas} apresenta a consulta de assinaturas. Ao receber a mensagem \textit{Minhas assinaturas}, o assistente retorna os serviços acompanhados, seus valores mensais e os dias de cobrança. A resposta também destaca as assinaturas ainda não cobradas no mês, reunindo informações sobre os compromissos recorrentes em uma única mensagem. Essa consulta complementa a página de assinaturas da interface web e permite acompanhar as cobranças diretamente pelo WhatsApp.
+
+\begin{figure}[H]
+    \centering
+    \setlength{\larguraPrint}{0.55\textwidth}
+    \caption{Consulta de assinaturas e cobranças pelo WhatsApp}
+    \label{fig:wa-assinaturas}
+    \trechoPrint{figs/screenshots/whatsapp-assinaturas.jpeg}{0.493750}{0.000000}
+    \fonte{Elaboração dos autores a partir da interface do GranaAI no WhatsApp.}
 \end{figure}
 
 \subsubsection{Dashboard Web}
 
-A interface web serve como o centro de análise financeira do usuário. Nela, os dados registrados via WhatsApp são consolidados em visualizações gráficas que facilitam a compreensão do orçamento. O espaço da Figura~\ref{fig:md-16} está reservado para um print da visão geral do dashboard, com cartões de resumo financeiro, gráficos de evolução mensal e a lista de transações recentes.
+A plataforma web organiza a consulta e o gerenciamento das informações financeiras em páginas específicas. O menu apresentado na Figura~\ref{fig:prints-menu} permite acessar início, transações, categorias, metas, assinaturas e relatórios. O destaque sobre Início identifica a página selecionada, enquanto o conteúdo ao fundo permanece escurecido durante a abertura do menu.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \caption{Interface principal do Dashboard Web --- espaço reservado para print}
+    \setlength{\larguraPrint}{0.44\textwidth}
+    \caption{Menu de navegação da interface móvel}
+    \label{fig:prints-menu}
+    \includegraphics[width=\larguraPrint,height=0.70\textheight,keepaspectratio]{figs/screenshots/menu-inicio-mobile.png}
+    \fonte{Elaboração dos autores a partir da interface do GranaAI.}
+\end{figure}
+
+\paragraph{Visão geral do painel}
+
+\begin{samepage}
+A Figura~\ref{fig:md-16} apresenta o painel inicial. À esquerda, estão os cartões de receitas, despesas, valor líquido e disponibilidade livre de metas. No backend, receitas e despesas do mês são calculadas separadamente do saldo acumulado, e a disponibilidade considera a reserva associada às metas.
+\end{samepage}
+
+À direita, são apresentados a análise do fluxo de caixa, a distribuição de despesas e o comparativo mensal. No gráfico de fluxo de caixa, o eixo horizontal representa os meses e o eixo vertical os valores monetários, com séries distintas para receitas, despesas e resultado líquido.
+
+\begin{figure}[H]
+    \centering
+    \setlength{\larguraPrint}{0.44\textwidth}
+    \caption{Indicadores e gráficos do painel inicial}
     \label{fig:md-16}
-    \fbox{%
-        \begin{minipage}[c][0.24\textheight][c]{0.90\linewidth}
-            \centering
-            \textbf{Espaço reservado para print do sistema}\\[0.8em]
-            Dashboard Web
-        \end{minipage}%
-    }
-    \fonte{Elaborado pelos autores.}
+    \begin{minipage}[t]{0.48\textwidth}
+        \vspace{0pt}\centering
+        \trechoPrint{figs/screenshots/painel-mobile.png}{0.596865}{0.000000}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \vspace{0pt}\centering
+        \trechoPrint{figs/screenshots/painel-mobile.png}{0.000000}{0.403135}
+    \end{minipage}
+    \fonte{Elaboração dos autores a partir da interface do GranaAI.}
 \end{figure}
 
-As demais funcionalidades, como o gerenciamento de categorias (espaço da Figura~\ref{fig:md-17}) e o acompanhamento de metas financeiras (espaço da Figura~\ref{fig:md-18}), complementam a experiência, permitindo que o usuário tenha controle total sobre seus objetivos de médio e longo prazo.
+\paragraph{Transações e registro manual}
 
-\begin{figure}[htbp]
+A Figura~\ref{fig:prints-transacoes} mostra a listagem de transações. A tela oferece exportação CSV, criação de transação e filtros por mês, ano, categoria e tipo, além dos comandos para aplicar ou limpar a seleção. Na parte da listagem, são apresentados descrição, data, categoria e valor das despesas, com ações de edição e exclusão. O controle de paginação permite escolher a quantidade de itens por página e percorrer os registros. Esses elementos permitem filtrar os dados e consultar as movimentações registradas.
+
+\begin{figure}[H]
     \centering
-    \caption{Gerenciamento de limites por categoria --- espaço reservado para print}
+    \setlength{\larguraPrint}{0.44\textwidth}
+    \caption{Listagem de transações}
+    \label{fig:prints-transacoes}
+    \trechoPrint{figs/screenshots/transacoes-mobile.png}{0.707034}{0.000000}
+    \fonte{Elaboração dos autores a partir da interface do GranaAI.}
+\end{figure}
+
+O formulário de lançamento manual é apresentado na Figura~\ref{fig:prints-nova-transacao}. Nele, o usuário informa o tipo da movimentação, o valor, a descrição, a categoria e a data. Os campos marcados com asterisco indicam os preenchimentos exigidos pela interface. Sobre a categoria, existe a possibilidade de criação de uma categoria nova ao salvar, e os botões finais permitem cancelar ou encaminhar o registro.
+
+\begin{figure}[H]
+    \centering
+    \setlength{\larguraPrint}{0.44\textwidth}
+    \caption{Formulário de nova transação}
+    \label{fig:prints-nova-transacao}
+    \includegraphics[width=\larguraPrint,height=0.70\textheight,keepaspectratio]{figs/screenshots/nova-transacao-mobile.png}
+    \fonte{Elaboração dos autores a partir da interface do GranaAI.}
+\end{figure}
+
+\paragraph{Categorias e limites}
+
+A Figura~\ref{fig:md-17} apresenta a página de categorias. A parte superior contém seleção de período, pesquisa e filtros para categorias com ou sem gastos. Cada cartão identifica a categoria, o limite, o valor gasto e o valor restante, acompanhado de uma barra de utilização e dos comandos de edição e exclusão. 
+
+\begin{figure}[H]
+    \centering
+    \setlength{\larguraPrint}{0.44\textwidth}
+    \caption{Consulta de categorias e limites mensais}
     \label{fig:md-17}
-    \fbox{%
-        \begin{minipage}[c][0.24\textheight][c]{0.90\linewidth}
-            \centering
-            \textbf{Espaço reservado para print do sistema}\\[0.8em]
-            Limites por categoria
-        \end{minipage}%
-    }
-    \fonte{Elaborado pelos autores.}
+    \begin{minipage}[t]{0.48\textwidth}
+        \vspace{0pt}\centering
+        \trechoPrint{figs/screenshots/categorias-mobile.png}{0.450711}{0.000000}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \vspace{0pt}\centering
+        \trechoPrint{figs/screenshots/categorias-mobile.png}{0.000000}{0.549289}
+    \end{minipage}
+    \fonte{Elaboração dos autores a partir da interface do GranaAI.}
 \end{figure}
 
-\begin{figure}[htbp]
+O cadastro de categoria, apresentado na Figura~\ref{fig:prints-nova-categoria}, reúne nome, limite mensal, ícone e cor. Os dois últimos elementos organizam a identificação visual dos cartões, enquanto o limite fornece o valor de referência para acompanhar o orçamento daquela categoria. O formulário também oferece cancelamento e gravação.
+
+\begin{figure}[H]
     \centering
-    \caption{Acompanhamento de metas financeiras --- espaço reservado para print}
+    \setlength{\larguraPrint}{0.44\textwidth}
+    \caption{Formulário de cadastro de categoria}
+    \label{fig:prints-nova-categoria}
+    \includegraphics[width=\larguraPrint,height=0.70\textheight,keepaspectratio]{figs/screenshots/nova-categoria-mobile.png}
+    \fonte{Elaboração dos autores a partir da interface do GranaAI.}
+\end{figure}
+
+\paragraph{Metas financeiras}
+
+As telas da Figura~\ref{fig:md-18} apresentam a consulta e a criação de metas. Na listagem, cada cartão mostra o título do objetivo, os valores atual e desejado, a barra de progresso e as opções de edição e exclusão. A pesquisa e os filtros permitem selecionar metas ativas ou concluídas. Ao lado, o formulário de nova meta solicita título e valor-alvo, com comandos para salvar ou cancelar a inclusão.
+
+\begin{figure}[H]
+    \centering
+    \setlength{\larguraPrint}{0.44\textwidth}
+    \caption{Consulta de metas financeiras e formulário de nova meta}
     \label{fig:md-18}
-    \fbox{%
-        \begin{minipage}[c][0.24\textheight][c]{0.90\linewidth}
-            \centering
-            \textbf{Espaço reservado para print do sistema}\\[0.8em]
-            Metas financeiras
-        \end{minipage}%
-    }
-    \fonte{Elaborado pelos autores.}
+    \begin{minipage}[t]{0.48\textwidth}
+        \vspace{0pt}\centering
+        \includegraphics[width=\larguraPrint,height=0.70\textheight,keepaspectratio]{figs/screenshots/metas-mobile.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \vspace{0pt}\centering
+        \includegraphics[width=\larguraPrint,height=0.70\textheight,keepaspectratio]{figs/screenshots/nova-meta-mobile.png}
+    \end{minipage}
+    \fonte{Elaboração dos autores a partir da interface do GranaAI.}
 \end{figure}
 
-Por fim, o espaço da Figura~\ref{fig:md-19} está reservado para um print da tela de relatórios e \textit{insights}, destinada à apresentação da visão analítica e das projeções financeiras.
+\paragraph{Assinaturas e cobranças recorrentes}
 
-\begin{figure}[htbp]
+A Figura~\ref{fig:prints-assinaturas} apresenta a página de assinaturas. A interface distingue cobranças previstas no mês, padrões detectados automaticamente e assinaturas que já estão sendo acompanhadas. Na área de detecção, os cartões apresentam descrição, valor, categoria, quantidade de meses e dia associado à cobrança, com a ação Acompanhar. Na área de assinaturas do usuário, aparecem classificação como necessária ou dispensável e comandos de edição e exclusão.
+
+\begin{figure}[H]
     \centering
-    \caption{Relatórios detalhados e insights da IA --- espaço reservado para print}
+    \setlength{\larguraPrint}{0.44\textwidth}
+    \caption{Acompanhamento de assinaturas e cobranças}
+    \label{fig:prints-assinaturas}
+    \begin{minipage}[t]{0.48\textwidth}
+        \vspace{0pt}\centering
+        \trechoPrint{figs/screenshots/assinaturas-mobile.png}{0.475628}{0.000000}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \vspace{0pt}\centering
+        \trechoPrint{figs/screenshots/assinaturas-mobile.png}{0.000000}{0.524372}
+    \end{minipage}
+    \fonte{Elaboração dos autores a partir da interface do GranaAI.}
+\end{figure}
+
+A Figura~\ref{fig:prints-nova-assinatura} apresenta o formulário de inclusão manual de uma assinatura. Os campos visíveis permitem indicar nome, categoria, valor mensal e dia da cobrança. Essa entrada complementa a identificação automática ao oferecer uma forma de cadastrar um compromisso conhecido pelo usuário. Os botões Cancelar e Salvar encerram a operação sem inclusão ou encaminham os dados para gravação, respectivamente.
+
+\begin{figure}[H]
+    \centering
+    \setlength{\larguraPrint}{0.44\textwidth}
+    \caption{Formulário de nova assinatura}
+    \label{fig:prints-nova-assinatura}
+    \includegraphics[width=\larguraPrint,height=0.70\textheight,keepaspectratio]{figs/screenshots/nova-assinatura-mobile.png}
+    \fonte{Elaboração dos autores a partir da interface do GranaAI.}
+\end{figure}
+
+\paragraph{Relatórios, tendências e projeções}
+
+A Figura~\ref{fig:md-19} apresenta o resumo financeiro e a análise de tendência. À esquerda, estão receitas, despesas e saldo do período indicado, além das mensagens na área de \textit{insights}.
+
+À direita, estão o gráfico de tendência e a tabela que o acompanha. O eixo horizontal organiza os períodos e o vertical representa valores monetários, com séries diferenciadas para receitas e despesas. A tabela discrimina os mesmos tipos de informação por mês, permitindo consultar os valores numéricos além da representação gráfica.
+
+\begin{figure}[H]
+    \centering
+    \setlength{\larguraPrint}{0.44\textwidth}
+    \caption{Resumo financeiro e análise de tendência}
     \label{fig:md-19}
-    \fbox{%
-        \begin{minipage}[c][0.24\textheight][c]{0.90\linewidth}
-            \centering
-            \textbf{Espaço reservado para print do sistema}\\[0.8em]
-            Relatórios e insights
-        \end{minipage}%
-    }
-    \fonte{Elaborado pelos autores.}
+    \begin{minipage}[t]{0.48\textwidth}
+        \vspace{0pt}\centering
+        \trechoPrint{figs/screenshots/relatorios-mobile.png}{0.695200}{0.000000}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \vspace{0pt}\centering
+        \trechoPrint{figs/screenshots/relatorios-mobile.png}{0.438400}{0.304800}
+    \end{minipage}
+    \fonte{Elaboração dos autores a partir da interface do GranaAI.}
+\end{figure}
+
+A projeção exibida na Figura~\ref{fig:prints-projecao} apresenta um gráfico de saldo acumulado e uma tabela com receitas, despesas e saldo projetados para os meses seguintes. Para estimar os próximos meses, o sistema calcula a média das receitas e das despesas já registradas. A diferença entre essas médias é somada ao saldo a cada mês da projeção. Abaixo do gráfico, são informados os valores usados nessa estimativa.
+
+\begin{figure}[H]
+    \centering
+    \setlength{\larguraPrint}{0.44\textwidth}
+    \caption{Projeção financeira para os períodos seguintes}
+    \label{fig:prints-projecao}
+    \trechoPrint{figs/screenshots/relatorios-mobile.png}{0.129200}{0.561600}
+    \fonte{Elaboração dos autores a partir da interface do GranaAI.}
+\end{figure}
+
+\paragraph{Perfil e preferências}
+
+A Figura~\ref{fig:prints-perfil} apresenta os campos de telefone, nome, e-mail, renda mensal e personalidade do assistente, além do comando para salvar as preferências. O seletor de personalidade indica a possibilidade de configurar o estilo de comunicação, enquanto os demais campos organizam informações da conta. Para a inclusão na monografia, os valores dos campos pessoais foram ocultados por tarjas aplicadas à cópia da imagem. Os rótulos e os controles foram preservados para permitir a compreensão da tela.
+
+\begin{figure}[H]
+    \centering
+    \setlength{\larguraPrint}{0.44\textwidth}
+    \caption{Tela de perfil com os campos pessoais anonimizados}
+    \label{fig:prints-perfil}
+    \includegraphics[width=\larguraPrint,height=0.70\textheight,keepaspectratio]{figs/screenshots/perfil-mobile.png}
+    \fonte{Elaboração dos autores a partir da interface do GranaAI.}
 \end{figure}
