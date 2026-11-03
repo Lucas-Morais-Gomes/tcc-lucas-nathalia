@@ -185,7 +185,7 @@ Entre os mecanismos utilizados nessas integrações, destacam-se as APIs e os we
 
 A utilização de aplicativos de mensagens como interface de sistemas de informação apresenta possibilidades de aplicação em atividades que exigem interação frequente com os usuários. Em soluções de controle financeiro pessoal, essa abordagem pode permitir que informações relacionadas a receitas e despesas sejam fornecidas diretamente em uma conversa, reduzindo a necessidade de acessar diferentes telas para realizar registros cotidianos.
 
-No GranaAI, o WhatsApp é o canal de interação com o chatbot financeiro. As mensagens são recebidas pela Evolution API e encaminhadas ao backend, que interpreta as solicitações e executa as operações correspondentes. Além de texto, o sistema também recebe áudios e imagens.
+No GranaAI, o WhatsApp foi selecionado como canal de interação conversacional entre o usuário e o sistema. O sistema permite que movimentações financeiras sejam informadas por meio de mensagens em linguagem natural, possibilitando seu encaminhamento aos componentes responsáveis pela interpretação, pelo processamento e pelo armazenamento dos dados.
 
 A integração entre o WhatsApp e os serviços internos do GranaAI foi realizada com o auxílio da Evolution API, apresentada na subseção seguinte. Essa ferramenta atuou como intermediária na comunicação entre a plataforma de mensagens e a aplicação, permitindo que os eventos recebidos sejam encaminhados ao backend responsável pela execução das funcionalidades financeiras.
 
@@ -276,7 +276,7 @@ A validação de dados constitui uma etapa importante no desenvolvimento de sist
 
 No desenvolvimento de APIs, o Pydantic pode ser utilizado em conjunto com o FastAPI para definir modelos de requisição e resposta. Dessa maneira, os dados encaminhados aos endpoints podem ser analisados de acordo com as estruturas estabelecidas, enquanto as respostas podem ser organizadas em formatos adequados à comunicação entre os sistemas.
 
-No GranaAI, o Pydantic define os modelos de entrada e saída dos endpoints. No cadastro de movimentações pela API, esses modelos especificam campos como tipo, valor, categoria e data. As informações extraídas das mensagens pelo chatbot são tratadas pelas rotinas de classificação e pelas regras de negócio do backend.
+No GranaAI, o Pydantic é utilizado para estruturar e validar informações processadas pelo backend, contribuindo para o tratamento dos dados recebidos e retornados pelos serviços da aplicação. Essa funcionalidade é relevante para o controle financeiro pessoal, uma vez que as operações envolvem informações como valores monetários, categorias, datas e descrições de movimentações.
 
 A utilização conjunta de Python, FastAPI, SQLAlchemy e Pydantic permitiu organizar o backend do GranaAI em diferentes responsabilidades. Enquanto o Python fornece a linguagem utilizada na implementação das funcionalidades, o FastAPI disponibilizou os mecanismos de comunicação por meio de APIs, o SQLAlchemy realizou a interação com o banco de dados e o Pydantic auxilia na definição e na validação das estruturas de informação.
 
@@ -308,6 +308,8 @@ Nesse contexto, é importante diferenciar as responsabilidades do modelo de ling
 
 A Groq API é utilizada para identificar a intenção e as informações presentes nas mensagens. O backend trata a resposta do modelo e encaminha a solicitação ao chatbot. Nos fluxos de registro, são solicitadas informações complementares e a confirmação do usuário antes de salvar a movimentação. A integração com a Groq também inclui a transcrição de áudios e a interpretação de imagens recebidas pelo WhatsApp.
 
+A utilização dessa abordagem permite separar a interpretação das mensagens da execução das funcionalidades financeiras. Assim, a Groq API atua como um recurso de processamento de linguagem, enquanto o backend permanece responsável pela aplicação das regras de negócio e pela comunicação com o banco de dados PostgreSQL.
+
 Outro aspecto relevante está relacionado ao tratamento das informações encaminhadas aos serviços externos. Considerando que aplicações financeiras podem processar dados pessoais e registros de movimentações, torna-se necessário avaliar quais informações são efetivamente necessárias para cada solicitação, bem como adotar medidas adequadas de proteção e controle de acesso. A utilização de serviços de inteligência artificial deve, portanto, considerar não apenas as possibilidades funcionais, mas também os requisitos de segurança e privacidade associados ao tratamento dos dados.
 
 A descrição detalhada da integração entre o backend e a Groq API, incluindo o tratamento das requisições e das respostas, será apresentada no capítulo dedicado ao desenvolvimento e à implementação do sistema.
@@ -335,6 +337,10 @@ Para facilitar o gerenciamento de aplicações que utilizam mais de um contêine
 A utilização do Docker Compose contribui para organizar a inicialização e a configuração dos serviços, permitindo que diferentes componentes sejam definidos de maneira centralizada. Essa abordagem é especialmente útil em ambientes de desenvolvimento e teste, nos quais a reprodução das configurações pode facilitar a preparação do sistema e a identificação de problemas relacionados às dependências e à comunicação entre os serviços.
 
 O ambiente do GranaAI foi organizado com Docker Compose. A configuração define os serviços da API, da interface web, do banco PostgreSQL e da Evolution API. O backend utiliza uma imagem baseada em Python 3.12. A interface é construída em uma etapa com Node.js.
+
+A utilização de contêineres pode contribuir para organizar esses componentes em ambientes separados, permitindo estabelecer configurações específicas para cada serviço. Dessa forma, as dependências necessárias à execução do backend podem ser administradas independentemente daquelas utilizadas por outros componentes da aplicação, reduzindo possíveis conflitos entre tecnologias.
+
+O Docker Compose, por sua vez, oferece recursos para definir as configurações dos serviços e suas relações de comunicação em um mesmo ambiente. Essa possibilidade é relevante para aplicações que dependem da execução coordenada de diferentes componentes, uma vez que permite documentar as configurações necessárias e simplificar determinados procedimentos de inicialização.
 
 Entretanto, a utilização de contêineres não elimina a necessidade de configuração adequada dos serviços, gerenciamento de credenciais, definição de políticas de acesso e proteção das informações armazenadas. Em aplicações financeiras, esses aspectos são particularmente importantes devido à natureza dos dados processados, que podem incluir informações pessoais e registros de movimentações financeiras.
 
