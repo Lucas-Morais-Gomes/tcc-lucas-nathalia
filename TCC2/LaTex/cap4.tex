@@ -5,11 +5,11 @@ Este capítulo apresenta a proposta de solução para o problema investigado, de
 
 \section{Documentação Técnica}
 
-A documentação técnica da solução tem como objetivo organizar, de forma estruturada, as decisões relacionadas ao funcionamento do sistema, às integrações previstas e ao comportamento esperado da aplicação. Nesta etapa, a documentação cumpre o papel de consolidar os resultados da pesquisa com usuários e transformá-los em especificações iniciais para desenvolvimento.
+A documentação técnica da solução tem como objetivo organizar, de forma estruturada, as decisões relacionadas ao funcionamento do sistema, às integrações implementadas e ao comportamento definido para a aplicação. Nesta etapa, a documentação cumpre o papel de registrar as decisões que orientaram o desenvolvimento a partir da pesquisa com usuários.
 
 \subsection{Levantamento de Requisitos}
 
-O levantamento de requisitos foi orientado pelos achados da pesquisa qualitativa e pelas histórias de usuário definidas no capítulo anterior. A seguir, são apresentados requisitos iniciais que servirão de base para o detalhamento técnico da solução.
+O levantamento de requisitos foi orientado pelos achados da pesquisa qualitativa e pelas histórias de usuário definidas no capítulo anterior. A seguir, são apresentados os requisitos que serviram de base para o desenvolvimento da solução.
 
 \subsubsection{Requisitos Funcionais}
 
@@ -145,52 +145,82 @@ Para consultar essas informações na versão web, o usuário acessa a tela de l
 
 \subsubsection{Interface Conversacional (WhatsApp)}
 
-A interação no WhatsApp foi projetada para ser rápida e intuitiva. O usuário pode enviar mensagens de texto ou áudio descrevendo um gasto, e o assistente GranaAI processa a informação em tempo real. A Figura 15 ilustra uma simulação de uso onde o usuário registra uma compra impulsiva no iFood. Além de confirmar o registro, a IA fornece um \textit{insight} imediato sobre o limite da categoria, cumprindo o papel de assistente preventivo.
+A interação no WhatsApp foi projetada para ser rápida e intuitiva. O usuário pode enviar mensagens de texto ou áudio descrevendo um gasto, e o assistente GranaAI processa a informação em tempo real. O espaço da Figura~\ref{fig:md-15} está reservado para um print do registro de gasto pelo WhatsApp. Além de confirmar o registro, a IA fornece um \textit{insight} imediato sobre o limite da categoria, cumprindo o papel de assistente preventivo.
 
 \begin{figure}[htbp]
     \centering
-    \caption{Simulação de registro de gasto via WhatsApp}
+    \caption{Registro de gasto via WhatsApp --- espaço reservado para print}
     \label{fig:md-15}
-    \includegraphics[width=0.8\textwidth,height=0.60\textheight,keepaspectratio]{figs/simulado-whatsapp.png}
+    \fbox{%
+        \begin{minipage}[c][0.24\textheight][c]{0.90\linewidth}
+            \centering
+            \textbf{Espaço reservado para print do sistema}\\[0.8em]
+            Registro de gasto via WhatsApp
+        \end{minipage}%
+    }
     \fonte{Elaborado pelos autores.}
 \end{figure}
 
 \subsubsection{Dashboard Web}
 
-A interface web serve como o centro de análise financeira do usuário. Nela, os dados registrados via WhatsApp são consolidados em visualizações gráficas que facilitam a compreensão do orçamento. A Figura 16 apresenta a visão geral do dashboard, com cartões de resumo financeiro, gráficos de evolução mensal e a lista de transações recentes.
+A interface web serve como o centro de análise financeira do usuário. Nela, os dados registrados via WhatsApp são consolidados em visualizações gráficas que facilitam a compreensão do orçamento. O espaço da Figura~\ref{fig:md-16} está reservado para um print da visão geral do dashboard, com cartões de resumo financeiro, gráficos de evolução mensal e a lista de transações recentes.
 
 \begin{figure}[htbp]
     \centering
-    \caption{Interface principal do Dashboard Web}
+    \caption{Interface principal do Dashboard Web --- espaço reservado para print}
     \label{fig:md-16}
-    \includegraphics[width=0.8\textwidth,height=0.60\textheight,keepaspectratio]{figs/dashboards.png}
+    \fbox{%
+        \begin{minipage}[c][0.24\textheight][c]{0.90\linewidth}
+            \centering
+            \textbf{Espaço reservado para print do sistema}\\[0.8em]
+            Dashboard Web
+        \end{minipage}%
+    }
     \fonte{Elaborado pelos autores.}
 \end{figure}
 
-As demais funcionalidades, como o gerenciamento de categorias (Figura 17) e o acompanhamento de metas financeiras (Figura 18), complementam a experiência, permitindo que o usuário tenha controle total sobre seus objetivos de médio e longo prazo.
+As demais funcionalidades, como o gerenciamento de categorias (espaço da Figura~\ref{fig:md-17}) e o acompanhamento de metas financeiras (espaço da Figura~\ref{fig:md-18}), complementam a experiência, permitindo que o usuário tenha controle total sobre seus objetivos de médio e longo prazo.
 
 \begin{figure}[htbp]
     \centering
-    \caption{Gerenciamento de limites por categoria}
+    \caption{Gerenciamento de limites por categoria --- espaço reservado para print}
     \label{fig:md-17}
-    \includegraphics[width=0.8\textwidth,height=0.60\textheight,keepaspectratio]{figs/categorias.png}
+    \fbox{%
+        \begin{minipage}[c][0.24\textheight][c]{0.90\linewidth}
+            \centering
+            \textbf{Espaço reservado para print do sistema}\\[0.8em]
+            Limites por categoria
+        \end{minipage}%
+    }
     \fonte{Elaborado pelos autores.}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \caption{Acompanhamento de metas financeiras}
+    \caption{Acompanhamento de metas financeiras --- espaço reservado para print}
     \label{fig:md-18}
-    \includegraphics[width=0.8\textwidth,height=0.60\textheight,keepaspectratio]{figs/metas.png}
+    \fbox{%
+        \begin{minipage}[c][0.24\textheight][c]{0.90\linewidth}
+            \centering
+            \textbf{Espaço reservado para print do sistema}\\[0.8em]
+            Metas financeiras
+        \end{minipage}%
+    }
     \fonte{Elaborado pelos autores.}
 \end{figure}
 
-Por fim, a tela de relatórios e \textit{insights} (Figura 19) oferece uma visão analítica e projeções futuras geradas pela IA, auxiliando na tomada de decisão estratégica do usuário.
+Por fim, o espaço da Figura~\ref{fig:md-19} está reservado para um print da tela de relatórios e \textit{insights}, destinada à apresentação da visão analítica e das projeções financeiras.
 
 \begin{figure}[htbp]
     \centering
-    \caption{Relatórios detalhados e insights da IA}
+    \caption{Relatórios detalhados e insights da IA --- espaço reservado para print}
     \label{fig:md-19}
-    \includegraphics[width=0.8\textwidth,height=0.60\textheight,keepaspectratio]{figs/relatorios.png}
+    \fbox{%
+        \begin{minipage}[c][0.24\textheight][c]{0.90\linewidth}
+            \centering
+            \textbf{Espaço reservado para print do sistema}\\[0.8em]
+            Relatórios e insights
+        \end{minipage}%
+    }
     \fonte{Elaborado pelos autores.}
 \end{figure}
