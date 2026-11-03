@@ -244,7 +244,7 @@ Dessa forma, a utilização de um chatbot integrado ao WhatsApp representa uma a
 
 O desenvolvimento de aplicações que integram diferentes serviços computacionais exige a utilização de tecnologias capazes de organizar o processamento das informações, executar regras de negócio e estabelecer mecanismos de comunicação entre os componentes do sistema. Nesse contexto, o backend representa a camada responsável por realizar operações que não são executadas diretamente na interface do usuário, incluindo o tratamento de requisições, a validação de dados, a comunicação com serviços externos e a persistência das informações.
 
-No desenvolvimento do GranaAI, a implementação do backend foi realizada utilizando a linguagem de programação Python 3.12, em conjunto com o framework FastAPI e as bibliotecas SQLAlchemy 2.0 e Pydantic v2. Essas tecnologias desempenham funções complementares na organização da aplicação, permitindo estruturar os serviços responsáveis pelo processamento das movimentações financeiras e pela integração entre os diferentes componentes da solução.
+No desenvolvimento do GranaAI, a implementação do backend foi realizada utilizando a linguagem de programação Python, em conjunto com o framework FastAPI e as bibliotecas SQLAlchemy e Pydantic. Essas tecnologias desempenham funções complementares na organização da aplicação, permitindo estruturar os serviços responsáveis pelo processamento das movimentações financeiras e pela integração entre os diferentes componentes da solução.
 
 A linguagem \textbf{Python} é uma linguagem de programação de alto nível, de propósito geral, caracterizada por uma sintaxe que favorece a legibilidade e a organização do código-fonte. Sua utilização abrange diferentes áreas da computação, incluindo desenvolvimento web, automação de processos, análise de dados, inteligência artificial e construção de aplicações que necessitam integrar serviços externos. A linguagem oferece recursos de programação estruturada e orientada a objetos, além de um amplo conjunto de bibliotecas que podem ser utilizadas conforme as necessidades de cada aplicação.
 
@@ -262,15 +262,15 @@ Outra característica do framework é o suporte à programação assíncrona, qu
 
 No contexto do GranaAI, o FastAPI foi utilizado na disponibilização dos endpoints responsáveis pela comunicação entre a plataforma web, o backend e os demais serviços que compõem a solução. Dessa forma, o framework contribuiu para organizar o recebimento das solicitações, o encaminhamento das operações financeiras e a disponibilização das informações necessárias ao funcionamento das interfaces.
 
-Para realizar a comunicação entre o backend e o banco de dados, foi utilizado o \textbf{SQLAlchemy 2.0}, uma biblioteca do ecossistema Python que disponibiliza recursos para a construção de consultas e a manipulação de informações armazenadas em bancos de dados relacionais. Entre suas funcionalidades, destaca-se o mapeamento objeto-relacional, também conhecido como \textit{Object-Relational Mapping} (ORM), que permite estabelecer uma correspondência entre estruturas de dados utilizadas na aplicação e tabelas presentes no banco de dados.
+Para realizar a comunicação entre o backend e o banco de dados, foi utilizado o \textbf{SQLAlchemy}, uma biblioteca do ecossistema Python que disponibiliza recursos para a construção de consultas e a manipulação de informações armazenadas em bancos de dados relacionais. Entre suas funcionalidades, destaca-se o mapeamento objeto-relacional, também conhecido como \textit{Object-Relational Mapping} (ORM), que permite estabelecer uma correspondência entre estruturas de dados utilizadas na aplicação e tabelas presentes no banco de dados.
 
 O mapeamento objeto-relacional possibilita representar entidades do sistema por meio de classes e objetos, facilitando a organização das operações relacionadas à persistência dos dados. Por meio desse mecanismo, informações podem ser consultadas, inseridas, atualizadas e excluídas utilizando recursos da linguagem de programação, sem a necessidade de construir manualmente todas as instruções SQL envolvidas nas operações.
 
 A utilização do SQLAlchemy também contribui para a separação entre as regras de negócio e os mecanismos de acesso aos dados. Essa organização favorece a manutenção do código, uma vez que permite concentrar as operações relacionadas ao armazenamento e à recuperação de informações em componentes específicos da aplicação.
 
-No GranaAI, o SQLAlchemy 2.0 é utilizado na comunicação com o PostgreSQL, sistema gerenciador de banco de dados responsável pela persistência das informações financeiras. Sua aplicação está relacionada ao gerenciamento das entidades necessárias ao funcionamento do sistema, incluindo os registros de movimentações financeiras e demais informações estruturadas utilizadas pelos serviços internos.
+No GranaAI, o SQLAlchemy é utilizado na comunicação com o PostgreSQL, sistema gerenciador de banco de dados responsável pela persistência das informações financeiras. Sua aplicação está relacionada ao gerenciamento das entidades necessárias ao funcionamento do sistema, incluindo os registros de movimentações financeiras e demais informações estruturadas utilizadas pelos serviços internos.
 
-Complementarmente, foi adotado o \textbf{Pydantic v2}, uma biblioteca Python destinada à definição, à validação e à serialização de estruturas de dados. Sua utilização permite estabelecer modelos que descrevem os campos esperados em determinadas operações, incluindo os tipos de dados e as condições de validação aplicáveis às informações recebidas ou produzidas pela aplicação.
+Complementarmente, foi adotado o \textbf{Pydantic}, uma biblioteca Python destinada à definição, à validação e à serialização de estruturas de dados. Sua utilização permite estabelecer modelos que descrevem os campos esperados em determinadas operações, incluindo os tipos de dados e as condições de validação aplicáveis às informações recebidas ou produzidas pela aplicação.
 
 A validação de dados constitui uma etapa importante no desenvolvimento de sistemas de informação, especialmente em aplicações que recebem informações de diferentes origens. Esse procedimento permite identificar situações em que os valores fornecidos não correspondem às estruturas esperadas, contribuindo para reduzir inconsistências e evitar que determinados dados sejam encaminhados incorretamente às etapas posteriores de processamento.
 
@@ -281,8 +281,6 @@ No GranaAI, o Pydantic é utilizado para estruturar e validar informações proc
 A utilização conjunta de Python, FastAPI, SQLAlchemy e Pydantic permitiu organizar o backend do GranaAI em diferentes responsabilidades. Enquanto o Python fornece a linguagem utilizada na implementação das funcionalidades, o FastAPI disponibilizou os mecanismos de comunicação por meio de APIs, o SQLAlchemy realizou a interação com o banco de dados e o Pydantic auxilia na definição e na validação das estruturas de informação.
 
 Essa combinação tecnológica estabelece uma base para o desenvolvimento de uma aplicação modular, na qual as interfaces de comunicação, as regras de negócio e os mecanismos de persistência podem ser organizados de maneira separada. Tal abordagem favorece a compreensão da arquitetura e possibilita que alterações em determinados componentes sejam realizadas com menor interferência sobre os demais, dependendo das relações de dependência estabelecidas durante a implementação.
-
-No backend do GranaAI, o FastAPI organiza as rotas da aplicação, o Pydantic valida os dados recebidos e o SQLAlchemy realiza o acesso ao banco de dados.
 
 % Imagem de tipo um diagrama de como  essas tecnologias trabalham juntas
 
@@ -312,8 +310,6 @@ A utilização dessa abordagem permite separar a interpretação das mensagens d
 
 Outro aspecto relevante está relacionado ao tratamento das informações encaminhadas aos serviços externos. Considerando que aplicações financeiras podem processar dados pessoais e registros de movimentações, torna-se necessário avaliar quais informações são efetivamente necessárias para cada solicitação, bem como adotar medidas adequadas de proteção e controle de acesso. A utilização de serviços de inteligência artificial deve, portanto, considerar não apenas as possibilidades funcionais, mas também os requisitos de segurança e privacidade associados ao tratamento dos dados.
 
-A descrição detalhada da integração entre o backend e a Groq API, incluindo o tratamento das requisições e das respostas, será apresentada no capítulo dedicado ao desenvolvimento e à implementação do sistema.
-
 \subsection{Docker}
 
 O desenvolvimento de aplicações computacionais envolve a utilização de diferentes tecnologias, bibliotecas e serviços que precisam funcionar de maneira integrada. Em sistemas compostos por múltiplos componentes, a configuração dos ambientes de execução representa um aspecto relevante, uma vez que diferenças entre sistemas operacionais, versões de dependências e parâmetros de configuração podem interferir no funcionamento das aplicações. Nesse contexto, a utilização de tecnologias de conteinerização constitui uma alternativa para organizar e padronizar os ambientes necessários à execução de sistemas.
@@ -336,15 +332,13 @@ Para facilitar o gerenciamento de aplicações que utilizam mais de um contêine
 
 A utilização do Docker Compose contribui para organizar a inicialização e a configuração dos serviços, permitindo que diferentes componentes sejam definidos de maneira centralizada. Essa abordagem é especialmente útil em ambientes de desenvolvimento e teste, nos quais a reprodução das configurações pode facilitar a preparação do sistema e a identificação de problemas relacionados às dependências e à comunicação entre os serviços.
 
-O ambiente do GranaAI foi organizado com Docker Compose. A configuração define os serviços da API, da interface web, do banco PostgreSQL e da Evolution API. O backend utiliza uma imagem baseada em Python 3.12. A interface é construída em uma etapa com Node.js.
-
 A utilização de contêineres pode contribuir para organizar esses componentes em ambientes separados, permitindo estabelecer configurações específicas para cada serviço. Dessa forma, as dependências necessárias à execução do backend podem ser administradas independentemente daquelas utilizadas por outros componentes da aplicação, reduzindo possíveis conflitos entre tecnologias.
 
 O Docker Compose, por sua vez, oferece recursos para definir as configurações dos serviços e suas relações de comunicação em um mesmo ambiente. Essa possibilidade é relevante para aplicações que dependem da execução coordenada de diferentes componentes, uma vez que permite documentar as configurações necessárias e simplificar determinados procedimentos de inicialização.
 
 Entretanto, a utilização de contêineres não elimina a necessidade de configuração adequada dos serviços, gerenciamento de credenciais, definição de políticas de acesso e proteção das informações armazenadas. Em aplicações financeiras, esses aspectos são particularmente importantes devido à natureza dos dados processados, que podem incluir informações pessoais e registros de movimentações financeiras.
 
-No GranaAI, o Docker foi utilizado para organizar os serviços e suas dependências em contêineres.
+O ambiente do GranaAI foi organizado com Docker Compose. A configuração define os serviços da API, da interface web, do banco PostgreSQL e da Evolution API. O backend utiliza uma imagem baseada em Python. A interface é construída em uma etapa com Node.js.
 
 % imagem conceitual da infraestrutura
 
@@ -404,7 +398,7 @@ A comunicação entre componentes também constitui um aspecto importante na org
 
 No desenvolvimento de sistemas que apresentam grande quantidade de informações, a organização dos componentes pode contribuir para a manutenção e a evolução da interface. Em aplicações voltadas ao controle financeiro, por exemplo, diferentes componentes podem ser utilizados para apresentar saldos, movimentações, categorias de despesas, metas financeiras e gráficos de acompanhamento.
 
-No GranaAI, o React 19 foi adotado como biblioteca principal para o desenvolvimento da interface web responsável pela organização e pela visualização das informações financeiras. Sua utilização está associada à construção do dashboard disponibilizado aos usuários, permitindo estruturar os diferentes elementos visuais necessários ao acompanhamento das movimentações registradas no sistema.
+No GranaAI, o React foi adotado como biblioteca principal para o desenvolvimento da interface web responsável pela organização e pela visualização das informações financeiras. Sua utilização está associada à construção do dashboard disponibilizado aos usuários, permitindo estruturar os diferentes elementos visuais necessários ao acompanhamento das movimentações registradas no sistema.
 
 A implementação do frontend utiliza o React em conjunto com o TypeScript, linguagem que acrescenta recursos de tipagem estática ao desenvolvimento. Essa combinação permite definir estruturas de dados utilizadas pelos componentes e estabelecer tipos para propriedades, estados e informações compartilhadas, contribuindo para a organização do código-fonte.
 
@@ -509,15 +503,13 @@ No desenvolvimento do GranaAI, o PostgreSQL foi adotado como sistema gerenciador
 
 A aplicação envolve informações relacionadas aos usuários e às suas movimentações financeiras, além de estruturas necessárias à organização e ao acompanhamento dos registros. Nesse cenário, a utilização de um banco de dados relacional permite estabelecer associações entre as diferentes entidades e disponibilizar informações para as funcionalidades de consulta e visualização presentes na plataforma.
 
-A comunicação entre o backend desenvolvido em Python e o PostgreSQL é realizada com o auxílio do SQLAlchemy 2.0, biblioteca que oferece recursos de mapeamento objeto-relacional e manipulação de dados. Essa integração permite que os serviços da aplicação executem operações de persistência e recuperação de informações utilizando estruturas definidas no código-fonte.
+A comunicação entre o backend desenvolvido em Python e o PostgreSQL é realizada com o auxílio do SQLAlchemy, biblioteca que oferece recursos de mapeamento objeto-relacional e manipulação de dados. Essa integração permite que os serviços da aplicação executem operações de persistência e recuperação de informações utilizando estruturas definidas no código-fonte.
 
 A utilização conjunta do PostgreSQL e do SQLAlchemy contribui para a separação entre os mecanismos de armazenamento e as regras de negócio implementadas no backend. Enquanto o sistema gerenciador de banco de dados é responsável pela persistência e pelo gerenciamento das informações, os serviços desenvolvidos em Python executam as operações necessárias ao funcionamento das funcionalidades financeiras.
 
 É importante destacar que a utilização de um banco de dados com mecanismos de integridade e controle transacional não elimina a necessidade de implementar medidas adicionais de segurança. Aplicações que armazenam informações financeiras devem considerar aspectos relacionados à autenticação, à autorização, à proteção de credenciais e ao controle de acesso aos registros, de acordo com os requisitos definidos para o sistema.
 
 No GranaAI, o PostgreSQL armazena os dados utilizados nas operações financeiras e nas consultas da aplicação.
-
-A descrição detalhada do modelo de dados, das entidades, dos relacionamentos e dos mecanismos de persistência implementados no GranaAI será apresentada no capítulo dedicado ao desenvolvimento e à implementação da solução.
 
 \subsection{Tecnologias avaliadas durante o desenvolvimento}
 
