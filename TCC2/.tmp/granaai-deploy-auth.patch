@@ -1,0 +1,772 @@
+diff --git a/.github/workflows/ci-cd.yml b/.github/workflows/ci-cd.yml
+--- a/.github/workflows/ci-cd.yml
++++ b/.github/workflows/ci-cd.yml
+@@ -1,219 +1,230 @@
+-name: CI/CD
+-
+-# Testes + compatibilidade a cada push/PR; deploy automático só no master,
+-# e apenas depois que todos os jobs de teste passarem.
+-on:
+-  push:
+-    branches: [master, main]
+-  pull_request:
+-    branches: [master, main]
+-  workflow_dispatch:
+-
+-# Cancela execuções antigas do mesmo ref (economiza runner).
+-# Em push (master) NÃO cancela, para não interromper um deploy em andamento.
+-concurrency:
+-  group: ci-${{ github.ref }}
+-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+-
+-permissions:
+-  contents: read
+-
+-jobs:
+-  # ---------------------------------------------------------------------------
+-  # 1) Backend: testes reais contra PostgreSQL (os fixtures dão skip sem banco).
+-  #    Matriz de Python detecta incompatibilidade de dependências por versão.
+-  #    `pip check` falha se uma lib nova conflitar com as já instaladas.
+-  # ---------------------------------------------------------------------------
+-  backend:
+-    name: Backend · Python ${{ matrix.python }}
+-    runs-on: ubuntu-latest
+-    strategy:
+-      fail-fast: false
+-      matrix:
+-        python: ["3.11", "3.12"]
+-
+-    services:
+-      postgres:
+-        image: postgres:16-alpine
+-        env:
+-          POSTGRES_DB: granaai_test
+-          POSTGRES_USER: granaai
+-          POSTGRES_PASSWORD: secret
+-        ports:
+-          - 5432:5432
+-        options: >-
+-          --health-cmd "pg_isready -U granaai"
+-          --health-interval 5s
+-          --health-timeout 5s
+-          --health-retries 10
+-
+-    env:
+-      # Settings do app exige estas variáveis; valores fictícios bastam.
+-      DATABASE_URL: postgresql+asyncpg://granaai:secret@localhost:5432/granaai
+-      TEST_DATABASE_URL: postgresql+asyncpg://granaai:secret@localhost:5432/granaai_test
+-      GROQ_API_KEY: ci-dummy
+-      GROQ_CHAT_MODEL: qwen/qwen3.8-27b
+-      GROQ_WHISPER_MODEL: whisper-large-v3
+-      GROQ_VISION_MODEL: qwen/qwen3.8-27b
+-      EVOLUTION_API_KEY: ci-dummy
+-      EVOLUTION_API_URL: http://localhost:8081
+-      EVOLUTION_INSTANCE: granaai
+-      WHATSAPP_WEBHOOK_SECRET: ci-dummy
+-      WHATSAPP_ALLOWED_PHONE: "5527998693240"
+-      FRONTEND_URL: http://localhost:5173
+-      CORS_ORIGINS: '["http://localhost:5173"]'
+-
+-    steps:
+-      - uses: actions/checkout@v4
+-
+-      - uses: actions/setup-python@v5
+-        with:
+-          python-version: ${{ matrix.python }}
+-          cache: pip
+-          cache-dependency-path: backend/requirements.txt
+-
+-      - name: Instalar dependências
+-        working-directory: backend
+-        run: pip install -r requirements.txt
+-
+-      - name: Checar conflitos de dependências (pip check)
+-        working-directory: backend
+-        run: pip check
+-
+-      - name: Rodar testes
+-        working-directory: backend
+-        run: pytest -v
+-
+-  # ---------------------------------------------------------------------------
+-  # 2) Frontend: lockfile consistente + árvore de deps válida + tipos + build.
+-  #    `npm ci` falha se o package-lock divergir do package.json (lib nova sem
+-  #    lock atualizado); `npm ls` falha com deps ausentes/ inválidas.
+-  # ---------------------------------------------------------------------------
+-  frontend:
+-    name: Frontend · Node ${{ matrix.node }}
+-    runs-on: ubuntu-latest
+-    strategy:
+-      fail-fast: false
+-      matrix:
+-        node: ["20", "22"]
+-
+-    steps:
+-      - uses: actions/checkout@v4
+-
+-      - uses: actions/setup-node@v4
+-        with:
+-          node-version: ${{ matrix.node }}
+-          cache: npm
+-          cache-dependency-path: frontend/package-lock.json
+-
+-      - name: Instalar dependências (npm ci)
+-        working-directory: frontend
+-        run: npm ci
+-
+-      - name: Checar árvore de dependências (npm ls)
+-        working-directory: frontend
+-        run: npm ls --depth=0
+-
+-      - name: Tipos + build de produção
+-        working-directory: frontend
+-        run: npm run build
+-
+-  # ---------------------------------------------------------------------------
+-  # 3) Docker + smoke test: as imagens reais constroem e o compose sobe de fato,
+-  #    respondendo no /health (API e via proxy do nginx do frontend).
+-  # ---------------------------------------------------------------------------
+-  docker:
+-    name: Docker · build + smoke
+-    runs-on: ubuntu-latest
+-    env:
+-      GROQ_CHAT_MODEL: qwen/qwen3.8-27b
+-    steps:
+-      - uses: actions/checkout@v4
+-
+-      - name: Build das imagens (api + frontend)
+-        run: docker compose build api frontend
+-
+-      - name: Subir db + api + frontend
+-        run: docker compose up -d db api frontend
+-
+-      - name: Aguardar API e validar health
+-        run: |
+-          set -e
+-          for i in $(seq 1 40); do
+-            if curl -fsS http://localhost:8000/health >/dev/null 2>&1; then
+-              echo "API pronta após ${i} tentativas"
+-              break
+-            fi
+-            sleep 3
+-            if [ "$i" -eq 40 ]; then
+-              echo "::error::API não respondeu em 120s"
+-              docker compose logs api
+-              exit 1
+-            fi
+-          done
+-
+-          echo "--- API direta ---"
+-          curl -fsS http://localhost:8000/health
+-
+-          echo "--- Frontend (index) ---"
+-          curl -fsS -o /dev/null -w "HTTP %{http_code}\n" http://localhost:5173/
+-
+-          echo "--- Health via proxy do nginx ---"
+-          curl -fsS http://localhost:5173/health
+-
+-      - name: Logs em caso de falha
+-        if: failure()
+-        run: docker compose logs --no-color
+-
+-      - name: Derrubar containers
+-        if: always()
+-        run: docker compose down -v
+-
+-  # ---------------------------------------------------------------------------
+-  # 4) Deploy: SSH na VPS, sincroniza o master e reergue o compose.
+-  #    Só roda em push no master e se todos os jobs acima passarem.
+-  #    Secrets necessários (Settings → Secrets and variables → Actions):
+-  #      VPS_SSH_KEY  → chave privada SSH (a pública vai em ~/.ssh/authorized_keys)
+-  #      VPS_HOST     → IP/host da VPS (169.58.113.93)
+-  #      VPS_USER     → usuário SSH (ex.: root)
+-  #      VPS_APP_DIR  → caminho do repo na VPS (ex.: /root/GranaAI)
+-  # ---------------------------------------------------------------------------
+-  deploy:
+-    name: Deploy · VPS
+-    runs-on: ubuntu-latest
+-    needs: [backend, frontend, docker]
+-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+-
+-    steps:
+-      - name: Deploy via SSH
+-        uses: appleboy/ssh-action@v1
+-        with:
+-          host: ${{ secrets.VPS_HOST }}
+-          username: ${{ secrets.VPS_USER }}
+-          key: ${{ secrets.VPS_SSH_KEY }}
+-          script: |
+-            set -e
+-            cd "${{ secrets.VPS_APP_DIR }}"
+-            git fetch origin master
+-            git reset --hard origin/master
+-
+-            # Serviços com build local. Os demais (db, caddy, evolution-*)
+-            # usam imagens prontas e não mudam a cada commit — recriá-los só
+-            # derrubaria o banco e a ponte do WhatsApp sem ganho algum.
+-            # Descobre a lista sozinho; cai na lista fixa se o Compose local
+-            # for antigo demais para `config --format json`.
+-            built=$(docker compose config --format json 2>/dev/null \
+-              | python3 -c "import json,sys; print(' '.join(k for k,v in json.load(sys.stdin)['services'].items() if v.get('build')))" 2>/dev/null \
+-              || echo "")
+-            built=${built:-api frontend}
+-            echo "Serviços com build local: $built"
+-
+-            docker compose build $built
+-            # --force-recreate garante a troca mesmo se o Compose achar o
+-            # container "up-to-date" (imagem com atestação do BuildKit).
+-            docker compose up -d --force-recreate --no-deps $built
+-
+-            # Garante os demais serviços no ar e limpa serviços órfãos.
+-            docker compose up -d --remove-orphans
+-            docker compose ps
+-            docker image prune -f
++name: CI/CD
++
++# Testes + compatibilidade a cada push/PR; deploy automático só no master,
++# e apenas depois que todos os jobs de teste passarem.
++on:
++  push:
++    branches: [master, main]
++  pull_request:
++    branches: [master, main]
++  workflow_dispatch:
++
++# Cancela execuções antigas do mesmo ref (economiza runner).
++# Em push (master) NÃO cancela, para não interromper um deploy em andamento.
++concurrency:
++  group: ci-${{ github.ref }}
++  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
++
++permissions:
++  contents: read
++
++jobs:
++  # ---------------------------------------------------------------------------
++  # 1) Backend: testes reais contra PostgreSQL (os fixtures dão skip sem banco).
++  #    Matriz de Python detecta incompatibilidade de dependências por versão.
++  #    `pip check` falha se uma lib nova conflitar com as já instaladas.
++  # ---------------------------------------------------------------------------
++  backend:
++    name: Backend · Python ${{ matrix.python }}
++    runs-on: ubuntu-latest
++    strategy:
++      fail-fast: false
++      matrix:
++        python: ["3.11", "3.12"]
++
++    services:
++      postgres:
++        image: postgres:16-alpine
++        env:
++          POSTGRES_DB: granaai_test
++          POSTGRES_USER: granaai
++          POSTGRES_PASSWORD: secret
++        ports:
++          - 5432:5432
++        options: >-
++          --health-cmd "pg_isready -U granaai"
++          --health-interval 5s
++          --health-timeout 5s
++          --health-retries 10
++
++    env:
++      # Settings do app exige estas variáveis; valores fictícios bastam.
++      DATABASE_URL: postgresql+asyncpg://granaai:secret@localhost:5432/granaai
++      TEST_DATABASE_URL: postgresql+asyncpg://granaai:secret@localhost:5432/granaai_test
++      GROQ_API_KEY: ci-dummy
++      GROQ_CHAT_MODEL: qwen/qwen3.8-27b
++      GROQ_WHISPER_MODEL: whisper-large-v3
++      GROQ_VISION_MODEL: qwen/qwen3.8-27b
++      EVOLUTION_API_KEY: ci-dummy
++      EVOLUTION_API_URL: http://localhost:8081
++      EVOLUTION_INSTANCE: granaai
++      WHATSAPP_WEBHOOK_SECRET: ci-dummy
++      WHATSAPP_ALLOWED_PHONE: "5527998693240"
++      FRONTEND_URL: http://localhost:5173
++      CORS_ORIGINS: '["http://localhost:5173"]'
++
++    steps:
++      - uses: actions/checkout@v4
++
++      - uses: actions/setup-python@v5
++        with:
++          python-version: ${{ matrix.python }}
++          cache: pip
++          cache-dependency-path: backend/requirements.txt
++
++      - name: Instalar dependências
++        working-directory: backend
++        run: pip install -r requirements.txt
++
++      - name: Checar conflitos de dependências (pip check)
++        working-directory: backend
++        run: pip check
++
++      - name: Rodar testes
++        working-directory: backend
++        run: pytest -v
++
++  # ---------------------------------------------------------------------------
++  # 2) Frontend: lockfile consistente + árvore de deps válida + tipos + build.
++  #    `npm ci` falha se o package-lock divergir do package.json (lib nova sem
++  #    lock atualizado); `npm ls` falha com deps ausentes/ inválidas.
++  # ---------------------------------------------------------------------------
++  frontend:
++    name: Frontend · Node ${{ matrix.node }}
++    runs-on: ubuntu-latest
++    strategy:
++      fail-fast: false
++      matrix:
++        node: ["20", "22"]
++
++    steps:
++      - uses: actions/checkout@v4
++
++      - uses: actions/setup-node@v4
++        with:
++          node-version: ${{ matrix.node }}
++          cache: npm
++          cache-dependency-path: frontend/package-lock.json
++
++      - name: Instalar dependências (npm ci)
++        working-directory: frontend
++        run: npm ci
++
++      - name: Checar árvore de dependências (npm ls)
++        working-directory: frontend
++        run: npm ls --depth=0
++
++      - name: Tipos + build de produção
++        working-directory: frontend
++        run: npm run build
++
++  # ---------------------------------------------------------------------------
++  # 3) Docker + smoke test: as imagens reais constroem e o compose sobe de fato,
++  #    respondendo no /health (API e via proxy do nginx do frontend).
++  # ---------------------------------------------------------------------------
++  docker:
++    name: Docker · build + smoke
++    runs-on: ubuntu-latest
++    env:
++      GROQ_CHAT_MODEL: qwen/qwen3.8-27b
++    steps:
++      - uses: actions/checkout@v4
++
++      - name: Build das imagens (api + frontend)
++        run: docker compose build api frontend
++
++      - name: Subir db + api + frontend
++        run: docker compose up -d db api frontend
++
++      - name: Aguardar API e validar health
++        run: |
++          set -e
++          for i in $(seq 1 40); do
++            if curl -fsS http://localhost:8000/health >/dev/null 2>&1; then
++              echo "API pronta após ${i} tentativas"
++              break
++            fi
++            sleep 3
++            if [ "$i" -eq 40 ]; then
++              echo "::error::API não respondeu em 120s"
++              docker compose logs api
++              exit 1
++            fi
++          done
++
++          echo "--- API direta ---"
++          curl -fsS http://localhost:8000/health
++
++          echo "--- Frontend (index) ---"
++          curl -fsS -o /dev/null -w "HTTP %{http_code}\n" http://localhost:5173/
++
++          echo "--- Health via proxy do nginx ---"
++          curl -fsS http://localhost:5173/health
++
++      - name: Logs em caso de falha
++        if: failure()
++        run: docker compose logs --no-color
++
++      - name: Derrubar containers
++        if: always()
++        run: docker compose down -v
++
++  # ---------------------------------------------------------------------------
++  # 4) Deploy: SSH na VPS, sincroniza o master e reergue o compose.
++  #    Só roda em push no master e se todos os jobs acima passarem.
++  #    Secrets necessários (Settings → Secrets and variables → Actions):
++  #      VPS_SSH_KEY  → chave privada SSH (a pública vai em ~/.ssh/authorized_keys)
++  #      VPS_HOST     → IP/host da VPS (169.58.113.93)
++  #      VPS_USER     → usuário SSH (ex.: root)
++  #      VPS_APP_DIR  → caminho do repo na VPS (ex.: /root/GranaAI)
++  # ---------------------------------------------------------------------------
++  deploy:
++    name: Deploy · VPS
++    runs-on: ubuntu-latest
++    needs: [backend, frontend, docker]
++    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
++
++    steps:
++      - name: Deploy via SSH
++        uses: appleboy/ssh-action@v1
++        env:
++          DEPLOY_GITHUB_TOKEN: ${{ github.token }}
++          DEPLOY_REPOSITORY_URL: ${{ github.server_url }}/${{ github.repository }}.git
++        with:
++          host: ${{ secrets.VPS_HOST }}
++          username: ${{ secrets.VPS_USER }}
++          key: ${{ secrets.VPS_SSH_KEY }}
++          envs: DEPLOY_GITHUB_TOKEN,DEPLOY_REPOSITORY_URL
++          script: |
++            set -e
++            cd "${{ secrets.VPS_APP_DIR }}"
++            : "${DEPLOY_GITHUB_TOKEN:?Token de leitura ausente no deploy}"
++            : "${DEPLOY_REPOSITORY_URL:?URL do repositorio ausente no deploy}"
++            # Credencial apenas para este fetch; nao persiste token na VPS.
++            GIT_TERMINAL_PROMPT=0 git \
++              -c credential.helper= \
++              -c 'credential.helper=!f() { if [ "$1" = get ]; then printf "%s\n" "username=x-access-token" "password=$DEPLOY_GITHUB_TOKEN"; fi; }; f' \
++              fetch "$DEPLOY_REPOSITORY_URL" +refs/heads/master:refs/remotes/origin/master
++            unset DEPLOY_GITHUB_TOKEN
++            git reset --hard origin/master
++
++            # Serviços com build local. Os demais (db, caddy, evolution-*)
++            # usam imagens prontas e não mudam a cada commit — recriá-los só
++            # derrubaria o banco e a ponte do WhatsApp sem ganho algum.
++            # Descobre a lista sozinho; cai na lista fixa se o Compose local
++            # for antigo demais para `config --format json`.
++            built=$(docker compose config --format json 2>/dev/null \
++              | python3 -c "import json,sys; print(' '.join(k for k,v in json.load(sys.stdin)['services'].items() if v.get('build')))" 2>/dev/null \
++              || echo "")
++            built=${built:-api frontend}
++            echo "Serviços com build local: $built"
++
++            docker compose build $built
++            # --force-recreate garante a troca mesmo se o Compose achar o
++            # container "up-to-date" (imagem com atestação do BuildKit).
++            docker compose up -d --force-recreate --no-deps $built
++
++            # Garante os demais serviços no ar e limpa serviços órfãos.
++            docker compose up -d --remove-orphans
++            docker compose ps
++            docker image prune -f
+diff --git a/CI-CD.md b/CI-CD.md
+--- a/CI-CD.md
++++ b/CI-CD.md
+@@ -1,151 +1,164 @@
+-# CI/CD — GitHub Actions
+-
+-Automação de testes e deploy do GranaAI. Arquivo único: [`.github/workflows/ci-cd.yml`](.github/workflows/ci-cd.yml).
+-
+-## Visão geral
+-
+-A cada **push** ou **pull request** para `master`/`main`, o GitHub sobe uma máquina temporária (runner) que roda os testes. Se tudo passar e o push for direto no `master`, o mesmo runner entra na VPS por SSH e atualiza a aplicação — sem você precisar abrir a máquina.
+-
+-```
+-push no master
+-   │
+-   ├─ backend   → pytest (Python 3.11, 3.12) + pip check
+-   ├─ frontend  → npm ci + npm ls + build (Node 20, 22)
+-   ├─ docker    → build das imagens + smoke test (/health)
+-   │
+-   └─ todos verdes? ──sim──► SSH na VPS → git reset --hard + build + recria api/frontend
+-                      └─não──► aborta (nada vai pra produção)
+-```
+-
+-O job de deploy **só** roda em push direto no `master`; em pull request roda apenas a bateria de testes. Também dá pra disparar tudo à mão pela aba **Actions → CI/CD → Run workflow** (`workflow_dispatch`).
+-
+-## Os jobs
+-
+-| Job | O que faz | Para que serve |
+-|---|---|---|
+-| `backend` | pytest real contra um `postgres:16` descartável, em **Python 3.11 e 3.12**, seguido de `pip check` | Garante que os testes passam e que as dependências Python não brigam entre si |
+-| `frontend` | `npm ci` + `npm ls` + `tsc`/`vite build`, em **Node 20 e 22** | Garante lockfile consistente, árvore de dependências válida e build de produção |
+-| `docker` | `docker compose build` das imagens e sobe `db+api+frontend`, validando `/health` direto e via nginx | Garante que as imagens reais constroem e a aplicação sobe de fato |
+-| `deploy` | SSH na VPS: `git fetch` + `git reset --hard origin/master` + build e recriação forçada **apenas dos serviços com build local** (`api`, `frontend`) | Publica a versão testada |
+-
+-Os testes de backend dependem de PostgreSQL: sem banco, os fixtures fazem `skip`. Por isso o job sobe um serviço `postgres:16` — aqui os testes rodam **de verdade**, não pulam.
+-
+-### O gate de dependências
+-
+-O ponto que evita "adicionei uma lib e quebrei outra":
+-
+-- **`pip check`** (backend) — depois de instalar `requirements.txt`, falha se algum pacote instalado viola o requisito de outro (ex.: uma lib nova sobe o `starlette` e o `fastapi` exige uma faixa mais antiga).
+-- **`npm ci`** (frontend) — falha se o `package-lock.json` estiver fora de sincronia com o `package.json` (lib adicionada sem atualizar o lock).
+-- **`npm ls`** — falha se houver dependência ausente ou inválida na árvore.
+-
+-Regra prática ao adicionar biblioteca: **commite `requirements.txt` / `package-lock.json` junto**. O CI barra o deploy se algo conflitar.
+-
+-## Configuração inicial (uma vez)
+-
+-O runner precisa de uma chave para entrar na VPS. Vamos criar um **par de chaves dedicado** ao deploy.
+-
+-### Por que uma chave dedicada
+-
+-Um par de chaves SSH tem dois arquivos:
+-
+-- **chave privada** (o segredo) — o runner usa para *assinar* a conexão;
+-- **chave pública** (o cadeado) — fica autorizada na VPS.
+-
+-Da pública não se descobre a privada. Usar uma chave **dedicada** (e não a sua pessoal) porque:
+-
+-1. se o segredo no GitHub vazar, você revoga **só** essa chave e não perde o próprio acesso à VPS;
+-2. sua chave pessoal provavelmente tem passphrase — e o runner não consegue digitá-la;
+-3. uma chave dedicada aceita restrições extras (ver seção *Segurança*).
+-
+-| Arquivo | Vai para | Nunca vai |
+-|---|---|---|
+-| `granaai_deploy` (privada) | Secret `VPS_SSH_KEY` no GitHub | VPS, repositório, chat |
+-| `granaai_deploy.pub` (pública) | `~/.ssh/authorized_keys` da VPS | — (não é segredo) |
+-
+-### 1. Gerar a chave (no seu PC)
+-
+-```powershell
+-ssh-keygen -t ed25519 -C "gha-deploy-granaai" -f $env:USERPROFILE\.ssh\granaai_deploy -N '""'
+-type $env:USERPROFILE\.ssh\granaai_deploy.pub
+-```
+-
+-- `-t ed25519` — algoritmo moderno, curto e seguro.
+-- `-C "gha-deploy-granaai"` — rótulo para identificar a chave; não autentica nada.
+-- `-f <caminho>` — onde salvar os dois arquivos.
+-- `-N '""'` — passphrase vazia (o runner não pode digitar senha). **Atenção:** no PowerShell, `-N ""` não funciona (o shell engole a string e o comando abre um prompt). O `'""'` manda um valor vazio de verdade.
+-
+-`type` apenas **mostra** a chave pública para você copiar o conteúdo inteiro (uma linha só, começando com `ssh-ed25519`).
+-
+-### 2. Autorizar a chave na VPS
+-
+-Cole a chave pública (o conteúdo que apareceu) no comando abaixo, **dentro da VPS**:
+-
+-```bash
+-echo "COLE_AQUI_A_CHAVE_PUBLICA" >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys
+-```
+-
+-- `authorized_keys` é a lista de chaves que podem entrar como aquele usuário.
+-- `>>` **anexa**. Nunca use `>` (um sinal só): ele apagaria o arquivo inteiro, inclusive as chaves que já te dão acesso — você se trancaria fora da VPS.
+-- `chmod 600` restringe a leitura ao dono. Não é opcional: o `sshd` **recusa** o arquivo se ele estiver gravável por outros usuários.
+-
+-### 3. Criar os secrets no GitHub
+-
+-**Settings → Secrets and variables → Actions → New repository secret**:
+-
+-| Secret | Valor |
+-|---|---|
+-| `VPS_SSH_KEY` | conteúdo **completo** da chave privada `granaai_deploy`, incluindo as linhas `-----BEGIN/END OPENSSH PRIVATE KEY-----` |
+-| `VPS_HOST` | IP/host da VPS (ex.: `169.58.113.93`) |
+-| `VPS_USER` | usuário SSH (ex.: `root`) |
+-| `VPS_APP_DIR` | caminho do repositório na VPS (ex.: `/root/GranaAI`) |
+-
+-> Configure os secrets **antes** do primeiro push. Sem eles, os jobs de teste passam mas o `deploy` fica vermelho.
+-
+-### 4. Testar a chave antes de subir
+-
+-```powershell
+-ssh -i $env:USERPROFILE\.ssh\granaai_deploy <usuario>@<ip-da-vps> "echo conectou ok"
+-```
+-
+-Se entrar sem pedir senha, está pronto. Depois é só `git push` no `master`.
+-
+-## No dia a dia
+-
+-- **Publicar**: `git push` no `master`. Testes rodam e, se verdes, o deploy acontece sozinho.
+-- **Ver o progresso**: aba **Actions** do repositório. Cada job mostra o log completo.
+-- **Rodar sem publicar**: abra um **pull request** — roda só os testes.
+-- **Disparar à mão**: **Actions → CI/CD → Run workflow**.
+-- **Reverter**: `git revert <commit>` + push, ou, com pressa, na VPS: `git checkout <commit>` e depois `docker compose build api frontend && docker compose up -d --force-recreate --no-deps api frontend`.
+-
+-## Solução de problemas
+-
+-| Sintoma | Causa provável | Correção |
+-|---|---|---|
+-| `deploy` vermelho, testes verdes | Secrets ausentes ou com nome errado | Confira os 4 secrets em *Settings → Secrets and variables → Actions* |
+-| `Permission denied (publickey)` | Chave pública não está no `authorized_keys`, ou `chmod` errado | Refaça o passo 2; confirme `chmod 600 ~/.ssh/authorized_keys` |
+-| Chave funciona no PC mas não no CI | Chave privada colada incompleta no secret | Cole o arquivo inteiro, com as linhas `BEGIN/END` |
+-| Testes de backend pulando | Postgres indisponível | No CI isso não deve ocorrer (serviço `postgres:16`); se ocorrer, veja o log do serviço |
+-| `pip check` falhando | Lib nova conflita com uma existente | Ajuste/pin a versão no `requirements.txt` antes de subir |
+-| `npm ci` falhando | Lock fora de sincronia | Rode `npm install` local (atualiza o lock) e commite `package-lock.json` |
+-| Deploy não roda, só os testes | Push veio de PR ou de outra branch | O deploy só roda em push direto no `master` |
+-| Deploy verde, mas o site **não muda** | O Compose considerou o container "up-to-date" e não trocou a imagem | Já tratado com `--force-recreate` no deploy. Em último caso, na VPS: `docker compose up -d --force-recreate --no-deps api frontend` |
+-| `services.X.build additional properties 'provenance' not allowed` | `build.provenance` é chave nova e o Compose do runner/da VPS pode não aceitar | Não use `build.provenance` no compose. A troca de container é garantida por `--force-recreate` |
+-
+-## Segurança e manutenção
+-
+-- **Nunca** commite a chave privada nem o `.env` (já estão no `.gitignore`).
+-- **Revogar** o acesso do CI a qualquer momento: apague a linha correspondente em `~/.ssh/authorized_keys` da VPS. O resto do seu acesso continua.
+-- **Rotacionar**: gere um novo par, atualize o `authorized_keys` e o secret `VPS_SSH_KEY`, e remova a chave antiga.
+-- **Restringir mais** (opcional): no `authorized_keys`, dá para limitar a chave a um IP de origem ou a um único comando, por exemplo:
+-  ```
+-  from="1.2.3.4" ssh-ed25519 AAAA... gha-deploy-granaai
+-  ```
+-
+-## Decisões e observações
+-
+-- **Recriação forçada**: o `docker compose up -d --build` pode reconstruir a imagem e, ainda assim, **não trocar o container** — observado na prática (deploy "verde" com o site inalterado). A causa provável é a comparação de ID de imagem do Compose quando o BuildKit anexa atestação à imagem (*manifest list*). A garantia é usar `--force-recreate --no-deps <serviços>`, como o deploy faz. (Existe a chave `build.provenance: false`, que tenderia a tornar a comparação confiável, mas ela é recente demais: o Compose do runner do GitHub rejeita o compose com `additional properties 'provenance' not allowed`. Não use.)
+-- **Por que só os serviços com build local são recriados**: serviços com `build:` próprio mudam a cada commit; os demais (`db`, `caddy`, `evolution-*`) usam imagens prontas do registry, que **não mudam** — recriá-los derrubaria o Postgres e a ponte do WhatsApp sem nenhum ganho. O deploy descobre a lista sozinho (`docker compose config --format json`), então um serviço novo com `build:` entra no fluxo automaticamente.
+-
+-- **`git reset --hard origin/master`**: garante que a VPS fique idêntica ao que passou no CI. Como `.env` é gitignored, ele é preservado; mas **qualquer edição manual feita direto no repositório da VPS é descartada**. Se preferir não resetar, troque a linha por `git pull --ff-only` no workflow (só funciona se não houver divergência local).
+-- **Build na VPS**: a cada deploy o script roda `docker compose build <serviços com build:>` (nada de `--build` no `up`). Alternativa para aliviar a CPU da VPS: buildar as imagens no CI e publicá-las no GitHub Container Registry, deixando a VPS apenas fazer `docker compose pull`.
+-- **Cancelamento**: execuções antigas de PR são canceladas automaticamente; pushes no `master` **não** são cancelados, para não interromper um deploy em andamento.
++# CI/CD — GitHub Actions
++
++Automação de testes e deploy do GranaAI. Arquivo único: [`.github/workflows/ci-cd.yml`](.github/workflows/ci-cd.yml).
++
++## Visão geral
++
++A cada **push** ou **pull request** para `master`/`main`, o GitHub sobe uma máquina temporária (runner) que roda os testes. Se tudo passar e o push for direto no `master`, o mesmo runner entra na VPS por SSH e atualiza a aplicação — sem você precisar abrir a máquina.
++
++```
++push no master
++   │
++   ├─ backend   → pytest (Python 3.11, 3.12) + pip check
++   ├─ frontend  → npm ci + npm ls + build (Node 20, 22)
++   ├─ docker    → build das imagens + smoke test (/health)
++   │
++   └─ todos verdes? ──sim──► SSH na VPS → git reset --hard + build + recria api/frontend
++                      └─não──► aborta (nada vai pra produção)
++```
++
++O job de deploy **só** roda em push direto no `master`; em pull request roda apenas a bateria de testes. Também dá pra disparar tudo à mão pela aba **Actions → CI/CD → Run workflow** (`workflow_dispatch`).
++
++## Os jobs
++
++| Job | O que faz | Para que serve |
++|---|---|---|
++| `backend` | pytest real contra um `postgres:16` descartável, em **Python 3.11 e 3.12**, seguido de `pip check` | Garante que os testes passam e que as dependências Python não brigam entre si |
++| `frontend` | `npm ci` + `npm ls` + `tsc`/`vite build`, em **Node 20 e 22** | Garante lockfile consistente, árvore de dependências válida e build de produção |
++| `docker` | `docker compose build` das imagens e sobe `db+api+frontend`, validando `/health` direto e via nginx | Garante que as imagens reais constroem e a aplicação sobe de fato |
++| `deploy` | SSH na VPS: `git fetch` + `git reset --hard origin/master` + build e recriação forçada **apenas dos serviços com build local** (`api`, `frontend`) | Publica a versão testada |
++
++Os testes de backend dependem de PostgreSQL: sem banco, os fixtures fazem `skip`. Por isso o job sobe um serviço `postgres:16` — aqui os testes rodam **de verdade**, não pulam.
++
++### O gate de dependências
++
++O ponto que evita "adicionei uma lib e quebrei outra":
++
++- **`pip check`** (backend) — depois de instalar `requirements.txt`, falha se algum pacote instalado viola o requisito de outro (ex.: uma lib nova sobe o `starlette` e o `fastapi` exige uma faixa mais antiga).
++- **`npm ci`** (frontend) — falha se o `package-lock.json` estiver fora de sincronia com o `package.json` (lib adicionada sem atualizar o lock).
++- **`npm ls`** — falha se houver dependência ausente ou inválida na árvore.
++
++Regra prática ao adicionar biblioteca: **commite `requirements.txt` / `package-lock.json` junto**. O CI barra o deploy se algo conflitar.
++
++## Configuração inicial (uma vez)
++
++O runner precisa de uma chave para entrar na VPS. Vamos criar um **par de chaves dedicado** ao deploy.
++
++### Por que uma chave dedicada
++
++Um par de chaves SSH tem dois arquivos:
++
++- **chave privada** (o segredo) — o runner usa para *assinar* a conexão;
++- **chave pública** (o cadeado) — fica autorizada na VPS.
++
++Da pública não se descobre a privada. Usar uma chave **dedicada** (e não a sua pessoal) porque:
++
++1. se o segredo no GitHub vazar, você revoga **só** essa chave e não perde o próprio acesso à VPS;
++2. sua chave pessoal provavelmente tem passphrase — e o runner não consegue digitá-la;
++3. uma chave dedicada aceita restrições extras (ver seção *Segurança*).
++
++| Arquivo | Vai para | Nunca vai |
++|---|---|---|
++| `granaai_deploy` (privada) | Secret `VPS_SSH_KEY` no GitHub | VPS, repositório, chat |
++| `granaai_deploy.pub` (pública) | `~/.ssh/authorized_keys` da VPS | — (não é segredo) |
++
++### 1. Gerar a chave (no seu PC)
++
++```powershell
++ssh-keygen -t ed25519 -C "gha-deploy-granaai" -f $env:USERPROFILE\.ssh\granaai_deploy -N '""'
++type $env:USERPROFILE\.ssh\granaai_deploy.pub
++```
++
++- `-t ed25519` — algoritmo moderno, curto e seguro.
++- `-C "gha-deploy-granaai"` — rótulo para identificar a chave; não autentica nada.
++- `-f <caminho>` — onde salvar os dois arquivos.
++- `-N '""'` — passphrase vazia (o runner não pode digitar senha). **Atenção:** no PowerShell, `-N ""` não funciona (o shell engole a string e o comando abre um prompt). O `'""'` manda um valor vazio de verdade.
++
++`type` apenas **mostra** a chave pública para você copiar o conteúdo inteiro (uma linha só, começando com `ssh-ed25519`).
++
++### 2. Autorizar a chave na VPS
++
++Cole a chave pública (o conteúdo que apareceu) no comando abaixo, **dentro da VPS**:
++
++```bash
++echo "COLE_AQUI_A_CHAVE_PUBLICA" >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys
++```
++
++- `authorized_keys` é a lista de chaves que podem entrar como aquele usuário.
++- `>>` **anexa**. Nunca use `>` (um sinal só): ele apagaria o arquivo inteiro, inclusive as chaves que já te dão acesso — você se trancaria fora da VPS.
++- `chmod 600` restringe a leitura ao dono. Não é opcional: o `sshd` **recusa** o arquivo se ele estiver gravável por outros usuários.
++
++### 3. Criar os secrets no GitHub
++
++**Settings → Secrets and variables → Actions → New repository secret**:
++
++| Secret | Valor |
++|---|---|
++| `VPS_SSH_KEY` | conteúdo **completo** da chave privada `granaai_deploy`, incluindo as linhas `-----BEGIN/END OPENSSH PRIVATE KEY-----` |
++| `VPS_HOST` | IP/host da VPS (ex.: `169.58.113.93`) |
++| `VPS_USER` | usuário SSH (ex.: `root`) |
++| `VPS_APP_DIR` | caminho do repositório na VPS (ex.: `/root/GranaAI`) |
++
++> Configure os secrets **antes** do primeiro push. Sem eles, os jobs de teste passam mas o `deploy` fica vermelho.
++
++### 4. Testar a chave antes de subir
++
++```powershell
++ssh -i $env:USERPROFILE\.ssh\granaai_deploy <usuario>@<ip-da-vps> "echo conectou ok"
++```
++
++Se entrar sem pedir senha, está pronto. Depois é só `git push` no `master`.
++
++## No dia a dia
++
++- **Publicar**: `git push` no `master`. Testes rodam e, se verdes, o deploy acontece sozinho.
++- **Ver o progresso**: aba **Actions** do repositório. Cada job mostra o log completo.
++- **Rodar sem publicar**: abra um **pull request** — roda só os testes.
++- **Disparar à mão**: **Actions → CI/CD → Run workflow**.
++- **Reverter**: `git revert <commit>` + push, ou, com pressa, na VPS: `git checkout <commit>` e depois `docker compose build api frontend && docker compose up -d --force-recreate --no-deps api frontend`.
++
++## Autenticação da VPS no repositório
++
++Há duas conexões distintas no deploy: o runner acessa a VPS com `VPS_SSH_KEY`, e o Git executado na VPS precisa de permissão para ler o repositório. A chave de entrada na VPS não autentica o `git fetch` por HTTPS.
++
++O workflow encaminha o `github.token` temporário e a URL do próprio repositório pelo parâmetro `envs` da ação SSH. A permissão `contents: read` já está declarada no workflow. O fetch usa a URL HTTPS explicitamente e atualiza `refs/remotes/origin/master`; não depende da URL ou de credenciais persistidas no `origin` da VPS.
++
++O helper de credenciais é definido somente na linha de comando do fetch e responde apenas à operação `get`. Os helpers previamente configurados são desabilitados para esse comando. O token não é colocado na URL, em arquivos ou na configuração Git e é removido do ambiente antes do reset e do build. Não é necessário criar outro secret para essa autenticação.
++
++O erro `could not read Username for 'https://github.com'` durante esse passo indica que o Git remoto tentou solicitar credenciais em uma sessão sem terminal. Se ocorrer antes da atualização do workflow, enviar a correção em um novo commit no `master`. Reexecutar uma execução antiga utiliza a versão antiga do workflow.
++
++Referências: [token temporário do GitHub Actions](https://docs.github.com/en/actions/concepts/security/github_token), [variáveis de ambiente da ação SSH](https://github.com/appleboy/ssh-action#pass-environment-variables-to-shell-script) e [helpers de credenciais do Git](https://git-scm.com/docs/gitcredentials).
++
++## Solução de problemas
++
++| Sintoma | Causa provável | Correção |
++|---|---|---|
++| `deploy` vermelho, testes verdes | Secrets ausentes ou com nome errado | Confira os 4 secrets em *Settings → Secrets and variables → Actions* |
++| `could not read Username for 'https://github.com'` no fetch | O Git na VPS está sem autenticação HTTPS | Usar o workflow atualizado, que encaminha o token temporário com leitura do próprio repositório |
++| `Permission denied (publickey)` | Chave pública não está no `authorized_keys`, ou `chmod` errado | Refaça o passo 2; confirme `chmod 600 ~/.ssh/authorized_keys` |
++| Chave funciona no PC mas não no CI | Chave privada colada incompleta no secret | Cole o arquivo inteiro, com as linhas `BEGIN/END` |
++| Testes de backend pulando | Postgres indisponível | No CI isso não deve ocorrer (serviço `postgres:16`); se ocorrer, veja o log do serviço |
++| `pip check` falhando | Lib nova conflita com uma existente | Ajuste/pin a versão no `requirements.txt` antes de subir |
++| `npm ci` falhando | Lock fora de sincronia | Rode `npm install` local (atualiza o lock) e commite `package-lock.json` |
++| Deploy não roda, só os testes | Push veio de PR ou de outra branch | O deploy só roda em push direto no `master` |
++| Deploy verde, mas o site **não muda** | O Compose considerou o container "up-to-date" e não trocou a imagem | Já tratado com `--force-recreate` no deploy. Em último caso, na VPS: `docker compose up -d --force-recreate --no-deps api frontend` |
++| `services.X.build additional properties 'provenance' not allowed` | `build.provenance` é chave nova e o Compose do runner/da VPS pode não aceitar | Não use `build.provenance` no compose. A troca de container é garantida por `--force-recreate` |
++
++## Segurança e manutenção
++
++- **Nunca** commite a chave privada nem o `.env` (já estão no `.gitignore`).
++- **Revogar** o acesso do CI a qualquer momento: apague a linha correspondente em `~/.ssh/authorized_keys` da VPS. O resto do seu acesso continua.
++- **Rotacionar**: gere um novo par, atualize o `authorized_keys` e o secret `VPS_SSH_KEY`, e remova a chave antiga.
++- **Restringir mais** (opcional): no `authorized_keys`, dá para limitar a chave a um IP de origem ou a um único comando, por exemplo:
++  ```
++  from="1.2.3.4" ssh-ed25519 AAAA... gha-deploy-granaai
++  ```
++
++## Decisões e observações
++
++- **Recriação forçada**: o `docker compose up -d --build` pode reconstruir a imagem e, ainda assim, **não trocar o container** — observado na prática (deploy "verde" com o site inalterado). A causa provável é a comparação de ID de imagem do Compose quando o BuildKit anexa atestação à imagem (*manifest list*). A garantia é usar `--force-recreate --no-deps <serviços>`, como o deploy faz. (Existe a chave `build.provenance: false`, que tenderia a tornar a comparação confiável, mas ela é recente demais: o Compose do runner do GitHub rejeita o compose com `additional properties 'provenance' not allowed`. Não use.)
++- **Por que só os serviços com build local são recriados**: serviços com `build:` próprio mudam a cada commit; os demais (`db`, `caddy`, `evolution-*`) usam imagens prontas do registry, que **não mudam** — recriá-los derrubaria o Postgres e a ponte do WhatsApp sem nenhum ganho. O deploy descobre a lista sozinho (`docker compose config --format json`), então um serviço novo com `build:` entra no fluxo automaticamente.
++
++- **`git reset --hard origin/master`**: garante que a VPS fique idêntica ao que passou no CI. Como `.env` é gitignored, ele é preservado; mas **qualquer edição manual feita direto no repositório da VPS é descartada**. Se preferir não resetar, troque a linha por `git pull --ff-only` no workflow (só funciona se não houver divergência local).
++- **Build na VPS**: a cada deploy o script roda `docker compose build <serviços com build:>` (nada de `--build` no `up`). Alternativa para aliviar a CPU da VPS: buildar as imagens no CI e publicá-las no GitHub Container Registry, deixando a VPS apenas fazer `docker compose pull`.
++- **Cancelamento**: execuções antigas de PR são canceladas automaticamente; pushes no `master` **não** são cancelados, para não interromper um deploy em andamento.

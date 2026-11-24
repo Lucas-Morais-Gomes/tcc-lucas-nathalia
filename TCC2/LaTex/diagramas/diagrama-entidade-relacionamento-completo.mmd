@@ -1,0 +1,108 @@
+---
+title: Esquema de persistência do GranaAI
+config:
+  theme: neutral
+  layout: elk
+  er:
+    entityPadding: 5
+    nodeSpacing: 25
+    rankSpacing: 40
+  themeVariables:
+    fontFamily: Arial
+    fontSize: 18px
+---
+erDiagram
+direction TB
+users {
+  uuid id PK
+  varchar_100 name "NOT NULL"
+  varchar_20 phone UK "NOT NULL"
+  varchar_255 email UK "aceita NULL"
+  varchar_255 password_hash "NOT NULL"
+  decimal_12_2 monthly_income
+  text avatar_url "aceita NULL"
+  varchar_20 personality
+  boolean is_admin "NOT NULL"
+  timestamptz created_at
+  timestamptz updated_at
+}
+transactions {
+  uuid id PK
+  uuid user_id FK "NOT NULL"
+  varchar_10 type "income ou expense"
+  decimal_12_2 amount "NOT NULL"
+  text description "aceita NULL"
+  varchar_50 category "slug textual; sem FK"
+  varchar_50 subcategory "aceita NULL"
+  date date
+  boolean is_recurring
+  varchar_20 recurring_frequency "aceita NULL"
+  uuid goal_id FK "aceita NULL"
+  varchar_20 source
+  timestamptz created_at
+}
+category_limits {
+  uuid id PK
+  uuid user_id FK "NOT NULL"
+  varchar_50 slug "UNIQUE com user_id"
+  varchar_50 name "NOT NULL"
+  decimal_12_2 monthly_limit "NOT NULL"
+  varchar_50 icon "aceita NULL"
+  varchar_7 color "aceita NULL"
+  timestamptz created_at
+}
+goals {
+  uuid id PK
+  uuid user_id FK "NOT NULL"
+  varchar_100 title "NOT NULL"
+  decimal_12_2 target_amount "NOT NULL"
+  decimal_12_2 current_amount
+  date deadline "aceita NULL"
+  varchar_50 icon "aceita NULL"
+  varchar_20 status "active, completed ou cancelled"
+  timestamptz created_at
+}
+subscriptions {
+  uuid id PK
+  uuid user_id FK "NOT NULL"
+  varchar_100 pattern "NOT NULL"
+  varchar_100 label "NOT NULL"
+  varchar_50 category "texto; sem FK"
+  decimal_12_2 expected_amount "aceita NULL"
+  varchar_20 frequency
+  integer billing_day "aceita NULL"
+  varchar_7 last_reminded "aceita NULL"
+  varchar_20 status "undecided, necessary ou dispensable"
+  timestamptz created_at
+}
+messages {
+  uuid id PK
+  uuid user_id FK "aceita NULL"
+  varchar_20 phone "NOT NULL"
+  varchar_3 direction "in ou out"
+  varchar_30 intent "aceita NULL"
+  text text "NOT NULL"
+  timestamptz created_at
+}
+conversation_states {
+  varchar_20 phone PK
+  varchar_36 user_id "texto; sem FK"
+  varchar_50 last_intent "aceita NULL"
+  varchar_50 step "aceita NULL"
+  text context "aceita NULL"
+  timestamptz created_at
+  timestamptz updated_at
+}
+system_settings {
+  varchar_50 key PK
+  text value "NOT NULL"
+  varchar_36 updated_by "texto; sem FK"
+  timestamptz updated_at
+}
+
+users ||--o{ transactions : user_id
+users ||--o{ category_limits : user_id
+users ||--o{ goals : user_id
+users ||--o{ subscriptions : user_id
+users |o--o{ messages : user_id
+goals |o--o{ transactions : goal_id

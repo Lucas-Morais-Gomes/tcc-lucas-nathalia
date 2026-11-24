@@ -1,0 +1,83 @@
+---
+config:
+  theme: base
+  look: classic
+  layout: elk
+  themeCSS: |
+    .actor .nodeLabel p::before {
+      content: "";
+      display: block;
+      width: 40px;
+      height: 58px;
+      margin: 0 auto 5px;
+      background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2040%2058%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23303030%27%20stroke-width%3D%271.7%27%3E%3Ccircle%20cx%3D%2720%27%20cy%3D%278%27%20r%3D%276%27%2F%3E%3Cpath%20d%3D%27M20%2014v23M5%2023h30M20%2037L7%2055M20%2037l13%2018%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") center / contain no-repeat;
+    }
+  flowchart:
+    nodeSpacing: 12
+    rankSpacing: 28
+    padding: 8
+  themeVariables:
+    fontFamily: Arial
+    fontSize: 18px
+    primaryTextColor: "#222222"
+    lineColor: "#666666"
+    clusterBkg: "#ffffff"
+    clusterBorder: "#555555"
+---
+flowchart LR
+U["«ator»<br/>Usuário"]
+E["«ator externo»<br/>Evolution API"]
+G["«ator externo»<br/>Groq API"]
+
+subgraph SYS["GranaAI"]
+  direction TB
+  AC(["Criar conta / acessar web"])
+  R(["Registrar pelo WhatsApp"])
+  Q(["Consultar pelo WhatsApp"])
+  M(["Gerenciar transações web"])
+  C(["Gerenciar categorias e limites"])
+  GO(["Gerenciar metas"])
+  S(["Acompanhar assinaturas"])
+  D(["Consultar painel e relatórios"])
+  P(["Atualizar perfil"])
+  I(["Solicitar recomendação"])
+  N(["Receber alertas e lembretes"])
+  IN(["Interpretar mensagem"])
+  CF(["Confirmar / cancelar"])
+  R -. "«include»" .-> IN
+  R -. "«include»" .-> CF
+  %% Ligações invisíveis apenas para distribuir os casos em duas colunas.
+  AC ~~~ P
+  M ~~~ D
+  C ~~~ GO
+  S ~~~ I
+  Q ~~~ N
+end
+
+U --- AC
+U --- R
+U --- Q
+U --- M
+U --- C
+U --- GO
+U --- S
+U --- D
+U --- P
+U --- I
+U --- N
+
+R --- E
+Q --- E
+I --- E
+N --- E
+IN --- G
+I --- G
+
+classDef actor fill:transparent,stroke:transparent,color:#222;
+classDef principal fill:#b3a0f4,stroke:#8772cc,stroke-width:1px,color:#222;
+classDef interno fill:#ffe044,stroke:#d8bc26,stroke-width:1px,color:#222;
+classDef acompanhamento fill:#c9ddf9,stroke:#9cb9df,stroke-width:1px,color:#222;
+class U,E,G actor;
+class AC,R,Q,M,C,GO,S,P principal;
+class IN,CF interno;
+class D,I,N acompanhamento;

@@ -1,0 +1,31 @@
+---
+config:
+  theme: neutral
+  sequence:
+    actorMargin: 25
+    messageMargin: 12
+    mirrorActors: false
+    wrap: false
+---
+sequenceDiagram
+actor U as Usuário
+participant A as Backend FastAPI
+participant D as PostgreSQL
+
+Note over U,D: Mensagens pelo WhatsApp
+U->>A: Envia descrição e valor da despesa
+A->>A: Identifica usuário, interpreta e classifica
+A->>D: Persiste contexto pendente de confirmação
+A-->>U: Apresenta resumo e pede sim ou não
+U->>A: Responde à confirmação
+A->>D: Recupera contexto pendente
+D-->>A: Retorna os dados da despesa
+
+alt Resposta afirmativa
+  A->>D: Grava transação e limpa estado pendente
+  D-->>A: Conclui a operação
+  A-->>U: Informa que a despesa foi registrada
+else Resposta negativa
+  A->>D: Limpa estado sem gravar a transação
+  A-->>U: Informa o cancelamento
+end

@@ -1,0 +1,66 @@
+---
+config:
+  theme: neutral
+  themeVariables:
+    fontFamily: Arial
+    fontSize: 18px
+  sequence:
+    actorMargin: 25
+    messageMargin: 18
+    boxMargin: 8
+    mirrorActors: false
+    wrap: true
+---
+sequenceDiagram
+actor U as Usuário
+participant W as WhatsApp / Evolution
+participant V as Plataforma web
+participant A as Backend FastAPI
+participant D as PostgreSQL
+
+U->>W: Envia a primeira mensagem
+W->>A: Encaminha mensagem por webhook
+A->>D: Consulta usuário pelo telefone
+D-->>A: Retorna resultado da consulta
+
+opt Número comum ainda sem cadastro
+  A-->>W: Retorna convite com link de cadastro
+  W-->>U: Apresenta o link
+  U->>V: Preenche o formulário
+  V->>A: Solicita criação da conta
+  A->>D: Insere usuário com telefone e senha
+  D-->>A: Retorna usuário criado
+  A-->>V: Retorna conta e identificação de acesso
+  V-->>U: Conclui cadastro
+end
+
+Note over U,D: Registro de despesa: usuário cadastrado e dados completos
+U->>W: Envia descrição e valor da despesa
+W->>A: Encaminha a nova mensagem
+A->>A: Identifica usuário, interpreta e classifica
+A->>D: Persiste contexto pendente de confirmação
+A-->>W: Retorna resumo e pedido de confirmação
+W-->>U: Solicita sim para confirmar ou não para cancelar
+U->>W: Responde à confirmação
+W->>A: Encaminha a resposta
+A->>D: Recupera o contexto pendente
+D-->>A: Retorna os dados da despesa
+
+alt Resposta afirmativa
+  A->>D: Grava transação e limpa estado pendente
+  D-->>A: Conclui a operação
+  A-->>W: Retorna confirmação de registro
+else Resposta negativa
+  A->>D: Limpa estado sem gravar a transação
+  A-->>W: Retorna aviso de cancelamento
+end
+W-->>U: Apresenta o resultado
+
+opt Consulta na plataforma web com sessão autenticada
+  U->>V: Solicita acompanhamento financeiro
+  V->>A: Requisita dados da conta identificada
+  A->>D: Consulta registros financeiros
+  D-->>A: Retorna os registros
+  A-->>V: Retorna dados para a interface
+  V-->>U: Exibe dashboard, metas e relatórios
+end

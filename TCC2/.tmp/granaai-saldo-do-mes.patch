@@ -1,0 +1,350 @@
+diff --git a/frontend/src/pages/Dashboard.tsx b/frontend/src/pages/Dashboard.tsx
+--- a/frontend/src/pages/Dashboard.tsx
++++ b/frontend/src/pages/Dashboard.tsx
+@@ -1,173 +1,173 @@
+-import { useEffect, useState } from "react";
+-import { DollarSign, PiggyBank, TrendingDown, Wallet } from "lucide-react";
+-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, PieChart, Pie, Cell, BarChart, Bar, Legend } from "recharts";
+-import { useFinanceStore, useThemeStore } from "../store/useStore";
+-import { formatCurrency } from "../lib/utils";
+-import { theme } from "../styles/theme";
+-import { KpiCard } from "../components/ui/kpi-card";
+-import { ChartCard } from "../components/ui/chart-card";
+-import { Skeleton } from "../components/ui/skeleton";
+-import { EmptyState } from "../components/ui/empty-state";
+-import { apiFetch } from "../config";
+-
+-export default function Dashboard() {
+-  const { balance, monthlyIncome, monthlyExpense, reservedForGoals, availableBalance, loading, error, fetchDashboard, fetchCategories } = useFinanceStore();
+-  const [evolution, setEvolution] = useState<any[]>([]);
+-  const [breakdown, setBreakdown] = useState<any[]>([]);
+-  const [trends, setTrends] = useState<any[]>([]);
+-  const currentYear = new Date().getFullYear();
+-  const [years, setYears] = useState<number[]>([currentYear]);
+-  const [year, setYear] = useState<number>(currentYear);
+-  const { darkMode } = useThemeStore();
+-  const gridStroke = darkMode ? "#e5e7eb" : "#9ca3af";
+-
+-  useEffect(() => {
+-    fetchDashboard();
+-    fetchCategories();
+-    apiFetch<number[]>("/dashboard/years").then((ys) => { if (ys?.length) setYears(ys); }).catch(() => {});
+-    apiFetch<any[]>("/dashboard/category-breakdown").then(setBreakdown).catch(() => {});
+-    apiFetch<any[]>("/reports/trends?months=12").then(setTrends).catch(() => {});
+-  }, []);
+-
+-  useEffect(() => {
+-    apiFetch<any[]>(`/dashboard/evolution?year=${year}`).then(setEvolution).catch(() => {});
+-  }, [year]);
+-
+-  if (loading && !evolution.length) {
+-    return (
+-      <div className="space-y-4">
+-        <Skeleton className="h-32 w-full" />
+-        <Skeleton className="h-64 w-full" />
+-        <Skeleton className="h-64 w-full" />
+-      </div>
+-    );
+-  }
+-
+-  if (error) {
+-    return <div className="rounded-lg bg-red-50 p-4 text-red-700 dark:bg-red-900/30 dark:text-red-400">{error}</div>;
+-  }
+-
+-  const cashFlowData = evolution.map((e) => ({ month: e.month.slice(5), income: e.income, expense: e.expense, net: e.income - e.expense }));
+-  const COLORS = ["#8b5cf6", "#ef4444", "#10b981", "#3b82f6", "#f59e0b", "#14b8a6"];
+-
+-  // Variação mês a mês real (últimos 2 pontos do gráfico). Sem histórico: "—".
+-  const pctChange = (cur?: number, prev?: number) => {
+-    if (cur === undefined || prev === undefined || !prev) return { text: "—", trend: undefined as "up" | "down" | undefined };
+-    const v = ((cur - prev) / Math.abs(prev)) * 100;
+-    return { text: `${v >= 0 ? "+" : ""}${v.toFixed(1).replace(".", ",")}%`, trend: (v >= 0 ? "up" : "down") as "up" | "down" };
+-  };
+-  const lastEv = evolution[evolution.length - 1];
+-  const prevEv = evolution[evolution.length - 2];
+-  const incomeCh = pctChange(lastEv?.income, prevEv?.income);
+-  const expenseCh = pctChange(lastEv?.expense, prevEv?.expense);
+-  const netCh = pctChange(
+-    lastEv ? lastEv.income - lastEv.expense : undefined,
+-    prevEv ? prevEv.income - prevEv.expense : undefined
+-  );
+-  // Em despesas, gastar menos é bom: inverte a cor.
+-  const expenseTrend = expenseCh.trend === "up" ? "down" : expenseCh.trend === "down" ? "up" : undefined;
+-
+-  return (
+-    <div className={theme.page}>
+-
+-      <div className={`${theme.gridKpi} animate-rise`}>
+-        <KpiCard title="Receita Total (Este Mês)" value={formatCurrency(monthlyIncome)} change={incomeCh.text} trend={incomeCh.trend} icon={<DollarSign className="h-4 w-4 text-gray-500" />} />
+-        <KpiCard title="Despesas Totais (Este Mês)" value={formatCurrency(monthlyExpense)} change={expenseCh.text} trend={expenseTrend} icon={<TrendingDown className="h-4 w-4 text-gray-500" />} />
+-        <KpiCard title="Lucro Líquido (Este Mês)" value={formatCurrency(balance)} change={netCh.text} trend={netCh.trend} icon={<Wallet className="h-4 w-4 text-gray-500" />} />
+-        <KpiCard title="Disponível (livre de metas)" value={formatCurrency(availableBalance)} change={formatCurrency(reservedForGoals) + " em metas"} trend="up" icon={<PiggyBank className="h-4 w-4 text-gray-500" />} />
+-      </div>
+-
+-      <div className="grid gap-4 lg:grid-cols-3">
+-        <ChartCard title="Análise de Fluxo de Caixa" className="lg:col-span-2" action={<select value={year} onChange={(e) => setYear(Number(e.target.value))} className="rounded-full border px-3 py-1 text-xs dark:bg-slate-700">{years.map((y) => (<option key={y} value={y}>{y}</option>))}</select>}>
+-          {cashFlowData.length === 0 ? (
+-            <EmptyState icon="📈" title="Sem dados" description="Movimente o último ano." />
+-          ) : (
+-            <div className="h-64">
+-              <ResponsiveContainer width="100%" height="100%">
+-                <LineChart data={cashFlowData}>
+-                  <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} />
+-                  <XAxis dataKey="month" fontSize={12} stroke="#6b7280" />
+-                  <YAxis fontSize={12} tickFormatter={(v) => `R$${(v / 1000).toFixed(0)}k`} stroke="#6b7280" />
+-                  <Tooltip
+-                    contentStyle={{ backgroundColor: "#ffffff", border: "1px solid #e5e7eb", borderRadius: "12px", boxShadow: "0 4px 12px rgba(0,0,0,0.15)", padding: "8px 12px" }}
+-                    labelStyle={{ color: "#111827", fontWeight: 600, fontSize: "13px", marginBottom: "4px" }}
+-                    itemStyle={{ color: "#374151", fontSize: "13px", padding: "2px 0" }}
+-                    formatter={(v: any) => formatCurrency(Number(v))}
+-                    cursor={{ stroke: gridStroke, strokeDasharray: "3 3" }}
+-                  />
+-                  <Legend wrapperStyle={{ fontSize: "12px", color: "#6b7280" }} />
+-                  <Line type="monotone" dataKey="income" name="Receitas" stroke="#10b981" strokeWidth={2} dot={false} />
+-                  <Line type="monotone" dataKey="expense" name="Despesas" stroke="#ef4444" strokeWidth={2} strokeDasharray="4 4" dot={false} />
+-                  <Line type="monotone" dataKey="net" name="Líquido" stroke="#f59e0b" strokeWidth={2} dot={false} />
+-                </LineChart>
+-              </ResponsiveContainer>
+-            </div>
+-          )}
+-        </ChartCard>
+-
+-        <ChartCard title="Distribuição de Despesas">
+-          {breakdown.length === 0 ? (
+-            <EmptyState icon="🥧" title="Sem gastos" description="Categorias aparecerão aqui." />
+-          ) : (
+-            <>
+-              <div className="relative h-64">
+-                <ResponsiveContainer width="100%" height="100%">
+-                  <PieChart>
+-                    <Pie data={breakdown.map((b) => ({ name: b.name ?? b.category, value: b.amount }))} innerRadius={60} outerRadius={80} dataKey="value">
+-                      {breakdown.map((_, i) => (
+-                        <Cell key={i} fill={COLORS[i % COLORS.length]} />
+-                      ))}
+-                    </Pie>
+-                    <Tooltip
+-                      contentStyle={{ backgroundColor: "#ffffff", border: "1px solid #e5e7eb", borderRadius: "12px", boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}
+-                      labelStyle={{ color: "#111827", fontWeight: 600 }}
+-                      itemStyle={{ color: "#374151" }}
+-                      formatter={(v: any) => formatCurrency(Number(v))}
+-                    />
+-                  </PieChart>
+-                </ResponsiveContainer>
+-                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+-                  <span className="text-xs text-gray-500">Total de Despesas</span>
+-                  <span className="font-bold">{formatCurrency(breakdown.reduce((s, b) => s + b.amount, 0))}</span>
+-                </div>
+-              </div>
+-              <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
+-                {breakdown.slice(0, 4).map((b, i) => (
+-                  <div key={b.category} className="flex items-center gap-2">
+-                    <span className="h-3 w-3 rounded" style={{ background: COLORS[i % COLORS.length] }} />
+-                    <span className="truncate">{b.name ?? b.category}: {formatCurrency(b.amount)}</span>
+-                  </div>
+-                ))}
+-              </div>
+-            </>
+-          )}
+-        </ChartCard>
+-      </div>
+-
+-      <ChartCard title="Comparativo Mensal" action={<div className="flex gap-2 text-xs"><span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-emerald-600" />Receitas</span><span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-gray-300" />Despesas</span></div>}>
+-        {trends.length === 0 ? (
+-          <EmptyState icon="📊" title="Sem tendência" />
+-        ) : (
+-          <div className="h-48">
+-            <ResponsiveContainer width="100%" height="100%">
+-              <BarChart data={trends}>
+-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
+-                <XAxis dataKey="month" fontSize={12} tickFormatter={(v) => v.slice(5)} stroke="#6b7280" />
+-                <YAxis fontSize={12} tickFormatter={(v) => `R$${(v / 1000).toFixed(0)}k`} stroke="#6b7280" />
+-                <Tooltip
+-                  contentStyle={{ backgroundColor: "#ffffff", border: "1px solid #e5e7eb", borderRadius: "12px", boxShadow: "0 4px 12px rgba(0,0,0,0.15)", padding: "8px 12px" }}
+-                  labelStyle={{ color: "#111827", fontWeight: 600, fontSize: "13px" }}
+-                  itemStyle={{ color: "#111827", fontWeight: 500, fontSize: "13px" }}
+-                  formatter={(v: any) => formatCurrency(Number(v))}
+-                  cursor={{ fill: "rgba(16,185,129,0.08)" }}
+-                />
+-                <Bar dataKey="income" name="Receitas" fill="#10b981" radius={[4, 4, 0, 0]} />
+-                <Bar dataKey="expense" name="Despesas" fill="#e5e7eb" radius={[4, 4, 0, 0]} />
+-              </BarChart>
+-            </ResponsiveContainer>
+-          </div>
+-        )}
+-      </ChartCard>
+-    </div>
+-  );
+-}
++import { useEffect, useState } from "react";
++import { DollarSign, PiggyBank, TrendingDown, Wallet } from "lucide-react";
++import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, PieChart, Pie, Cell, BarChart, Bar, Legend } from "recharts";
++import { useFinanceStore, useThemeStore } from "../store/useStore";
++import { formatCurrency } from "../lib/utils";
++import { theme } from "../styles/theme";
++import { KpiCard } from "../components/ui/kpi-card";
++import { ChartCard } from "../components/ui/chart-card";
++import { Skeleton } from "../components/ui/skeleton";
++import { EmptyState } from "../components/ui/empty-state";
++import { apiFetch } from "../config";
++
++export default function Dashboard() {
++  const { monthlyIncome, monthlyExpense, reservedForGoals, availableBalance, loading, error, fetchDashboard, fetchCategories } = useFinanceStore();
++  const [evolution, setEvolution] = useState<any[]>([]);
++  const [breakdown, setBreakdown] = useState<any[]>([]);
++  const [trends, setTrends] = useState<any[]>([]);
++  const currentYear = new Date().getFullYear();
++  const [years, setYears] = useState<number[]>([currentYear]);
++  const [year, setYear] = useState<number>(currentYear);
++  const { darkMode } = useThemeStore();
++  const gridStroke = darkMode ? "#e5e7eb" : "#9ca3af";
++
++  useEffect(() => {
++    fetchDashboard();
++    fetchCategories();
++    apiFetch<number[]>("/dashboard/years").then((ys) => { if (ys?.length) setYears(ys); }).catch(() => {});
++    apiFetch<any[]>("/dashboard/category-breakdown").then(setBreakdown).catch(() => {});
++    apiFetch<any[]>("/reports/trends?months=12").then(setTrends).catch(() => {});
++  }, []);
++
++  useEffect(() => {
++    apiFetch<any[]>(`/dashboard/evolution?year=${year}`).then(setEvolution).catch(() => {});
++  }, [year]);
++
++  if (loading && !evolution.length) {
++    return (
++      <div className="space-y-4">
++        <Skeleton className="h-32 w-full" />
++        <Skeleton className="h-64 w-full" />
++        <Skeleton className="h-64 w-full" />
++      </div>
++    );
++  }
++
++  if (error) {
++    return <div className="rounded-lg bg-red-50 p-4 text-red-700 dark:bg-red-900/30 dark:text-red-400">{error}</div>;
++  }
++
++  const cashFlowData = evolution.map((e) => ({ month: e.month.slice(5), income: e.income, expense: e.expense, net: e.income - e.expense }));
++  const COLORS = ["#8b5cf6", "#ef4444", "#10b981", "#3b82f6", "#f59e0b", "#14b8a6"];
++
++  // Comparação dos cartões com o mês anterior, independente do ano do gráfico.
++  const monthlyBalance = monthlyIncome - monthlyExpense;
++  const pctChange = (cur?: number, prev?: number) => {
++    if (cur === undefined || prev === undefined || !prev) return { text: "—", trend: undefined as "up" | "down" | undefined };
++    const v = ((cur - prev) / Math.abs(prev)) * 100;
++    return { text: `${v >= 0 ? "+" : ""}${v.toFixed(1).replace(".", ",")}%`, trend: (v >= 0 ? "up" : "down") as "up" | "down" };
++  };
++  const previousMonth = trends[trends.length - 2];
++  const incomeCh = pctChange(monthlyIncome, previousMonth?.income);
++  const expenseCh = pctChange(monthlyExpense, previousMonth?.expense);
++  const netCh = pctChange(
++    monthlyBalance,
++    previousMonth ? previousMonth.income - previousMonth.expense : undefined
++  );
++  // Em despesas, gastar menos é bom: inverte a cor.
++  const expenseTrend = expenseCh.trend === "up" ? "down" : expenseCh.trend === "down" ? "up" : undefined;
++
++  return (
++    <div className={theme.page}>
++
++      <div className={`${theme.gridKpi} animate-rise`}>
++        <KpiCard title="Receita Total (Este Mês)" value={formatCurrency(monthlyIncome)} change={incomeCh.text} trend={incomeCh.trend} icon={<DollarSign className="h-4 w-4 text-gray-500" />} />
++        <KpiCard title="Despesas Totais (Este Mês)" value={formatCurrency(monthlyExpense)} change={expenseCh.text} trend={expenseTrend} icon={<TrendingDown className="h-4 w-4 text-gray-500" />} />
++        <KpiCard title="Saldo do mês" value={formatCurrency(monthlyBalance)} change={netCh.text} trend={netCh.trend} icon={<Wallet className="h-4 w-4 text-gray-500" />} />
++        <KpiCard title="Disponível (livre de metas)" value={formatCurrency(availableBalance)} change={formatCurrency(reservedForGoals) + " em metas"} trend="up" icon={<PiggyBank className="h-4 w-4 text-gray-500" />} />
++      </div>
++
++      <div className="grid gap-4 lg:grid-cols-3">
++        <ChartCard title="Análise de Fluxo de Caixa" className="lg:col-span-2" action={<select value={year} onChange={(e) => setYear(Number(e.target.value))} className="rounded-full border px-3 py-1 text-xs dark:bg-slate-700">{years.map((y) => (<option key={y} value={y}>{y}</option>))}</select>}>
++          {cashFlowData.length === 0 ? (
++            <EmptyState icon="📈" title="Sem dados" description="Movimente o último ano." />
++          ) : (
++            <div className="h-64">
++              <ResponsiveContainer width="100%" height="100%">
++                <LineChart data={cashFlowData}>
++                  <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} />
++                  <XAxis dataKey="month" fontSize={12} stroke="#6b7280" />
++                  <YAxis fontSize={12} tickFormatter={(v) => `R$${(v / 1000).toFixed(0)}k`} stroke="#6b7280" />
++                  <Tooltip
++                    contentStyle={{ backgroundColor: "#ffffff", border: "1px solid #e5e7eb", borderRadius: "12px", boxShadow: "0 4px 12px rgba(0,0,0,0.15)", padding: "8px 12px" }}
++                    labelStyle={{ color: "#111827", fontWeight: 600, fontSize: "13px", marginBottom: "4px" }}
++                    itemStyle={{ color: "#374151", fontSize: "13px", padding: "2px 0" }}
++                    formatter={(v: any) => formatCurrency(Number(v))}
++                    cursor={{ stroke: gridStroke, strokeDasharray: "3 3" }}
++                  />
++                  <Legend wrapperStyle={{ fontSize: "12px", color: "#6b7280" }} />
++                  <Line type="monotone" dataKey="income" name="Receitas" stroke="#10b981" strokeWidth={2} dot={false} />
++                  <Line type="monotone" dataKey="expense" name="Despesas" stroke="#ef4444" strokeWidth={2} strokeDasharray="4 4" dot={false} />
++                  <Line type="monotone" dataKey="net" name="Líquido" stroke="#f59e0b" strokeWidth={2} dot={false} />
++                </LineChart>
++              </ResponsiveContainer>
++            </div>
++          )}
++        </ChartCard>
++
++        <ChartCard title="Distribuição de Despesas">
++          {breakdown.length === 0 ? (
++            <EmptyState icon="🥧" title="Sem gastos" description="Categorias aparecerão aqui." />
++          ) : (
++            <>
++              <div className="relative h-64">
++                <ResponsiveContainer width="100%" height="100%">
++                  <PieChart>
++                    <Pie data={breakdown.map((b) => ({ name: b.name ?? b.category, value: b.amount }))} innerRadius={60} outerRadius={80} dataKey="value">
++                      {breakdown.map((_, i) => (
++                        <Cell key={i} fill={COLORS[i % COLORS.length]} />
++                      ))}
++                    </Pie>
++                    <Tooltip
++                      contentStyle={{ backgroundColor: "#ffffff", border: "1px solid #e5e7eb", borderRadius: "12px", boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}
++                      labelStyle={{ color: "#111827", fontWeight: 600 }}
++                      itemStyle={{ color: "#374151" }}
++                      formatter={(v: any) => formatCurrency(Number(v))}
++                    />
++                  </PieChart>
++                </ResponsiveContainer>
++                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
++                  <span className="text-xs text-gray-500">Total de Despesas</span>
++                  <span className="font-bold">{formatCurrency(breakdown.reduce((s, b) => s + b.amount, 0))}</span>
++                </div>
++              </div>
++              <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
++                {breakdown.slice(0, 4).map((b, i) => (
++                  <div key={b.category} className="flex items-center gap-2">
++                    <span className="h-3 w-3 rounded" style={{ background: COLORS[i % COLORS.length] }} />
++                    <span className="truncate">{b.name ?? b.category}: {formatCurrency(b.amount)}</span>
++                  </div>
++                ))}
++              </div>
++            </>
++          )}
++        </ChartCard>
++      </div>
++
++      <ChartCard title="Comparativo Mensal" action={<div className="flex gap-2 text-xs"><span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-emerald-600" />Receitas</span><span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-gray-300" />Despesas</span></div>}>
++        {trends.length === 0 ? (
++          <EmptyState icon="📊" title="Sem tendência" />
++        ) : (
++          <div className="h-48">
++            <ResponsiveContainer width="100%" height="100%">
++              <BarChart data={trends}>
++                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
++                <XAxis dataKey="month" fontSize={12} tickFormatter={(v) => v.slice(5)} stroke="#6b7280" />
++                <YAxis fontSize={12} tickFormatter={(v) => `R$${(v / 1000).toFixed(0)}k`} stroke="#6b7280" />
++                <Tooltip
++                  contentStyle={{ backgroundColor: "#ffffff", border: "1px solid #e5e7eb", borderRadius: "12px", boxShadow: "0 4px 12px rgba(0,0,0,0.15)", padding: "8px 12px" }}
++                  labelStyle={{ color: "#111827", fontWeight: 600, fontSize: "13px" }}
++                  itemStyle={{ color: "#111827", fontWeight: 500, fontSize: "13px" }}
++                  formatter={(v: any) => formatCurrency(Number(v))}
++                  cursor={{ fill: "rgba(16,185,129,0.08)" }}
++                />
++                <Bar dataKey="income" name="Receitas" fill="#10b981" radius={[4, 4, 0, 0]} />
++                <Bar dataKey="expense" name="Despesas" fill="#e5e7eb" radius={[4, 4, 0, 0]} />
++              </BarChart>
++            </ResponsiveContainer>
++          </div>
++        )}
++      </ChartCard>
++    </div>
++  );
++}

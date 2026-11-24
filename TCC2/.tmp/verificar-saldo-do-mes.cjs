@@ -1,0 +1,37 @@
+const fs = require('node:fs');
+const assert = require('node:assert/strict');
+const vm = require('node:vm');
+const { createRequire } = require('node:module');
+const root = 'D:/UVV/projetos/GranaAI/frontend';
+const requireFrontend = createRequire(root + '/package.json');
+const ts = requireFrontend('typescript');
+const source = fs.readFileSync(root + '/src/pages/Dashboard.tsx', 'utf8');
+const start = source.indexOf('  // ', source.indexOf('const COLORS'));
+const end = source.indexOf('  return (', start);
+const block = source.slice(start, end);
+const card = source.match(/<KpiCard title="(Saldo do mês|Lucro Líquido \(Este Mês\))" value=\{formatCurrency\((\w+)\)\}/);
+assert.ok(card, 'Cartão financeiro deve existir');
+const compiled = ts.transpileModule(block + `\nresult = { title: ${JSON.stringify(card[1])}, value: ${card[2]}, net: netCh, income: incomeCh, expense: expenseCh };`, { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
+function evaluate(input) {
+  const context = { ...input };
+  vm.runInNewContext(compiled, context);
+  return JSON.parse(JSON.stringify(context.result));
+}
+const historical = [{ month: '2024-11', income: 20000, expense: 10000 }, { month: '2024-12', income: 100, expense: 500 }];
+const current = [{ month: '2026-10', income: 500, expense: 1000 }, { month: '2026-11', income: 0, expense: 45 }];
+const data = { balance: 28000, monthlyIncome: 0, monthlyExpense: 45, trends: current, evolution: historical };
+let result = evaluate(data);
+assert.equal(result.title, 'Saldo do mês');
+assert.equal(result.value, -45, 'Saldo deve usar apenas o mês atual');
+assert.equal(result.net.text, '+91,0%', 'Comparação deve usar o saldo do mês anterior');
+assert.equal(result.income.text, '-100,0%');
+assert.equal(result.expense.text, '-95,5%');
+assert.deepEqual(evaluate({ ...data, evolution: [] }), result, 'Ano do gráfico não deve afetar cartões');
+assert.deepEqual(evaluate({ ...data, balance: 999999 }), result, 'Acumulado não deve afetar saldo mensal');
+result = evaluate({ ...data, monthlyIncome: 200, monthlyExpense: 100, trends: [{ month: '2025-12', income: 100, expense: 50 }, { month: '2026-01', income: 200, expense: 100 }] });
+assert.equal(result.value, 100);
+assert.equal(result.net.text, '+100,0%', 'Janeiro deve comparar com dezembro anterior');
+result = evaluate({ ...data, trends: [{ income: 50, expense: 50 }, { income: 0, expense: 45 }] });
+assert.equal(result.net.text, '—', 'Base zero não deve gerar divisão por zero');
+assert.equal(evaluate({ ...data, trends: [] }).net.text, '—', 'Histórico ausente deve exibir traço');
+console.log('PASSOU: saldo mensal, percentuais, ano do gráfico, saldo acumulado, janeiro/dezembro, base zero e histórico ausente.');

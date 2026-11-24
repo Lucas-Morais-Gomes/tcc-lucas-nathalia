@@ -1,0 +1,35 @@
+---
+config:
+  theme: neutral
+  sequence:
+    actorMargin: 20
+    messageMargin: 12
+    mirrorActors: false
+    wrap: true
+---
+sequenceDiagram
+actor U as Usuário
+participant V as Plataforma web
+participant A as Backend FastAPI
+participant D as PostgreSQL
+
+U->>A: Primeira mensagem pelo WhatsApp
+A->>D: Consulta usuário pelo telefone
+D-->>A: Retorna resultado
+opt Número comum sem cadastro
+  A-->>U: Envia link de cadastro pelo WhatsApp
+  U->>V: Preenche o formulário
+  V->>A: Solicita criação da conta
+  A->>D: Insere usuário com telefone e senha
+  D-->>A: Retorna usuário criado
+  A-->>V: Retorna conta e identificação de acesso
+  V-->>U: Conclui cadastro
+end
+
+Note over U,D: Consulta posterior com sessão autenticada
+U->>V: Solicita acompanhamento financeiro
+V->>A: Requisita dados da conta identificada
+A->>D: Consulta registros financeiros
+D-->>A: Retorna os registros
+A-->>V: Retorna dados para a interface
+V-->>U: Exibe dashboard, metas e relatórios

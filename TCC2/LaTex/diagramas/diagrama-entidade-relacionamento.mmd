@@ -1,0 +1,79 @@
+---
+config:
+  theme: neutral
+  layout: elk
+  er:
+    entityPadding: 4
+    nodeSpacing: 20
+    rankSpacing: 30
+  themeVariables:
+    fontFamily: Arial
+    fontSize: 20px
+---
+erDiagram
+direction TB
+users {
+  uuid id PK
+  varchar name
+  varchar phone UK
+  varchar email UK "NULL"
+  varchar password_hash
+}
+transactions {
+  uuid id PK
+  uuid user_id FK
+  uuid goal_id FK "NULL"
+  varchar type
+  decimal amount
+  varchar category
+  date date
+}
+category_limits {
+  uuid id PK
+  uuid user_id FK
+  varchar slug
+  varchar name
+  decimal monthly_limit
+}
+goals {
+  uuid id PK
+  uuid user_id FK
+  varchar title
+  decimal target_amount
+  decimal current_amount
+  date deadline "NULL"
+  varchar status
+}
+subscriptions {
+  uuid id PK
+  uuid user_id FK
+  varchar pattern
+  decimal expected_amount "NULL"
+  integer billing_day "NULL"
+  varchar status
+}
+messages {
+  uuid id PK
+  uuid user_id FK "NULL"
+  varchar phone
+  varchar direction
+  text text
+}
+conversation_states {
+  varchar phone PK
+  varchar user_id
+  varchar step "NULL"
+  text context "NULL"
+}
+system_settings {
+  varchar key PK
+  text value
+  varchar updated_by "NULL"
+}
+
+users ||--o{ transactions : user_id
+users ||--o{ category_limits : user_id
+users ||--o{ goals : user_id
+users ||--o{ subscriptions : user_id
+users |o--o{ messages : user_id
+goals |o--o{ transactions : goal_id

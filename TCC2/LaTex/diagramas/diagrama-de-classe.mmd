@@ -1,0 +1,89 @@
+---
+config:
+  theme: neutral
+  layout: elk
+  class:
+    hideEmptyMembersBox: true
+    nodeSpacing: 24
+    rankSpacing: 35
+    padding: 6
+  themeVariables:
+    fontFamily: Arial
+    fontSize: 18px
+---
+classDiagram
+direction TB
+
+class User {
+  UUID id
+  string name
+  string phone
+  string email
+  string password_hash
+  decimal monthly_income
+  string personality
+  bool is_admin
+}
+class Transaction {
+  UUID id
+  UUID user_id
+  string type
+  decimal amount
+  string category
+  string subcategory
+  date date
+  bool is_recurring
+  UUID goal_id
+  string source
+}
+class CategoryLimit {
+  UUID id
+  UUID user_id
+  string slug
+  string name
+  decimal monthly_limit
+  string icon
+  string color
+}
+class Goal {
+  UUID id
+  UUID user_id
+  string title
+  decimal target_amount
+  decimal current_amount
+  date deadline
+  string status
+}
+class Subscription {
+  UUID id
+  UUID user_id
+  string pattern
+  string label
+  string category
+  decimal expected_amount
+  int billing_day
+  string status
+}
+class Message {
+  UUID id
+  UUID user_id
+  string phone
+  string direction
+  string intent
+  string text
+}
+class ConversationStateModel {
+  string phone
+  string user_id
+  string last_intent
+  string step
+  string context
+}
+
+User "1" -- "0..*" Transaction : transactions
+User "1" -- "0..*" CategoryLimit : category_limits
+User "1" -- "0..*" Goal : goals
+User "1" -- "0..*" Subscription : subscriptions
+User "0..1" -- "0..*" Message : messages
+Goal "0..1" -- "0..*" Transaction : transactions
+
